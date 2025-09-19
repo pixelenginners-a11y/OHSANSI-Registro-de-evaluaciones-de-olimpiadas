@@ -1,0 +1,112 @@
+/* Layout general */
+.page {
+  min-height: 100vh;
+  background: #f7f7f7;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  height: 40px;
+  background: #e5e5e5;
+  border-bottom: 1px solid #ccc;
+}
+
+.layout {
+  display: flex;
+  flex: 1;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  padding: 16px;
+}
+
+.logo {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.menu-title {
+  font-weight: 600;
+  color: #333;
+}
+
+.menu-sub {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Contenido */
+.content {
+  flex: 1;
+  padding: 32px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Formulario */
+.form {
+  margin-top: 24px;
+  max-width: 800px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 14px;
+}
+
+input:focus,
+select:focus {
+  border-color: #666;
+  outline: none;
+}
+
+/* Botón */
+.btn {
+  margin-top: 24px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  background: #333;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
