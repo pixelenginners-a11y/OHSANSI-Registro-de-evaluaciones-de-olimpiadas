@@ -17,17 +17,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       intl zip bcmath pdo_pgsql \
   && rm -rf /var/lib/apt/lists/*
 
-
-# ✅ Habilitar rewrite y apuntar Apache a /public; permitir .htaccess
+# Habilitar rewrite y apuntar Apache a /public; permitir .htaccess
 RUN a2enmod rewrite \
  && sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/public#g' /etc/apache2/sites-available/000-default.conf \
  && printf '<Directory /var/www/html/public>\n  AllowOverride All\n  Require all granted\n</Directory>\n' > /etc/apache2/conf-available/laravel.conf \
  && a2enconf laravel
 
-# ✅ Fijar directorio de trabajo
 WORKDIR /var/www/html
 
-# Copia código primero (sin vendor)
+# Copiar vendor desde stage intermedio
+COPY --from=vendor /app/vendor ./vendor
+
+# Copia el resto del código
 COPY . .
 
 # Permisos para Laravel
