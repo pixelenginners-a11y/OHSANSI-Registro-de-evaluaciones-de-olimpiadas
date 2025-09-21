@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as RegistroEvaluadorRouteImport } from './routes/RegistroEvaluador'
 import { Route as IndexRouteImport } from './routes/index'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegistroEvaluadorRoute = RegistroEvaluadorRouteImport.update({
+  id: '/RegistroEvaluador',
+  path: '/RegistroEvaluador',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,27 +31,31 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/RegistroEvaluador': typeof RegistroEvaluadorRoute
   '/about': typeof AboutRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/RegistroEvaluador': typeof RegistroEvaluadorRoute
   '/about': typeof AboutRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/RegistroEvaluador': typeof RegistroEvaluadorRoute
   '/about': typeof AboutRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/RegistroEvaluador' | '/about'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/RegistroEvaluador' | '/about'
+  id: '__root__' | '/' | '/RegistroEvaluador' | '/about'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  RegistroEvaluadorRoute: typeof RegistroEvaluadorRoute
   AboutRoute: typeof AboutRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/RegistroEvaluador': {
+      id: '/RegistroEvaluador'
+      path: '/RegistroEvaluador'
+      fullPath: '/RegistroEvaluador'
+      preLoaderRoute: typeof RegistroEvaluadorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  RegistroEvaluadorRoute: RegistroEvaluadorRoute,
   AboutRoute: AboutRoute,
 }
 export const routeTree = rootRouteImport
