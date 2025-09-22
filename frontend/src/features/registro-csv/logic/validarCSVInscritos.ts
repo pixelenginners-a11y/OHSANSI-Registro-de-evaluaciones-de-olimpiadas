@@ -1,5 +1,4 @@
-
-import Papa from "papaparse";
+import * as Papa from "papaparse";
 
 export function parseCSVText(text: string): Record<string, string>[] {
   const parsed = Papa.parse<Record<string, string>>(text, {
