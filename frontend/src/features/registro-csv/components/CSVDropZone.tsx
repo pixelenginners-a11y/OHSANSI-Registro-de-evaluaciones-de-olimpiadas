@@ -24,7 +24,7 @@ export default function CSVDropZone({ onParse }: Props) {
       title="Soltar o hacer clic para escoger archivo CSV"
     >
       <div className="text-center">
-        <div className="text-4xl">⬆️</div>
+        <div className="text-4xl"></div>
         <div className="mt-2">
           <button className="btn btn-sec">Escoger archivo</button>
         </div>
