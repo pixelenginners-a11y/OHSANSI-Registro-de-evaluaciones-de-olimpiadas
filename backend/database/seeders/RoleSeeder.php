@@ -10,6 +10,17 @@ class RoleSeeder extends Seeder
 {
     public function run(): void
     {
-        Role::created(['name' => 'Evaluador']);
+        $roles = [
+          ['name' => 'Administrador', 'description' => 'Usuario con todos los permisos'],
+          ['name' => 'Evaluador', 'description' => 'Usuario que puede evaluar inscripciones'],
+          ['name' => 'Responsable Academico', 'description' => 'Usuario que gestiona un área específica'],
+        ];
+        
+        foreach ($roles as $roleData) {
+            Role::updateOrCreate(
+              ['name' => $roleData['name']], 
+              ['description' => $roleData['description']]
+            );
+        }
     }
 }
