@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateEvaluatorRequest extends FormRequest
+class UpdateAcademicRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,26 +23,26 @@ class UpdateEvaluatorRequest extends FormRequest
     public function rules(): array
     {
         $userId = $this->route('id');
-
         return [
-            'full_name'  => ['sometimes', 'string', 'max:100'],
-            'username'   => [
+            'full_name' => ['sometimes', 'string', 'max:100'],
+            'username'  => [
                 'sometimes',
                 'string',
                 'alpha_dash',
                 'max:50',
                 Rule::unique('users', 'username')->ignore($userId),
             ],
-            'email'      => [
+            'email'     => [
                 'sometimes',
                 'email:rfc,dns',
                 'max:50',
                 Rule::unique('users', 'email')->ignore($userId),
             ],
-            'phone'      => ['nullable', 'string', 'max:20'],
-            'password'   => ['sometimes', 'string', 'min:6'],
-            'area_id'    => ['sometimes', 'exists:areas,id'],
-            'active'     => ['nullable', 'boolean'],
+            'phone'     => ['nullable', 'string', 'max:20'],
+            'password'  => ['nullable', 'string', 'min:6'],
+            'role_id'   => ['nullable', 'exists:roles,id'],
+            'area_id'   => ['nullable', 'exists:areas,id'],
+            'active'    => ['nullable', 'boolean'],
         ];
     }
 
@@ -60,6 +60,6 @@ class UpdateEvaluatorRequest extends FormRequest
           'password.min'       => 'La contraseña debe tener al menos :min caracteres.',
           'area_id.exists'     => 'El área seleccionada no es válida.',
           'active.boolean'     => 'El valor de activo debe ser verdadero o falso.',
-        ];  
+        ];
     }
 }
