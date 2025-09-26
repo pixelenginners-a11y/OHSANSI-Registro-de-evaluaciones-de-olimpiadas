@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Roles\EvaluatorController;
+use App\Http\Controllers\Roles\AcademicResponsibleController;
 
 Route::prefix('evaluators')->group(function () {
     Route::get('/', [EvaluatorController::class, 'index']);
@@ -13,8 +14,11 @@ Route::prefix('evaluators')->group(function () {
     Route::delete('{id}', [EvaluatorController::class, 'destroy']);
 });
 
-Route::get('/test', function() {
-    return response()->json([
-        'message' => 'Ruta de prueba funcionando'
-    ]);
+Route::prefix('academics')->group(function () {
+    Route::get('/', [AcademicResponsibleController::class, 'index']);
+    Route::post('/', [AcademicResponsibleController::class, 'store']);
+    Route::get('{id}', [AcademicResponsibleController::class, 'show']);
+    Route::put('{id}', [AcademicResponsibleController::class, 'update']);
+    Route::patch('{id}', [AcademicResponsibleController::class, 'update']);
+    Route::delete('{id}', [AcademicResponsibleController::class, 'destroy']);
 });
