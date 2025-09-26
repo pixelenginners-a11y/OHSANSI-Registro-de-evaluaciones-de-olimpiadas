@@ -13,28 +13,38 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::truncate();
-        
-        User::factory()->create([
-            'full_name' => 'Admin',
-            'username' => 'Test Admin',
-            'email' => 'admin@gmail.com',
-            'role_id' => 1,
-        ]);
-        
-        User::factory()->create([
-            'full_name' => 'Evaluator',
-            'username' => 'Test Evaluator',
-            'email' => 'evaluator@gmail.com',
-            'role_id' => 2,
-        ]);
+        User::updateOrCreate(
+            ['username' => 'Test Admin'],
+            [
+                'full_name' => 'Admin',
+                'email'     => 'admin@gmail.com',
+                'role_id'   => 1,
+                'password'  => bcrypt('password'),
+                'active'    => true,
+            ]
+        );
 
-        User::factory()->create([
-            'full_name' => 'Academic',
-            'username' => 'Test Academic',
-            'email' => 'academic@gmail.com',
-            'role_id' => 3,
-        ]);
+        User::updateOrCreate(
+            ['username' => 'Test Evaluator'],
+            [
+                'full_name' => 'Evaluator',
+                'email'     => 'evaluator@gmail.com',
+                'role_id'   => 2,
+                'password'  => bcrypt('password'),
+                'active'    => true,
+            ]
+        );
+
+        User::updateOrCreate(
+            ['username' => 'Test Academic'],
+            [
+                'full_name' => 'Academic',
+                'email'     => 'academic@gmail.com',
+                'role_id'   => 3,
+                'password'  => bcrypt('password'),
+                'active'    => true,
+            ]
+        );
 
         User::factory(20)->create();
     }
