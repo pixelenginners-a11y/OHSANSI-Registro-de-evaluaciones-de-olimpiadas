@@ -18,7 +18,7 @@ class EvaluatorController extends Controller
      */
     public function index()
     {
-        $evaluators = $this->evaluatorService->getEvaluators();
+        $evaluators = $this->evaluatorService->getAll();
         return response()->json($evaluators);
     }
 

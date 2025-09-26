@@ -56,4 +56,15 @@ class UserService
         $user = User::with('role')->findOrFail($userId);
         return $user ? $user->role : null;
     }
+
+    public function ensureUserHasRole(int $userId, string $roleName): void
+    {
+        $role = $this->getUserRole($userId);
+
+        if (!$role || $role->name !== $roleName) {
+            throw ValidationException::withMessages([
+                'role' => ["El usuario no es un $roleName."]
+            ]);
+        }
+    }
 }
