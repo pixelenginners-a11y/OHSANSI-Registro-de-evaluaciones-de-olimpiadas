@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Grade extends Model
 {
-    public function area()
+    public function areaGrades()
     {
-        return $this->belongsTo(Area::class);
-    } 
+        return $this->hasMany(AreaGrade::class);
+    }
 
     public function inscriptions()
     {
