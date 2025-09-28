@@ -18,6 +18,8 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreignId('responsable_id')->nullable()->references('id')->on('users')->onDelete('set null');
         });
     }
 

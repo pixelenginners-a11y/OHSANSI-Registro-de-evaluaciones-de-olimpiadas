@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('legal_guardian_contact', 100);
             $table->string('educational_institution', 100);
             $table->string('department', 50);
-            $table->string('school_grade',50);
             $table->string('academic_tutor',100)->nullable();
             $table->timestamps();
         });
