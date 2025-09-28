@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Roles\EvaluatorController;
 use App\Http\Controllers\Roles\AcademicResponsibleController;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\GradeController;
 
 Route::prefix('evaluators')->group(function () {
     Route::get('/', [EvaluatorController::class, 'index']);
@@ -31,4 +32,13 @@ Route::prefix('areas')->group(function () {
     Route::put('{id}', [AreaController::class, 'update']);
     Route::patch('{id}', [AreaController::class, 'update']);
     Route::delete('{id}', [AreaController::class, 'destroy']);
+});
+
+Route::prefix('grades')->group(function () {
+    Route::get('/', [GradeController::class, 'index']);
+    Route::post('/', [GradeController::class, 'store']);
+    Route::get('{id}', [GradeController::class, 'show']);
+    Route::put('{id}', [GradeController::class, 'update']);
+    Route::patch('{id}', [GradeController::class, 'update']);
+    Route::delete('{id}', [GradeController::class, 'destroy']);
 });
