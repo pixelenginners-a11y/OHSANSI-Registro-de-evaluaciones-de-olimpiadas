@@ -7,23 +7,16 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   return (
-    <section className="bg-[#003049] text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-24 text-center">
-        <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
-          ¡Vive la emoción de las<br className="hidden md:block" /> Olimpiadas UMSS!
-        </h1>
-        <p className="mt-4 md:mt-6 text-lg md:text-xl text-[#EAE2B7]">
-          Competencia, disciplina y amistad — todo en un solo evento universitario.
-        </p>
-        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-          <a className="inline-block rounded-xl bg-[#F77F00] text-[#003049] px-6 py-3 font-semibold shadow hover:opacity-90 transition">
-            Inscribirme ahora
-          </a>
-          <a className="inline-block rounded-xl border border-[#EAE2B7] text-white px-6 py-3 font-semibold hover:bg-white/10 transition">
-            Ver reglamento
-          </a>
-        </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white shadow-lg rounded-2xl p-6 text-center">
+        <h3 className="text-2xl font-bold text-gray-800 mb-2">
+          Welcome Home!
+        </h3>
+        <p className="text-gray-600">Has iniciado sesión correctamente 🚀</p>
+        <button className="mt-4 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition">
+          Explorar
+        </button>
       </div>
-    </section>
+    </div>
   )
 }
