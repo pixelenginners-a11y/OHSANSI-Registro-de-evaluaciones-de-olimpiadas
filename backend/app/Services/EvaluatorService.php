@@ -25,7 +25,7 @@ class EvaluatorService
                 'email' => $data['email'],
                 'phone' => $data['phone'] ?? null,
                 'password' => $data['password'],
-                'role_id' => 2,
+                'role_id' => $data['role_id'],
             ]);
             $this->evaluatorAreaService->assign($user->id, $data['area_id']);
             return $user;
@@ -36,7 +36,7 @@ class EvaluatorService
     {
         return DB::transaction(function () use ($userId, $data) {
             $role = $this->userService->getUserRole($userId);
-            if (!$role || $role->name !== 'Evaluador') {
+            if ($role && $role->name !== 'Evaluador') {
                 throw ValidationException::withMessages([
                     'role' => ['El usuario no es un evaluador.']
                 ]);
