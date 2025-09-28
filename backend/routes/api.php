@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Roles\EvaluatorController;
 use App\Http\Controllers\Roles\AcademicResponsibleController;
+use App\Http\Controllers\OlympianController;
 
 Route::prefix('evaluators')->group(function () {
     Route::get('/', [EvaluatorController::class, 'index']);
@@ -21,4 +22,9 @@ Route::prefix('academics')->group(function () {
     Route::put('{id}', [AcademicResponsibleController::class, 'update']);
     Route::patch('{id}', [AcademicResponsibleController::class, 'update']);
     Route::delete('{id}', [AcademicResponsibleController::class, 'destroy']);
+});
+
+Route::prefix('olympians')->group(function () {
+    Route::get('/', [OlympianController::class, 'all']);
+    Route::post('/import', [OlympianController::class, 'import']);
 });
