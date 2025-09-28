@@ -1,104 +1,78 @@
-import { useState, useMemo } from "react";
 import CSVDropZone from "../components/CSVDropZone";
 import PreviewTabla from "../components/PreviewTabla";
-import {
-  camposPlantilla,
-  validarCSVInscritos,
-  type FilaCSVValida,
-  type FilaCSVConError,
-} from "../logic/validarCSVInscritos";
+import { useCSVRegistro } from "../hooks/useCSVRegistro";
+
+import Modal from "../ui/Modal";
+import Toast from "../ui/Toast";
+import Button from "../ui/Button";
+import Card from "../ui/Card";
+import PageHeader from "../ui/PageHeader";
+import { Stat } from "../ui/Stats";
 
 export default function RegistroPage() {
-  
-  const [validas, setValidas] = useState<FilaCSVValida[]>([]);
-  const [errores, setErrores] = useState<FilaCSVConError[]>([]);
-  const [csvNombre, setCsvNombre] = useState("");
+  const { state, actions } = useCSVRegistro();
+  const { validas, errores, csvNombre, totales, confirmOpen, toastText, loading } = state;
 
-  const totales = useMemo(
-    () => ({ validas: validas.length, errores: errores.length }),
-    [validas, errores]
-  );
-
-  const onCSVParseado = (rows: Record<string, string>[], nombreArchivo: string) => {
-    const { validas, errores } = validarCSVInscritos(rows);
-    setValidas(validas);
-    setErrores(errores);
-    setCsvNombre(nombreArchivo);
-  };
-
-  const descargarPlantilla = () => {
-    const csv = camposPlantilla.join(",") + "\n";
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "plantilla_inscritos.csv";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const confirmarImportacion = () => {
-    alert(`Importación simulada OK: ${validas.length} filas válidas.`);
-  };
-
-  const reiniciar = () => { setValidas([]); setErrores([]); setCsvNombre(""); };
+  const showEmpty = totales.validas === 0 && totales.errores === 0;
 
   return (
-    <div className="min-h-[70vh] bg-neutral-40 font-sans">
+    <div className="min-h-[100vh] bg-neutral-50">
+      <Toast open={!!toastText} text={toastText ?? ""} onClose={()=>actions.setToastText(null)} />
 
-      <div className="grid min-h-[70vh] grid-cols-1 md:grid-cols-[260px_1fr]">
+      <PageHeader
+        title="Registro de Concursantes"
+        subtitle="Sube el CSV con la plantilla oficial y valida antes de registrar."
+      />
 
-        {/* Main */}
-        <main className="p-4 md:p-6">
-          <h1 className="mb-4 text-2xl font-extrabold text-neutral-900 md:text-3xl">
-            Registro de Concursantes
-          </h1>
-
-          {totales.validas === 0 && totales.errores === 0 ? (
-            <>
-              <div className="mb-4">
-                <button
-                  onClick={descargarPlantilla}
-                  className="inline-flex items-center gap-2 rounded-lg bg-[#F77F00] px-4 py-2 text-sm font-semibold text-white shadow hover:opacity-90 transition md:text-base"
-                >
+      <main className="mx-auto mt-6 w-full max-w-6xl px-4 pb-14 md:px-6">
+        {showEmpty ? (
+          <div className="grid gap-4 md:grid-cols-[340px_1fr]">
+            <aside className="order-2 md:order-1">
+              <Card className="p-4">
+                <h2 className="text-base font-semibold text-neutral-900">Acciones rápidas</h2>
+                <p className="mt-1 text-sm text-neutral-600">Descarga la plantilla con los encabezados correctos.</p>
+                <Button variant="accent" className="mt-3 w-full" onClick={actions.descargarPlantilla}>
                   Descargar plantilla CSV
-                </button>
+                </Button>
+              </Card>
+            </aside>
+            <section className="order-1 md:order-2">
+              <div className="rounded-2xl border border-dashed border-neutral-300 bg-white p-4 md:p-6">
+                <CSVDropZone onParse={actions.onCSVParseado} />
               </div>
+            </section>
+          </div>
+        ) : (
+          <>
+            <div className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <Card className="p-4">
+                <div className="text-xs uppercase text-neutral-500">Archivo</div>
+                <div className="truncate text-sm font-semibold text-neutral-900">{csvNombre}</div>
+              </Card>
+              <Stat label="Válidas" value={totales.validas} accent="success" />
+              <Stat label="Con error" value={totales.errores} accent="danger" />
+            </div>
 
-              <div className="rounded-2xl border border-neutral-200 bg-white p-3 md:p-4">
-                <CSVDropZone onParse={onCSVParseado} />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="mb-3 text-sm text-neutral-700 md:text-base">
-                <strong>Archivo:</strong> {csvNombre} &nbsp;|&nbsp;
-                <strong>Válidas:</strong> {totales.validas} &nbsp;|&nbsp;
-                <strong>Con error:</strong> {totales.errores}
-              </div>
+            <div className="mb-3 flex flex-col gap-2 sm:flex-row">
+              <Button onClick={actions.confirmarImportacion} isLoading={loading}>Registrar todos</Button>
+              <Button variant="outline" onClick={actions.reiniciar} disabled={loading}>Cancelar</Button>
+            </div>
 
-              <div className="mb-3 flex flex-col gap-2 sm:flex-row">
-                <button
-                  onClick={confirmarImportacion}
-                  className="rounded-lg bg-[#003049] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition md:text-base"
-                >
-                  Registrar Todos
-                </button>
-                <button
-                  onClick={reiniciar}
-                  className="rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-800 hover:bg-neutral-100 transition md:text-base"
-                >
-                  Cancelar
-                </button>
-              </div>
+            <PreviewTabla validas={validas} errores={errores} />
+          </>
+        )}
+      </main>
 
-              <div className="overflow-x-auto rounded-2xl border border-neutral-200 bg-white p-3 md:p-4">
-                <PreviewTabla validas={validas} errores={errores} />
-              </div>
-            </>
-          )}
-        </main>
-      </div>
+      <Modal
+        open={confirmOpen}
+        title="Confirmar registro de concursantes"
+        description={`Se registrarán ${totales.validas} filas válidas. Las filas con error no serán importadas.`}
+        confirmText={loading ? "Registrando..." : "Registrar"}
+        confirmDisabled={loading}
+        cancelText="Volver"
+        onConfirm={actions.doImport}
+        onClose={()=>actions.setConfirmOpen(false)}
+      />
     </div>
   );
 }
