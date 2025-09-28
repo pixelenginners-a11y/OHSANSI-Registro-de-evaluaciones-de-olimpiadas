@@ -18,7 +18,7 @@ class EvaluatorAreaSeeder extends Seeder
 
         foreach ($evaluators as $index => $evaluator) {
             $areaId = ($index % 5) + 1;
-            EvaluatorArea::firstOrCreate([
+            EvaluatorArea::create([
                 'user_id' => $evaluator->id,
                 'area_id' => $areaId,
             ]);
