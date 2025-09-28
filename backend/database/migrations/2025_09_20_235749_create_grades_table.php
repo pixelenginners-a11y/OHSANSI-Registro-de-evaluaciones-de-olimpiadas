@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 50);
             $table->string('description')->nullable();
+            $table->foreignId('area_id')->references('id')->on('areas')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->unique(['name', 'area_id']);
