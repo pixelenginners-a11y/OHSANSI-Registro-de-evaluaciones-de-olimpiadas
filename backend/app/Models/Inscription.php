@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Inscription extends Model
 {
+    protected $fillable = [
+        'olympian_id',
+        'area_id',
+        'grade_id',
+        'status',
+    ];
+    
     public function olympian()
     {
         return $this->belongsTo(Olympian::class);
