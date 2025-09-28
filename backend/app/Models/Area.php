@@ -12,7 +12,8 @@ class Area extends Model
     protected $fillable = [
       'name', 
       'description', 
-      'active'
+      'active',
+      'responsable_id'
     ];
 
     public function medalParameter()
