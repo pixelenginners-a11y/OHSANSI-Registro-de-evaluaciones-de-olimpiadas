@@ -2,19 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Roles\EvaluatorController;
+use App\Http\Controllers\UserController;
 
-Route::prefix('evaluators')->group(function () {
-    Route::get('/', [EvaluatorController::class, 'index']);
-    Route::post('/', [EvaluatorController::class, 'store']);
-    Route::get('{id}', [EvaluatorController::class, 'show']);
-    Route::put('{id}', [EvaluatorController::class, 'update']);
-    Route::patch('{id}', [EvaluatorController::class, 'update']);
-    Route::delete('{id}', [EvaluatorController::class, 'destroy']);
-});
-
-Route::get('/test', function() {
-    return response()->json([
-        'message' => 'Ruta de prueba funcionando'
-    ]);
+Route::prefix('admin')->group(function () {
+    Route::get('users', [UserController::class,'index']);
+    Route::post('users', [UserController::class,'store']);
+    Route::delete('users/{user}', [UserController::class,'destroy']);
+    Route::put('users/{user}', [UserController::class,'update']);
+    Route::patch('users/{user}', [UserController::class,'update']);
 });
