@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Roles\EvaluatorController;
 use App\Http\Controllers\Roles\AcademicResponsibleController;
+use App\Http\Controllers\AreaController;
 
 Route::prefix('evaluators')->group(function () {
     Route::get('/', [EvaluatorController::class, 'index']);
@@ -21,4 +22,13 @@ Route::prefix('academics')->group(function () {
     Route::put('{id}', [AcademicResponsibleController::class, 'update']);
     Route::patch('{id}', [AcademicResponsibleController::class, 'update']);
     Route::delete('{id}', [AcademicResponsibleController::class, 'destroy']);
+});
+
+Route::prefix('areas')->group(function () {
+    Route::get('/', [AreaController::class, 'index']);
+    Route::post('/', [AreaController::class, 'store']);
+    Route::get('{id}', [AreaController::class, 'show']);
+    Route::put('{id}', [AreaController::class, 'update']);
+    Route::patch('{id}', [AreaController::class, 'update']);
+    Route::delete('{id}', [AreaController::class, 'destroy']);
 });
