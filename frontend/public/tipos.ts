@@ -1,0 +1,1 @@
+export type Nivel = { id:number; nombre:string; activo:boolean };
