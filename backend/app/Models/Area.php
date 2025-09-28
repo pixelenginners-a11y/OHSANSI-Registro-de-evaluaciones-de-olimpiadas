@@ -21,9 +21,9 @@ class Area extends Model
         return $this->belongsTo(Inscription::class);
     } 
 
-    public function areaGrades()
+    public function grades()
     {
-        return $this->hasMany(AreaGrade::class);
+        return $this->hasMany(Grade::class);
     }
 
     public function responsable()
