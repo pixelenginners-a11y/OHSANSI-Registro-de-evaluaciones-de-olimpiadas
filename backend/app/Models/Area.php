@@ -15,7 +15,7 @@ class Area extends Model
       'active'
     ];
 
-    public function medalParameters()
+    public function medalParameter()
     {
         return $this->hasOne(MedalParameter::class);
     }
@@ -27,12 +27,17 @@ class Area extends Model
 
     public function inscriptions()
     {
-        return $this->belongsTo(Inscription::class);
+        return $this->hasMany(Inscription::class);
     } 
 
     public function areaGrades()
     {
         return $this->hasMany(AreaGrade::class);
+    }
+
+    public function grades()
+    {
+        return $this->belongsToMany(Grade::class, 'area_grades');
     }
 
     public function responsable()
