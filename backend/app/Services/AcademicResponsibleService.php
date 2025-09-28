@@ -3,10 +3,8 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
-use \Illuminate\Database\Eloquent\Collection;
 
 class AcademicResponsibleService
 {
@@ -17,7 +15,7 @@ class AcademicResponsibleService
     public function create(array $data): User
     {
         return DB::transaction(function () use ($data) {
-            return $this->userService->createUser([
+            $user = $this->userService->createUser([
                 'full_name' => $data['full_name'],
                 'username' => $data['username'],
                 'email' => $data['email'],
@@ -25,6 +23,8 @@ class AcademicResponsibleService
                 'password' => $data['password'],
                 'role_id' => 3,
             ]);
+
+            return $this->userService->createUser($user);
         });
     }
 
@@ -49,7 +49,7 @@ class AcademicResponsibleService
         return $this->userService->findUserWithRole($userId, 'Responsable Academico');
     }
 
-    public function getAll(): Collection
+    public function getAll()
     {
         return User::select('id', 'full_name', 'username', 'email', 'phone', 'active')
             ->whereHas('role', function ($query) {

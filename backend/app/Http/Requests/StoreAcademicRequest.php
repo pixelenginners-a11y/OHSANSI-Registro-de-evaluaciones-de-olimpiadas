@@ -57,6 +57,9 @@ class StoreAcademicRequest extends FormRequest
             'password.required'  => 'La contraseña es obligatoria.',
             'password.min'       => 'La contraseña debe tener al menos :min caracteres.',
 
+            'role_id.required'   => 'Debe asignarse un rol al usuario.',
+            'role_id.exists'     => 'El rol seleccionado no es válido.',
+
             'active.boolean'     => 'El valor de activo debe ser verdadero o falso.',
         ];
     }
