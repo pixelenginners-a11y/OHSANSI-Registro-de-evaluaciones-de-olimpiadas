@@ -40,6 +40,9 @@ class EvaluatorController extends Controller
     public function show(string $id)
     {
         $evaluator = $this->evaluatorService->getEvaluatorById((int)$id);
+        if (!$evaluator) {
+            return response()->json(['message' => 'Evaluador no encontrado'], 404);
+        }
         return response()->json($evaluator);
     }
 
@@ -49,6 +52,9 @@ class EvaluatorController extends Controller
     public function update(UpdateEvaluatorRequest $request, string $id)
     {
         $evaluator = $this->evaluatorService->updateEvaluator((int)$id, $request->validated());
+        if (!$evaluator) {
+            return response()->json(['message' => 'Evaluador no encontrado'], 404);
+        }
         return response()->json([
             'message' => 'Evaluador actualizado correctamente',
             'data' => $evaluator,
