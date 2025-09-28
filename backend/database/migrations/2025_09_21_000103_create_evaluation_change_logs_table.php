@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->decimal('previous_score', 5, 2);
             $table->decimal('new_score', 5, 2);
-            $table->text('description')->nullable();
+            $table->text('reason')->nullable();
             $table->timestamps();
         });
     }
