@@ -9,10 +9,40 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResponsableRouteImport } from './routes/responsable'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as EvaluadorRouteImport } from './routes/evaluador'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ConcursantesRegistroRouteImport } from './routes/concursantes/registro'
 
+const ResponsableRoute = ResponsableRouteImport.update({
+  id: '/responsable',
+  path: '/responsable',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvaluadorRoute = EvaluadorRouteImport.update({
+  id: '/evaluador',
+  path: '/evaluador',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -32,35 +62,115 @@ const ConcursantesRegistroRoute = ConcursantesRegistroRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
+  '/app': typeof AppRoute
+  '/evaluador': typeof EvaluadorRoute
+  '/login': typeof LoginRoute
+  '/responsable': typeof ResponsableRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
+  '/app': typeof AppRoute
+  '/evaluador': typeof EvaluadorRoute
+  '/login': typeof LoginRoute
+  '/responsable': typeof ResponsableRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
+  '/app': typeof AppRoute
+  '/evaluador': typeof EvaluadorRoute
+  '/login': typeof LoginRoute
+  '/responsable': typeof ResponsableRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/concursantes/registro'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/app'
+    | '/evaluador'
+    | '/login'
+    | '/responsable'
+    | '/concursantes/registro'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/concursantes/registro'
-  id: '__root__' | '/' | '/about' | '/concursantes/registro'
+  to:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/app'
+    | '/evaluador'
+    | '/login'
+    | '/responsable'
+    | '/concursantes/registro'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/app'
+    | '/evaluador'
+    | '/login'
+    | '/responsable'
+    | '/concursantes/registro'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRoute
+  AppRoute: typeof AppRoute
+  EvaluadorRoute: typeof EvaluadorRoute
+  LoginRoute: typeof LoginRoute
+  ResponsableRoute: typeof ResponsableRoute
   ConcursantesRegistroRoute: typeof ConcursantesRegistroRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/responsable': {
+      id: '/responsable'
+      path: '/responsable'
+      fullPath: '/responsable'
+      preLoaderRoute: typeof ResponsableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/evaluador': {
+      id: '/evaluador'
+      path: '/evaluador'
+      fullPath: '/evaluador'
+      preLoaderRoute: typeof EvaluadorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -88,6 +198,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRoute,
+  AppRoute: AppRoute,
+  EvaluadorRoute: EvaluadorRoute,
+  LoginRoute: LoginRoute,
+  ResponsableRoute: ResponsableRoute,
   ConcursantesRegistroRoute: ConcursantesRegistroRoute,
 }
 export const routeTree = rootRouteImport
