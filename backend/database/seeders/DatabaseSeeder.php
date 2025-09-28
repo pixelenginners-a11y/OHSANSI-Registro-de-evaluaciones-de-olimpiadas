@@ -17,6 +17,5 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(EvaluatorAreaSeeder::class);
         $this->call(GradeSeeder::class);
-        $this->call(AreaGradeSeeder::class);
     }
 }
