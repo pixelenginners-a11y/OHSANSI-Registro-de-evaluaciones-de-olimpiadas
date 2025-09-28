@@ -9,10 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RegistroRouteImport } from './routes/registro'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ResponsablesIndexRouteImport } from './routes/responsables/index'
+import { Route as ResponsablesNuevoRouteImport } from './routes/responsables/nuevo'
+import { Route as ResponsablesIdRouteImport } from './routes/responsables/$id'
 import { Route as ConcursantesRegistroRouteImport } from './routes/concursantes/registro'
 
+const RegistroRoute = RegistroRouteImport.update({
+  id: '/registro',
+  path: '/registro',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -21,6 +30,21 @@ const AboutRoute = AboutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResponsablesIndexRoute = ResponsablesIndexRouteImport.update({
+  id: '/responsables/',
+  path: '/responsables/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResponsablesNuevoRoute = ResponsablesNuevoRouteImport.update({
+  id: '/responsables/nuevo',
+  path: '/responsables/nuevo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResponsablesIdRoute = ResponsablesIdRouteImport.update({
+  id: '/responsables/$id',
+  path: '/responsables/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConcursantesRegistroRoute = ConcursantesRegistroRouteImport.update({
@@ -32,35 +56,80 @@ const ConcursantesRegistroRoute = ConcursantesRegistroRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/registro': typeof RegistroRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
+  '/responsables/$id': typeof ResponsablesIdRoute
+  '/responsables/nuevo': typeof ResponsablesNuevoRoute
+  '/responsables': typeof ResponsablesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/registro': typeof RegistroRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
+  '/responsables/$id': typeof ResponsablesIdRoute
+  '/responsables/nuevo': typeof ResponsablesNuevoRoute
+  '/responsables': typeof ResponsablesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/registro': typeof RegistroRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
+  '/responsables/$id': typeof ResponsablesIdRoute
+  '/responsables/nuevo': typeof ResponsablesNuevoRoute
+  '/responsables/': typeof ResponsablesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/concursantes/registro'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/registro'
+    | '/concursantes/registro'
+    | '/responsables/$id'
+    | '/responsables/nuevo'
+    | '/responsables'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/concursantes/registro'
-  id: '__root__' | '/' | '/about' | '/concursantes/registro'
+  to:
+    | '/'
+    | '/about'
+    | '/registro'
+    | '/concursantes/registro'
+    | '/responsables/$id'
+    | '/responsables/nuevo'
+    | '/responsables'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/registro'
+    | '/concursantes/registro'
+    | '/responsables/$id'
+    | '/responsables/nuevo'
+    | '/responsables/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  RegistroRoute: typeof RegistroRoute
   ConcursantesRegistroRoute: typeof ConcursantesRegistroRoute
+  ResponsablesIdRoute: typeof ResponsablesIdRoute
+  ResponsablesNuevoRoute: typeof ResponsablesNuevoRoute
+  ResponsablesIndexRoute: typeof ResponsablesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/registro': {
+      id: '/registro'
+      path: '/registro'
+      fullPath: '/registro'
+      preLoaderRoute: typeof RegistroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -73,6 +142,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/responsables/': {
+      id: '/responsables/'
+      path: '/responsables'
+      fullPath: '/responsables'
+      preLoaderRoute: typeof ResponsablesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/responsables/nuevo': {
+      id: '/responsables/nuevo'
+      path: '/responsables/nuevo'
+      fullPath: '/responsables/nuevo'
+      preLoaderRoute: typeof ResponsablesNuevoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/responsables/$id': {
+      id: '/responsables/$id'
+      path: '/responsables/$id'
+      fullPath: '/responsables/$id'
+      preLoaderRoute: typeof ResponsablesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/concursantes/registro': {
@@ -88,7 +178,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  RegistroRoute: RegistroRoute,
   ConcursantesRegistroRoute: ConcursantesRegistroRoute,
+  ResponsablesIdRoute: ResponsablesIdRoute,
+  ResponsablesNuevoRoute: ResponsablesNuevoRoute,
+  ResponsablesIndexRoute: ResponsablesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
