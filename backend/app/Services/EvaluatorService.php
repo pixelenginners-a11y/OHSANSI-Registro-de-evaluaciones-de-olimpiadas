@@ -35,7 +35,12 @@ class EvaluatorService
     public function updateEvaluator(int $userId, array $data): ?User
     {
         return DB::transaction(function () use ($userId, $data) {
-            $this->userService->ensureUserHasRole($userId, 'Evaluador');
+            $role = $this->userService->getUserRole($userId);
+            if (!$role || $role->name !== 'Evaluador') {
+                throw ValidationException::withMessages([
+                    'role' => ['El usuario no es un evaluador.']
+                ]);
+            }
             $user = $this->userService->updateUser($userId, $data);
             if (isset($data['area_id'])) {
                 $this->evaluatorAreaService->updateArea($userId, $data['area_id']);
@@ -47,7 +52,12 @@ class EvaluatorService
     public function deleteEvaluator(int $userId): bool
     {
         return DB::transaction(function () use ($userId) {
-            $this->userService->ensureUserHasRole($userId, 'Evaluador');
+            $role = $this->userService->getUserRole($userId);
+            if ($role && $role->name !== 'Evaluador') {
+                throw ValidationException::withMessages([
+                    'role' => ['El usuario no es un evaluador.']
+                ]);
+            }
             $this->evaluatorAreaService->remove($userId);
             return $this->userService->deleteUser($userId);
         });
@@ -58,7 +68,7 @@ class EvaluatorService
         return $this->userService->findUserWithRole($userId, 'Evaluador');
     }
 
-    public function getAll(): Collection
+    public function getEvaluators(): Collection
     {
         return User::select(
             'users.id', 
