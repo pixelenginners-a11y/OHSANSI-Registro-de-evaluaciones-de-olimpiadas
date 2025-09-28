@@ -2,64 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OlympianRequest;
+use App\Services\CsvOlympianImporter;
+use Illuminate\Http\JsonResponse;
 use App\Models\Olympian;
-use Illuminate\Http\Request;
 
 class OlympianController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function import(OlympianRequest $request, CsvOlympianImporter $importer): JsonResponse
     {
-        //
-    }
+        $filePath = $request->file('file')->getRealPath();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $result = $importer->import($filePath);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if ($result->invalidHeader) {
+            return response()->json([
+                'message'  => 'Encabezados inválidos',
+                'esperado' => $result->expected,
+                'recibido' => $result->received,
+            ], 422);
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Olympian $olympian)
-    {
-        //
+        return response()->json([
+            'message'      => 'Importación procesada',
+            'procesadas'   => $result->processed,
+            'insertados'   => $result->inserted,
+            'actualizados' => $result->updated,
+            'errores'      => $result->errors,
+        ]);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Olympian $olympian)
+    public function all(): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Olympian $olympian)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Olympian $olympian)
-    {
-        //
+        $olympians = Olympian::all();
+        return response()->json([
+            'data' => $olympians,
+        ]);
     }
 }
