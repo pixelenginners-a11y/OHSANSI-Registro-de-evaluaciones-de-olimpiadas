@@ -14,9 +14,11 @@ export default function CSVDropZone({ onParse }: Props) {
   };
 
   return (
-        <div
-      className={`card flex cursor-pointer items-center justify-center rounded-2xl border-2 border-dashed p-12 transition
-        ${hover ? "border-gray-400 bg-gray-50" : "border-gray-300 bg-white"}`}
+    <div
+      className={[
+        "group relative flex cursor-pointer items-center justify-center rounded-2xl border-2 border-dashed p-12 transition",
+        hover ? "border-neutral-400 bg-neutral-50" : "border-neutral-300 bg-white",
+      ].join(" ")}
       onDragOver={(e)=>{e.preventDefault(); setHover(true);}}
       onDragLeave={()=>setHover(false)}
       onDrop={(e)=>{e.preventDefault(); setHover(false); const f = e.dataTransfer.files?.[0]; if(f) leerArchivo(f);}}
@@ -24,10 +26,11 @@ export default function CSVDropZone({ onParse }: Props) {
       title="Soltar o hacer clic para escoger archivo CSV"
     >
       <div className="text-center">
-        <div className="text-4xl"></div>
-        <div className="mt-2">
-          <button className="btn btn-sec">Escoger archivo</button>
-        </div>
+        <p className="text-base font-semibold text-neutral-900">Soltar archivo CSV aquí</p>
+        <p className="mt-1 text-sm text-neutral-600">o</p>
+        <button className="mt-2 rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-800 hover:bg-neutral-100 transition">
+          Escoger archivo
+        </button>
         <input
           ref={inputRef}
           type="file"
@@ -38,5 +41,4 @@ export default function CSVDropZone({ onParse }: Props) {
       </div>
     </div>
   );
-  
 }
