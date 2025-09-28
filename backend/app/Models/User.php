@@ -48,16 +48,6 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->belongsTo(Role::class);
-    }
-
-    public function evaluatorArea()
-    {
-        return $this->hasOne(evaluatorArea::class);
-    }
-
-    public function areaResponsable()
-    {
-        return $this->hasOne(Area::class, 'responsable_id');
+        return $this->belongsTos(Role::class);
     }
 }
