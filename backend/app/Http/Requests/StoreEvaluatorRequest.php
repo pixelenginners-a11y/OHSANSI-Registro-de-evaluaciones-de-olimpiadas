@@ -19,9 +19,8 @@ class StoreEvaluatorRequest extends FormRequest
             'email'     => ['required','email:rfc,dns','max:50','unique:users,email'],
             'phone'     => ['nullable','string','max:20'],
             'password'  => ['required','string','min:6'],
+            // Si asignas el rol por ID desde el cliente:
             'role_id'   => ['nullable','exists:roles,id'],
-            'area_id'  => ['required','exists:areas,id'],
-            'active'    => ['nullable','boolean'],
         ];
     }
 
@@ -46,11 +45,19 @@ class StoreEvaluatorRequest extends FormRequest
             'password.required'  => 'La contraseña es obligatoria.',
             'password.min'       => 'La contraseña debe tener al menos :min caracteres.',
 
-            'role_id.exists'  => 'El rol seleccionado no es válido.',
-            'area_id.required'=> 'Debe asignarse un área al evaluador.',
-            'area_id.exists'  => 'El área seleccionada no es válida.',
+            'role_id.exists'     => 'El rol seleccionado no es válido.',
+        ];
+    }
 
-            'active.boolean' => 'El valor de activo debe ser verdadero o falso.',
+    public function attributes(): array
+    {
+        return [
+            'full_name' => 'nombre completo',
+            'username'  => 'nombre de usuario',
+            'email'     => 'email',
+            'phone'     => 'teléfono',
+            'password'  => 'contraseña',
+            'role_id'   => 'rol',
         ];
     }
 }
