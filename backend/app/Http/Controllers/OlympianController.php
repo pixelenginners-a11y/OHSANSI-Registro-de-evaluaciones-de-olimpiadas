@@ -2,40 +2,64 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\OlympianRequest;
-use App\Services\CsvOlympianImporter;
-use Illuminate\Http\JsonResponse;
 use App\Models\Olympian;
+use Illuminate\Http\Request;
 
 class OlympianController extends Controller
 {
-    public function import(OlympianRequest $request, CsvOlympianImporter $importer): JsonResponse
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
-        $filePath = $request->file('file')->getRealPath();
-
-        $result = $importer->import($filePath);
-
-        if ($result->invalidHeader) {
-            return response()->json([
-                'message'  => 'Encabezados inválidos',
-                'esperado' => $result->expected,
-                'recibido' => $result->received,
-            ], 422);
-        }
-
-        return response()->json([
-            'message'      => 'Importación procesada',
-            'procesadas'   => $result->processed,
-            'insertados'   => $result->inserted,
-            'actualizados' => $result->updated,
-            'errores'      => $result->errors,
-        ]);
+        //
     }
-    public function all(): JsonResponse
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        $olympians = Olympian::all();
-        return response()->json([
-            'data' => $olympians,
-        ]);
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Olympian $olympian)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Olympian $olympian)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Olympian $olympian)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Olympian $olympian)
+    {
+        //
     }
 }
