@@ -72,6 +72,6 @@ class GradeController extends Controller
             return response()->json(['message' => 'Grado no encontrado'], 404);
         }
 
-        return response()->json(['message' => 'Grado eliminado correctamente']);
+        return response()->noContent();
     }
 }
