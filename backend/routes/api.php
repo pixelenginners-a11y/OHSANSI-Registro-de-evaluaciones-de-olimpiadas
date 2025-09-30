@@ -7,6 +7,7 @@ use App\Http\Controllers\Roles\AcademicResponsibleController;
 use App\Http\Controllers\OlympianController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\GradeController;
+use App\Http\Controllers\InscriptionController;
 
 Route::prefix('evaluators')->group(function () {
     Route::get('/', [EvaluatorController::class, 'index']);
@@ -47,4 +48,13 @@ Route::prefix('grades')->group(function () {
     Route::put('{id}', [GradeController::class, 'update']);
     Route::patch('{id}', [GradeController::class, 'update']);
     Route::delete('{id}', [GradeController::class, 'destroy']);
+});
+
+Route::prefix('inscriptions')->group(function () {
+    Route::get('/', [InscriptionController::class, 'index']);
+    Route::post('/', [InscriptionController::class, 'store']);
+    Route::get('{id}', [InscriptionController::class, 'show']);
+    Route::put('{id}', [InscriptionController::class, 'update']);
+    Route::patch('{id}', [InscriptionController::class, 'update']);
+    Route::delete('{id}', [InscriptionController::class, 'destroy']);
 });
