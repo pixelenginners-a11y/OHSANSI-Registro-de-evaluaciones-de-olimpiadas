@@ -1,2 +1,2 @@
-export { useUpdateEvaluator } from './useEvaluatorMutations';
+export { useUpdateEvaluator, useCreateEvaluator, useDeleteEvaluator } from './useEvaluatorMutations';
 export { useGetEvaluators, useGetEvaluatorById } from './useEvaluatorQueries';
