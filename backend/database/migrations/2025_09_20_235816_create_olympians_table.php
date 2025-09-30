@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('full_name', 100);
             $table->string('identity_document',20)->unique();
-            $table->string('legal_guardian_contact', 100);
             $table->string('educational_institution', 100);
             $table->string('department', 50);
             $table->string('academic_tutor',100)->nullable();
