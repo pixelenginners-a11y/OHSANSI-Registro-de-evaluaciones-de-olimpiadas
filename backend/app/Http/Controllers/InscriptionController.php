@@ -83,8 +83,6 @@ class InscriptionController extends Controller
             'message' => 'El inscrito no se pudo eliminar'
           ],404);
         }
-        return response()->json([
-          'message' => 'El inscrito se eliminó correctamente'
-        ],200);
+        return response()->noContent();
     }
 }

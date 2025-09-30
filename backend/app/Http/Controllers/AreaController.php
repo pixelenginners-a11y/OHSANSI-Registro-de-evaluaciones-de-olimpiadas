@@ -78,8 +78,6 @@ class AreaController extends Controller
             return response()->json(['message' => 'Area no encontrada'], 404);
         }
 
-        return response()->json([
-            'message' => 'Area eliminada correctamente',
-        ]);
+        return response()->noContent();
     }
 }
