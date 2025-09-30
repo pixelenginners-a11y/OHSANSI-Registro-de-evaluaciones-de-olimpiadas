@@ -1,41 +1,39 @@
-export interface Evaluator {
+export interface EvaluatorBase {
   id: number;
   full_name: string;
   username: string;
-  password: string;
   email: string;
   phone: string;
-  area: string;
-  active: boolean;
+  area?: string;
+  role_id?: number;
+  active?: boolean;
   created_at?: string;
   updated_at?: string;
+  deleted_at?: string | null;
 }
 
-export type EvaluatorCreate = Omit<Evaluator, 'id' | 'created_at' | 'updated_at' | 'active'>;
-
-export type EvaluatorUpdate = Partial<Omit<Evaluator, 'id' | 'created_at' | 'updated_at'>>;
-
-export type EvaluatorListResponse = {
-  evaluators: Evaluator[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
-
-export interface EvaluatorFormData {
+export interface EvaluatorCreate {
   full_name: string;
   username: string;
   email: string;
-  password: string;
-  area_id: string;
   phone: string;
+  password: string;
+  area_id: number;
+  active?: boolean;
 }
 
-export type EvaluatorResponse = Omit<Evaluator, 'password'>;
+export type EvaluatorUpdate = Partial<Omit<EvaluatorCreate, 'password'>> & {
+  password?: string;
+};
 
-export interface EvaluatorsResponse {
-  evaluators: EvaluatorResponse[];
+export interface EvaluatorListResponse {
+  evaluators: EvaluatorBase[];
   total: number;
   page: number;
   pageSize: number;
+}
+
+export interface EvaluatorResponse {
+  message: string;
+  data: EvaluatorBase;
 }
