@@ -8,17 +8,17 @@ const USERS: Record<Rol, { email: string; pwd: string; home: string }> = {
   Administrador: {
     email: "admin@umss.edu.bo",
     pwd: "admin123",
-    home: "/admin",
+    home: "/Admin/evaluador",
   },
   Responsable: {
     email: "resp@umss.edu.bo",
     pwd: "resp123",
-    home: "/responsable",
+    home: "/Admin/evaluador",
   },
   Evaluador: {
     email: "eval@umss.edu.bo",
     pwd: "eval123",
-    home: "/evaluador",
+    home: "/Admin/evaluador",
   },
 };
 
