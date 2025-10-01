@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as AreasRouteImport } from './routes/areas'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -19,6 +20,11 @@ import { Route as AdminEvaluadorRouteImport } from './routes/Admin/evaluador'
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AreasRoute = AreasRouteImport.update({
+  id: '/areas',
+  path: '/areas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/app': typeof AppRoute
+  '/areas': typeof AreasRoute
   '/login': typeof LoginRoute
   '/Admin/evaluador': typeof AdminEvaluadorRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/app': typeof AppRoute
+  '/areas': typeof AreasRoute
   '/login': typeof LoginRoute
   '/Admin/evaluador': typeof AdminEvaluadorRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/app': typeof AppRoute
+  '/areas': typeof AreasRoute
   '/login': typeof LoginRoute
   '/Admin/evaluador': typeof AdminEvaluadorRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/app'
+    | '/areas'
     | '/login'
     | '/Admin/evaluador'
     | '/concursantes/registro'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/app'
+    | '/areas'
     | '/login'
     | '/Admin/evaluador'
     | '/concursantes/registro'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/app'
+    | '/areas'
     | '/login'
     | '/Admin/evaluador'
     | '/concursantes/registro'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AppRoute: typeof AppRoute
+  AreasRoute: typeof AreasRoute
   LoginRoute: typeof LoginRoute
   AdminEvaluadorRoute: typeof AdminEvaluadorRoute
   ConcursantesRegistroRoute: typeof ConcursantesRegistroRoute
@@ -115,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/areas': {
+      id: '/areas'
+      path: '/areas'
+      fullPath: '/areas'
+      preLoaderRoute: typeof AreasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AppRoute: AppRoute,
+  AreasRoute: AreasRoute,
   LoginRoute: LoginRoute,
   AdminEvaluadorRoute: AdminEvaluadorRoute,
   ConcursantesRegistroRoute: ConcursantesRegistroRoute,
