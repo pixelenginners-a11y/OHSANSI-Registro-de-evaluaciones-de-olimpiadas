@@ -30,7 +30,7 @@ export default function PreviewTabla({
           <table className="w-full border-collapse text-sm">
             <thead className="sticky top-0 z-10 bg-neutral-50 text-neutral-800">
               <tr>
-                {["Nombre completo","Documento","Unidad educativa","Departamento","Área","Nivel","Estado"].map((h) => (
+                {["Nombre completo","Documento","Contacto tutor","Unidad educativa","Departamento","Grado","Tutor académico","Estado"].map((h) => (
                   <th key={h} className="border-b border-neutral-200 px-3 py-2 text-left font-semibold">
                     {h}
                   </th>
@@ -39,13 +39,14 @@ export default function PreviewTabla({
             </thead>
             <tbody>
               {slice.map((r) => (
-                <tr key={`${r.CI}-${r.Area}-${r.Nivel}-${r.__row}`} className="even:bg-neutral-50/60">
-                  <td className="border-b border-neutral-200 px-3 py-2">{r.NombreCompleto}</td>
-                  <td className="border-b border-neutral-200 px-3 py-2">{r.CI}</td>
-                  <td className="border-b border-neutral-200 px-3 py-2">{r.UnidadEducativa}</td>
-                  <td className="border-b border-neutral-200 px-3 py-2">{r.Departamento}</td>
-                  <td className="border-b border-neutral-200 px-3 py-2">{r.Area}</td>
-                  <td className="border-b border-neutral-200 px-3 py-2">{r.Nivel}</td>
+                <tr key={`${r.identity_document}-${r.__row}`} className="even:bg-neutral-50/60">
+                  <td className="border-b border-neutral-200 px-3 py-2">{r.full_name}</td>
+                  <td className="border-b border-neutral-200 px-3 py-2">{r.identity_document}</td>
+                  <td className="border-b border-neutral-200 px-3 py-2">{r.legal_guardian_contact}</td>
+                  <td className="border-b border-neutral-200 px-3 py-2">{r.educational_institution}</td>
+                  <td className="border-b border-neutral-200 px-3 py-2">{r.department}</td>
+                  <td className="border-b border-neutral-200 px-3 py-2">{r.school_grade}</td>
+                  <td className="border-b border-neutral-200 px-3 py-2">{r.academic_tutor || '-'}</td>
                   <td className="border-b border-neutral-200 px-3 py-2">
                     <span className="inline-flex items-center rounded-md bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-500/20">
                       Válida
@@ -55,7 +56,7 @@ export default function PreviewTabla({
               ))}
               {slice.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="p-4 text-center text-neutral-600">No hay filas válidas</td>
+                  <td colSpan={8} className="p-4 text-center text-neutral-600">No hay filas válidas</td>
                 </tr>
               )}
             </tbody>

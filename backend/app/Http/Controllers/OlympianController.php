@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\OlympianRequest;
-use App\Services\CsvOlympianImporter;
 use Illuminate\Http\JsonResponse;
 use App\Models\Olympian;
 use Illuminate\Http\Request;
@@ -19,6 +17,10 @@ class OlympianController extends Controller
 
     public function import(Request $request): JsonResponse
     {
+        $request->validate([
+            'rows' => 'required|array',
+        ]);
+
         $data = $request->all();
         $res = $this->importer->import($data);
         return response()->json([

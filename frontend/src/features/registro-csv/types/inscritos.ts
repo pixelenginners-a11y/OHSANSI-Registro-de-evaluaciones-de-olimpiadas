@@ -1,16 +1,13 @@
 
 
 export type FilaCSVValida = {
-  __row: number; // 1-based (sin header)
-  NombreCompleto: string;
-  CI: string;
-  TutorContacto: string;
-  UnidadEducativa: string;
-  Departamento: string;
-  Grado: string;
-  Area: string;
-  Nivel: string;
-  TutorAcademico?: string; // opcional
+  full_name: string;
+  identity_document: string;
+  legal_guardian_contact: string;
+  educational_institution: string;
+  department: string;
+  school_grade: string;
+  academic_tutor?: string;
 };
 
 export type FilaCSVConError = {
@@ -18,22 +15,18 @@ export type FilaCSVConError = {
   errores: string[];
 };
 
-// Encabezados oficiales (HU-01 / pliego)
 export const CAMPOS_PLANTILLA = [
-  "NombreCompleto",
-  "CI",
-  "TutorContacto",
-  "UnidadEducativa",
-  "Departamento",
-  "Grado",
-  "Area",
-  "Nivel",
-  "TutorAcademico", // opcional en contenido, pero parte del header
+  "full_name",
+  "identity_document",
+  "legal_guardian_contact",
+  "educational_institution",
+  "department",
+  "school_grade",
+  "academic_tutor",
 ] as const;
 
 export type CampoPlantilla = (typeof CAMPOS_PLANTILLA)[number];
 
-// Catálogos por defecto (si no pasas desde backend)
 export const DEPARTAMENTOS_DEFAULT = [
   "Chuquisaca","La Paz","Cochabamba","Oruro","Potosí","Tarija","Santa Cruz","Beni","Pando",
 ];
