@@ -4,29 +4,46 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Area extends Model
 {
-    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
-        'nombre',
-        'estado'
+      'name', 
+      'description', 
+      'active',
+      'responsable_id'
     ];
 
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
-
-    
-    public function scopeActivo($query)
+    public function medalParameter()
     {
-        return $query->where('estado', 'Activo');
+        return $this->hasOne(MedalParameter::class);
     }
 
-    public function scopeInactivo($query)
+    public function evaluatorAreas()
     {
-        return $query->where('estado', 'Inactivo');
+        return $this->hasMany(EvaluatorArea::class);
+    }
+
+    public function inscriptions()
+    {
+        return $this->hasMany(Inscription::class);
+    } 
+
+    public function areaGrades()
+    {
+        return $this->hasMany(AreaGrade::class);
+    }
+
+    public function grades()
+    {
+        return $this->belongsToMany(Grade::class, 'area_grades');
+    }
+
+    public function responsable()
+    {
+        return $this->belongsTo(User::class, 'responsable_id');
     }
 }

@@ -1,0 +1,12 @@
+/* src/style/global.css */
+@import "tailwindcss";
+
+@theme {
+  --color-primary-dark: #153540;     /* títulos, texto principal */
+  --color-primary-light: #f6f6f6;    /* fondo de página */
+  --color-secondary-1: #6DB3BF;      /* focus, links */
+  --color-secondary-2: #94CFC9;      /* panel izquierda (mix) */
+  --color-secondary-gray: #dddddd;   /* bordes inputs/panel */
+  --color-accent-red: #FD3F5B;       /* botón Ingresar */
+  --color-accent-gray: #dddddd;
+}

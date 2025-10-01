@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('olympians', function (Blueprint $table) {
             $table->id();
+            $table->string('full_name', 100);
+            $table->string('identity_document',20)->unique();
+            $table->string('educational_institution', 100);
+            $table->string('department', 50);
+            $table->string('academic_tutor',100)->nullable();
             $table->timestamps();
         });
     }
