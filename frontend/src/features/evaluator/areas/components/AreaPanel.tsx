@@ -1,7 +1,7 @@
 // frontend/src/components/areas/AreaPanel.tsx
 
 import React from 'react';
-import type { Area } from '../../services/apiService';
+import type { Area } from '../../../../../services/apiService';
 import AreaForm from './AreaForm';
 import EmptyState from './EmptyState';
 

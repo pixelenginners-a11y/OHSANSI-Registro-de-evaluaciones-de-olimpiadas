@@ -1,9 +1,9 @@
 // frontend/src/components/areas/AreasManager.tsx - VERSIÓN REFACTORIZADA
 
 import React, { useState, useEffect } from 'react';
-import { apiService, type Area } from '../../services/apiService';
-import AreasList from './AreasList';
-import AreaPanel from './AreaPanel';
+import { apiService, type Area } from '../../../../services/apiService';
+import AreasList from '../components/AreasList';
+import AreaPanel from '../components/AreaPanel';
 
 const AreasManager: React.FC = () => {
   const [areas, setAreas] = useState<Area[]>([]);

@@ -1,7 +1,7 @@
 // frontend/src/components/areas/AreaForm.tsx
 
 import React from 'react';
-import type { Area } from '../../services/apiService';
+import type { Area } from '../../../../../services/apiService';
 
 interface AreaFormProps {
   editingArea: Area | null;

@@ -1,7 +1,7 @@
 // frontend/src/components/areas/AreasList.tsx
 
 import React from 'react';
-import type { Area } from '../../services/apiService';
+import type { Area } from '../../../../../services/apiService';
 import AreaCard from './AreaCard';
 
 interface AreasListProps {
