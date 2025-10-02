@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../api/axios";
-import type { EvaluatorResponse } from "../types/evaluator";
+import type { EvaluatorResponse } from "../types";
 
 export const useGetEvaluators = () => {
 
