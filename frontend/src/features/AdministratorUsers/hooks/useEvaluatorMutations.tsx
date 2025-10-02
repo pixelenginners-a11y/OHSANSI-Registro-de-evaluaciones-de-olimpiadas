@@ -3,7 +3,7 @@ import { queryClient } from "../../../lib/QueryClient";
 import { AxiosError } from "axios";
 
 import api from "../../../api/axios";
-import type { EvaluatorCreate, EvaluatorUpdate, EvaluatorResponse } from "../types/evaluator";
+import type { EvaluatorCreate, EvaluatorUpdate, EvaluatorResponse } from "../types";
 
 export const useUpdateEvaluator = (id: number) => {
   return useMutation<EvaluatorResponse, AxiosError, EvaluatorUpdate>({
