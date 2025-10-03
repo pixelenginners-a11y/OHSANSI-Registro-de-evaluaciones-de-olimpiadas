@@ -1,12 +1,7 @@
+import type { Area } from '../features/areas/types/area';
 import api from './axios';
 
-export interface Area {
-  id?: number;
-  name: string;
-  description?: string;
-  created_at?: string;
-  updated_at?: string;
-}
+export type { Area };
 
 export const areasEndpoints = {
   // GET /api/areas - Obtener todas las áreas

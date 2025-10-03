@@ -4,10 +4,13 @@ const API_BASE_URL = 'http://localhost:8200/api';
 
 export type Area = {
   id: number;
-  nombre: string;
-  estado: 'Activo' | 'Inactivo';
+  name: string;
+  description: string | null;
+  active: boolean;
+  responsable_id: number | null;
   created_at: string;
   updated_at: string;
+  deleted_at?: string | null;
 }
 
 export type ApiResponse<T> = {

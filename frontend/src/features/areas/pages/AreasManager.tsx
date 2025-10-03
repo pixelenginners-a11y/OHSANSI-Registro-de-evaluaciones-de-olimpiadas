@@ -1,163 +1,137 @@
-// frontend/src/components/areas/AreasManager.tsx - VERSIÓN REFACTORIZADA
+import { useState } from 'react';
+import AreaCard from '../components/AreaCard';
+import AreaFormModal from '../components/AreaFormModal';
+import type { Area } from '../types/area';
+import {
+  useGetAreas,
+  useCreateArea,
+  useUpdateArea,
+  useDeleteArea
+} from '../hooks';
 
-import React, { useState, useEffect } from 'react';
-import { apiService, type Area } from '../../../services/apiService';
-import AreasList from '../components/AreasList';
-import AreaPanel from '../components/AreaPanel';
+const AreasManager = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedArea, setSelectedArea] = useState<Area | null>(null);
 
-const AreasManager: React.FC = () => {
-  const [areas, setAreas] = useState<Area[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [showForm, setShowForm] = useState(false);
-  const [editingArea, setEditingArea] = useState<Area | null>(null);
+  // Queries
+  const { data: areas = [], isLoading, error } = useGetAreas();
 
-  const loadAreas = async () => {
-    try {
-      setLoading(true);
-      const response = await apiService.getAreas();
-      if (response.success) {
-        setAreas(response.data);
-      } else {
-        setError('Error al cargar las áreas');
-      }
-    } catch (err) {
-      setError('Error al conectar con el servidor');
-      console.error(err);
-    } finally {
-      setLoading(false);
+  // Mutations
+  const createArea = useCreateArea();
+  const updateArea = useUpdateArea();
+  const deleteArea = useDeleteArea();
+
+  const handleOpenCreate = () => {
+    setSelectedArea(null);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEdit = (area: Area) => {
+    setSelectedArea(area);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedArea(null);
+  };
+
+  const handleSubmit = (data: { name: string; description: string | null; active: boolean }) => {
+    if (selectedArea) {
+      updateArea.mutate(
+        { id: selectedArea.id, data },
+        {
+          onSuccess: () => {
+            handleCloseModal();
+          },
+        }
+      );
+    } else {
+      createArea.mutate(data, {
+        onSuccess: () => {
+          handleCloseModal();
+        },
+      });
     }
   };
 
-  useEffect(() => {
-    loadAreas();
-  }, []);
-
-  const handleCreateArea = () => {
-    setEditingArea(null);
-    setShowForm(true);
-  };
-
-  const handleEditArea = (area: Area) => {
-    setEditingArea(area);
-    setShowForm(true);
-  };
-
-  const handleDeleteArea = async (id: number) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar esta área?')) {
-      return;
-    }
-
-    try {
-      const response = await apiService.deleteArea(id);
-      if (response.success) {
-        await loadAreas();
-      } else {
-        alert('Error al eliminar el área');
-      }
-    } catch (err) {
-      alert('Error al conectar con el servidor');
-      console.error(err);
+  const handleDelete = (id: number) => {
+    if (confirm('¿Estás seguro de que deseas eliminar esta área?')) {
+      deleteArea.mutate(id);
     }
   };
-
-  const handleToggleStatus = async (id: number) => {
-    try {
-      const response = await apiService.toggleAreaStatus(id);
-      if (response.success) {
-        await loadAreas();
-      } else {
-        alert('Error al cambiar el estado');
-      }
-    } catch (err) {
-      alert('Error al conectar con el servidor');
-      console.error(err);
-    }
-  };
-
-  const handleFormSubmit = async (areaData: Omit<Area, 'id' | 'created_at' | 'updated_at'>) => {
-    try {
-      let response;
-      if (editingArea) {
-        response = await apiService.updateArea(editingArea.id, areaData);
-      } else {
-        response = await apiService.createArea(areaData);
-      }
-
-      if (response.success) {
-        setShowForm(false);
-        setEditingArea(null);
-        await loadAreas();
-      } else {
-        alert('Error al guardar el área');
-      }
-    } catch (err) {
-      alert('Error al conectar con el servidor');
-      console.error(err);
-    }
-  };
-
-  const handleFormCancel = () => {
-    setShowForm(false);
-    setEditingArea(null);
-  };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen" style={{backgroundColor: '#EAE2B7'}}>
-        <div className="text-xl" style={{color: '#003049'}}>Cargando áreas...</div>
-      </div>
-    );
-  }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen" style={{backgroundColor: '#EAE2B7'}}>
-        <div className="text-xl" style={{color: '#D62828'}}>{error}</div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">Error al cargar las áreas</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-secondary-1 text-white rounded hover:bg-primary-dark transition-colors"
+          >
+            Reintentar
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: '#EAE2B7'}}>
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100">
-          {/* Header */}
-          <div className="border-b border-gray-100 p-6" style={{backgroundColor: '#003049'}}>
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2">Administrar Áreas</h1>
-                <p className="text-white/80">
-                  Gestión completa de áreas de competencia
-                </p>
-              </div>
-              <button
-                onClick={handleCreateArea}
-                style={{backgroundColor: '#F77F00'}}
-                className="hover:opacity-90 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg"
-              >
-                + Agregar Nueva
-              </button>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="flex">
-            <AreasList
-              areas={areas}
-              onEdit={handleEditArea}
-              onDelete={handleDeleteArea}
-              onToggleStatus={handleToggleStatus}
-            />
-            
-            <AreaPanel
-              showForm={showForm}
-              editingArea={editingArea}
-              onSubmit={handleFormSubmit}
-              onCancel={handleFormCancel}
-            />
-          </div>
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="mb-12">
+          <h1 className="text-4xl font-light text-primary-dark mb-2">
+            Gestión de Áreas Olímpicas
+          </h1>
+          <p className="text-sm text-gray-500">
+            Administra las áreas académicas y sus logros
+          </p>
         </div>
+
+        <div className="flex justify-end mb-8">
+          <button
+            onClick={handleOpenCreate}
+            className="px-6 py-2.5 bg-secondary-1 hover:bg-primary-dark text-white text-sm font-medium rounded transition-colors duration-200"
+          >
+            + Nueva Área
+          </button>
+        </div>
+
+        {isLoading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="text-gray-500">Cargando áreas...</div>
+          </div>
+        ) : areas.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 mb-4">No hay áreas registradas</p>
+            <button
+              onClick={handleOpenCreate}
+              className="px-6 py-2.5 bg-secondary-1 hover:bg-primary-dark text-white text-sm font-medium rounded transition-colors duration-200"
+            >
+              Crear primera área
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {areas.map((area) => (
+              <AreaCard
+                key={area.id}
+                area={area}
+                onEdit={handleOpenEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        )}
+
+        <AreaFormModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmit}
+          area={selectedArea}
+          isLoading={createArea.isPending || updateArea.isPending}
+          />
       </div>
     </div>
   );
