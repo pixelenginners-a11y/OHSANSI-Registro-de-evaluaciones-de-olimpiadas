@@ -61,6 +61,9 @@ class EvaluatorController extends Controller
     public function destroy(string $id)
     {
         $this->evaluatorService->deleteEvaluator((int)$id);
+        if (!$id) {
+            return response()->json(['message' => 'Evaluador no encontrado'], 404);
+        }
         return response()->noContent();
     }
 }

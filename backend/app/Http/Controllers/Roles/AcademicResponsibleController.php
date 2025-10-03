@@ -61,6 +61,9 @@ class AcademicResponsibleController extends Controller
     public function destroy(string $id)
     {
         $this->academicResponsibleService->delete((int)$id);
-        return response()->json(['message' => 'Responsable Academico eliminado correctamente']);
+        if (!$id) {
+            return response()->json(['message' => 'Responsable Academico no encontrado'], 404);
+        }
+        return response()->noContent();
     }
 }

@@ -9,13 +9,37 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ConcursantesRegistroRouteImport } from './routes/concursantes/registro'
+import { Route as AdminResponsablesRouteImport } from './routes/admin/responsables'
+import { Route as AdminNivelesRouteImport } from './routes/admin/niveles'
+import { Route as AdminInscritosRouteImport } from './routes/admin/inscritos'
+import { Route as AdminEvaluadoresRouteImport } from './routes/admin/evaluadores'
+import { Route as AdminCsvRouteImport } from './routes/admin/csv'
+import { Route as AdminAreasRouteImport } from './routes/admin/areas'
 
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -28,44 +52,162 @@ const ConcursantesRegistroRoute = ConcursantesRegistroRouteImport.update({
   path: '/concursantes/registro',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminResponsablesRoute = AdminResponsablesRouteImport.update({
+  id: '/responsables',
+  path: '/responsables',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminNivelesRoute = AdminNivelesRouteImport.update({
+  id: '/niveles',
+  path: '/niveles',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminInscritosRoute = AdminInscritosRouteImport.update({
+  id: '/inscritos',
+  path: '/inscritos',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminEvaluadoresRoute = AdminEvaluadoresRouteImport.update({
+  id: '/evaluadores',
+  path: '/evaluadores',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCsvRoute = AdminCsvRouteImport.update({
+  id: '/csv',
+  path: '/csv',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAreasRoute = AdminAreasRouteImport.update({
+  id: '/areas',
+  path: '/areas',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/app': typeof AppRoute
+  '/login': typeof LoginRoute
+  '/admin/areas': typeof AdminAreasRoute
+  '/admin/csv': typeof AdminCsvRoute
+  '/admin/evaluadores': typeof AdminEvaluadoresRoute
+  '/admin/inscritos': typeof AdminInscritosRoute
+  '/admin/niveles': typeof AdminNivelesRoute
+  '/admin/responsables': typeof AdminResponsablesRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/app': typeof AppRoute
+  '/login': typeof LoginRoute
+  '/admin/areas': typeof AdminAreasRoute
+  '/admin/csv': typeof AdminCsvRoute
+  '/admin/evaluadores': typeof AdminEvaluadoresRoute
+  '/admin/inscritos': typeof AdminInscritosRoute
+  '/admin/niveles': typeof AdminNivelesRoute
+  '/admin/responsables': typeof AdminResponsablesRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/app': typeof AppRoute
+  '/login': typeof LoginRoute
+  '/admin/areas': typeof AdminAreasRoute
+  '/admin/csv': typeof AdminCsvRoute
+  '/admin/evaluadores': typeof AdminEvaluadoresRoute
+  '/admin/inscritos': typeof AdminInscritosRoute
+  '/admin/niveles': typeof AdminNivelesRoute
+  '/admin/responsables': typeof AdminResponsablesRoute
   '/concursantes/registro': typeof ConcursantesRegistroRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/concursantes/registro'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/about'
+    | '/app'
+    | '/login'
+    | '/admin/areas'
+    | '/admin/csv'
+    | '/admin/evaluadores'
+    | '/admin/inscritos'
+    | '/admin/niveles'
+    | '/admin/responsables'
+    | '/concursantes/registro'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/concursantes/registro'
-  id: '__root__' | '/' | '/about' | '/concursantes/registro'
+  to:
+    | '/'
+    | '/admin'
+    | '/about'
+    | '/app'
+    | '/login'
+    | '/admin/areas'
+    | '/admin/csv'
+    | '/admin/evaluadores'
+    | '/admin/inscritos'
+    | '/admin/niveles'
+    | '/admin/responsables'
+    | '/concursantes/registro'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/about'
+    | '/app'
+    | '/login'
+    | '/admin/areas'
+    | '/admin/csv'
+    | '/admin/evaluadores'
+    | '/admin/inscritos'
+    | '/admin/niveles'
+    | '/admin/responsables'
+    | '/concursantes/registro'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AppRoute: typeof AppRoute
+  LoginRoute: typeof LoginRoute
   ConcursantesRegistroRoute: typeof ConcursantesRegistroRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -82,12 +224,79 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConcursantesRegistroRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/responsables': {
+      id: '/admin/responsables'
+      path: '/responsables'
+      fullPath: '/admin/responsables'
+      preLoaderRoute: typeof AdminResponsablesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/niveles': {
+      id: '/admin/niveles'
+      path: '/niveles'
+      fullPath: '/admin/niveles'
+      preLoaderRoute: typeof AdminNivelesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/inscritos': {
+      id: '/admin/inscritos'
+      path: '/inscritos'
+      fullPath: '/admin/inscritos'
+      preLoaderRoute: typeof AdminInscritosRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/evaluadores': {
+      id: '/admin/evaluadores'
+      path: '/evaluadores'
+      fullPath: '/admin/evaluadores'
+      preLoaderRoute: typeof AdminEvaluadoresRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/csv': {
+      id: '/admin/csv'
+      path: '/csv'
+      fullPath: '/admin/csv'
+      preLoaderRoute: typeof AdminCsvRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/areas': {
+      id: '/admin/areas'
+      path: '/areas'
+      fullPath: '/admin/areas'
+      preLoaderRoute: typeof AdminAreasRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
   }
 }
 
+interface AdminRouteRouteChildren {
+  AdminAreasRoute: typeof AdminAreasRoute
+  AdminCsvRoute: typeof AdminCsvRoute
+  AdminEvaluadoresRoute: typeof AdminEvaluadoresRoute
+  AdminInscritosRoute: typeof AdminInscritosRoute
+  AdminNivelesRoute: typeof AdminNivelesRoute
+  AdminResponsablesRoute: typeof AdminResponsablesRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAreasRoute: AdminAreasRoute,
+  AdminCsvRoute: AdminCsvRoute,
+  AdminEvaluadoresRoute: AdminEvaluadoresRoute,
+  AdminInscritosRoute: AdminInscritosRoute,
+  AdminNivelesRoute: AdminNivelesRoute,
+  AdminResponsablesRoute: AdminResponsablesRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AppRoute: AppRoute,
+  LoginRoute: LoginRoute,
   ConcursantesRegistroRoute: ConcursantesRegistroRoute,
 }
 export const routeTree = rootRouteImport

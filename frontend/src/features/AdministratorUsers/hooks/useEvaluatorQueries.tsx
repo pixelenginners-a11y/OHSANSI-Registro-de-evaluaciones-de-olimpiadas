@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../api/axios";
-import type { EvaluatorResponse } from "../types/evaluator";
+import type { EvaluatorResponse } from "../types";
 
 export const useGetEvaluators = () => {
 
@@ -8,7 +8,6 @@ export const useGetEvaluators = () => {
     queryKey: ["evaluators"],
     queryFn: async () => {
       const res = await api.get("/evaluators");
-      if (!res) throw new Error("Error get evaluators");
       return res.data;
     }
   })
@@ -20,7 +19,6 @@ export const useGetEvaluatorById = (id: number) => {
     queryKey: ["evaluator", id],
     queryFn: async () => {
       const res = await api.get(`/evaluators/${id}`);
-      if (!res) throw new Error("Error get evaluator by id");
       return res.data;
     }
   })

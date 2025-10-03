@@ -9,10 +9,8 @@ class Olympian extends Model
     protected $fillable = [
         'full_name',
         'identity_document',
-        'legal_guardian_contact',
         'educational_institution',
         'department',
-        'school_grade',
         'academic_tutor',
     ];
 
