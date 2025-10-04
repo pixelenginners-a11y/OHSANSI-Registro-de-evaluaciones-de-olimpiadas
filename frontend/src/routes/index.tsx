@@ -20,14 +20,6 @@ function Index() {
         </p>
 
         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-          {/* HU-1 */}
-          <Link
-            to="/concursantes/registro"
-            className="inline-block rounded-xl bg-[#F77F00] text-[#003049] px-6 py-3 font-semibold shadow hover:opacity-90 transition"
-          >
-            Inscribirme ahora
-          </Link>
-
           {/* Ver reglamento */}
           <a
             href="/reglamento.pdf"
