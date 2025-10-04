@@ -8,7 +8,7 @@ import { useLogin } from "../hooks/useLogin";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login, loading, error } = useLogin();
+  const { loginAsync, loading, error, isSuccess } = useLogin();
 
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -20,7 +20,7 @@ export default function LoginPage() {
     if (!canSubmit || loading) return;
 
     try {
-      await login({ email, password: pwd });
+      await loginAsync({ email, password: pwd });
       navigate({ to: "/app", replace: true });
     } catch {
       // Error manejado por el hook
