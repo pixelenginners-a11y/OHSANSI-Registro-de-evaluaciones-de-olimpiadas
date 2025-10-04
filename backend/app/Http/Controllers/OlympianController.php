@@ -2,33 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\OlympianRequest;
-use App\Services\CsvOlympianImporter;
 use Illuminate\Http\JsonResponse;
 use App\Models\Olympian;
-
+use Illuminate\Http\Request;
+use App\Services\OlympianService;
 class OlympianController extends Controller
 {
-    public function import(OlympianRequest $request, CsvOlympianImporter $importer): JsonResponse
+    private OlympianService $importer;
+
+    public function __construct(OlympianService $importer)
     {
-        $filePath = $request->file('file')->getRealPath();
+        $this->importer = $importer;
+    }
 
-        $result = $importer->import($filePath);
+    public function import(Request $request): JsonResponse
+    {
+        $request->validate([
+            'rows' => 'required|array',
+        ]);
 
-        if ($result->invalidHeader) {
-            return response()->json([
-                'message'  => 'Encabezados inválidos',
-                'esperado' => $result->expected,
-                'recibido' => $result->received,
-            ], 422);
-        }
-
+        $data = $request->all();
+        $res = $this->importer->import($data);
         return response()->json([
-            'message'      => 'Importación procesada',
-            'procesadas'   => $result->processed,
-            'insertados'   => $result->inserted,
-            'actualizados' => $result->updated,
-            'errores'      => $result->errors,
+            'message' => 'Import ejecutado con éxito',
+            'data' => $res,
         ]);
     }
     public function all(): JsonResponse

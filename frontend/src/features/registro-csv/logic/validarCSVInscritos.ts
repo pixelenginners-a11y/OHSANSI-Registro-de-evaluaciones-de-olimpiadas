@@ -75,57 +75,50 @@ export function validarCSVInscritos(
     const errs: string[] = [];
 
     const data = {
-      NombreCompleto: normalize(raw.NombreCompleto ?? ""),
-      CI: normalize(raw.CI ?? ""),
-      TutorContacto: normalize(raw.TutorContacto ?? ""),
-      UnidadEducativa: normalize(raw.UnidadEducativa ?? ""),
-      Departamento: normalize(raw.Departamento ?? ""),
-      Grado: normalize(raw.Grado ?? ""),
-      Area: normalize(raw.Area ?? ""),
-      Nivel: normalize(raw.Nivel ?? ""),
-      TutorAcademico: normalize(raw.TutorAcademico ?? ""),
+      full_name: normalize(raw.full_name ?? ""),
+      identity_document: normalize(raw.identity_document ?? ""),
+      legal_guardian_contact: normalize(raw.legal_guardian_contact ?? ""),
+      educational_institution: normalize(raw.educational_institution ?? ""),
+      department: normalize(raw.department ?? ""),
+      school_grade: normalize(raw.school_grade ?? ""),
+      academic_tutor: normalize(raw.academic_tutor ?? ""),
     };
 
-    // Reglas HU-01
-    if (!nonEmpty(data.NombreCompleto)) errs.push("NombreCompleto vacío");
-    if (!nonEmpty(data.CI)) errs.push("CI vacío");
-    if (!nonEmpty(data.Area)) errs.push("Área vacía");
-    if (!nonEmpty(data.Nivel)) errs.push("Nivel vacío");
+    // Reglas de validación
+    if (!nonEmpty(data.full_name)) errs.push("full_name vacío");
+    if (!nonEmpty(data.identity_document)) errs.push("identity_document vacío");
+    if (!nonEmpty(data.legal_guardian_contact)) errs.push("legal_guardian_contact vacío");
+    if (!nonEmpty(data.educational_institution)) errs.push("educational_institution vacío");
+    if (!nonEmpty(data.department)) errs.push("department vacío");
+    if (!nonEmpty(data.school_grade)) errs.push("school_grade vacío");
 
-    if (nonEmpty(data.Departamento) && !DEPTOS.includes(data.Departamento.toLowerCase())) {
-      errs.push(`Departamento no válido: ${data.Departamento}`);
-    }
-    if (nonEmpty(data.Area) && !AREAS.includes(data.Area.toLowerCase())) {
-      errs.push(`Área no válida: ${data.Area}`);
-    }
-    if (nonEmpty(data.Nivel) && !NIVELES.includes(data.Nivel.toLowerCase())) {
-      errs.push(`Nivel no válido: ${data.Nivel}`);
+    if (nonEmpty(data.department) && !DEPTOS.includes(data.department.toLowerCase())) {
+      errs.push(`Departamento no válido: ${data.department}`);
     }
 
-    if (nonEmpty(data.CI) && nonEmpty(data.Area) && nonEmpty(data.Nivel)) {
-      const key = `${data.CI.toLowerCase()}|${data.Area.toLowerCase()}|${data.Nivel.toLowerCase()}`;
-      if (seen.has(key)) errs.push("Duplicado (mismo CI + Área + Nivel)");
+    // Validar duplicados por identity_document
+    if (nonEmpty(data.identity_document)) {
+      const key = data.identity_document.toLowerCase();
+      if (seen.has(key)) errs.push("Duplicado (mismo identity_document)");
       else seen.add(key);
     }
 
-    if (nonEmpty(data.TutorContacto)) {
-      const digits = data.TutorContacto.replace(/\D/g, "");
-      if (digits.length < 7) errs.push("TutorContacto inválido (muy corto)");
+    if (nonEmpty(data.legal_guardian_contact)) {
+      const digits = data.legal_guardian_contact.replace(/\D/g, "");
+      if (digits.length < 7) errs.push("legal_guardian_contact inválido (muy corto)");
     }
 
     if (errs.length) errores.push({ __row: rowNum, errores: errs });
     else {
       validas.push({
         __row: rowNum,
-        NombreCompleto: data.NombreCompleto!,
-        CI: data.CI!,
-        TutorContacto: data.TutorContacto!,
-        UnidadEducativa: data.UnidadEducativa!,
-        Departamento: data.Departamento!,
-        Grado: data.Grado!,
-        Area: data.Area!,
-        Nivel: data.Nivel!,
-        TutorAcademico: data.TutorAcademico || undefined,
+        full_name: data.full_name!,
+        identity_document: data.identity_document!,
+        legal_guardian_contact: data.legal_guardian_contact!,
+        educational_institution: data.educational_institution!,
+        department: data.department!,
+        school_grade: data.school_grade!,
+        academic_tutor: data.academic_tutor || undefined,
       });
     }
   });

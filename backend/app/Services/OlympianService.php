@@ -2,66 +2,42 @@
 
 namespace App\Services;
 
-use App\Models\Olympian;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Olympian;
+use Illuminate\Http\Request;
+
+use function PHPSTORM_META\map;
 
 class OlympianService
 {
-    /**
-     * Obtener todos los olympians.
-     */
-    public function getAll(): Collection
+    public function create(Request $req)
     {
-        return Olympian::orderBy('id', 'desc')->get();
+        $validated = $req->validate([
+            'full_name' => 'required|string|max:100',
+            'identity_document' => 'required|string|max:20|unique:olympians,identity_document',
+            'legal_guardian_contact' => 'required|string|max:100',
+            'educational_institution' => 'required|string|max:100',
+            'department' => 'required|string|max:50',
+            'academic_tutor' => 'nullable|string|max:100',
+        ]);
+        return Olympian::create($validated);
     }
 
-    /**
-     * Obtener un olympian por su ID.
-     */
-    public function getById(int $id): ?Olympian
+    public function import(array $data)
     {
-        return Olympian::find($id);
-    }
-
-    /**
-     * Crear un nuevo olympian.
-     */
-    public function create(array $data): Olympian
-    {
-        return DB::transaction(function () use ($data) {
-            return Olympian::create([
-                'full_name'             => $data['full_name'],
-                'identity_document'     => $data['identity_document'],
-                'educational_institution'=> $data['educational_institution'],
-                'department'            => $data['department'],
-                'academic_tutor'        => $data['academic_tutor'] ?? null,
-            ]);
-        });
-    }
-
-    /**
-     * Actualizar un olympian existente.
-     */
-    public function update(int $id, array $data): ?Olympian
-    {
-        $olympian = Olympian::find($id);
-        if (!$olympian) {
-            return null;
-        }
-        $olympian->update($data);
-        return $olympian;
-    }
-
-    /**
-     * Eliminar un olympian.
-     */
-    public function delete(int $id): bool
-    {
-        $olympian = Olympian::find($id);
-        if (!$olympian) {
-            return false;
-        }
-        return (bool) $olympian->delete();
+        $validator = Validator::make($data, [
+            'rows.*.full_name' => 'required|string|max:100',
+            'rows.*.identity_document' => 'required|string|max:20|unique:olympians,identity_document',
+            'rows.*.legal_guardian_contact' => 'required|string|max:100',
+            'rows.*.educational_institution' => 'required|string|max:100',
+            'rows.*.department' => 'required|string|max:50',
+            'rows.*.school_grade' => 'required|string|max:50',
+            'rows.*.academic_tutor' => 'nullable|string|max:100',
+        ]);
+        $validated = $validator->validate();
+        $creados = collect($validated['rows'])->map(fn ($fila) => Olympian::create($fila));
+        return $creados;
     }
 }
