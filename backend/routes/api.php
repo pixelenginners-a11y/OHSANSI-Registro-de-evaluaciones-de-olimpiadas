@@ -42,7 +42,12 @@ Route::middleware('auth:api')->group(function () {
 
     // Olympians routes (Administrador y Responsable Academico)
     Route::prefix('olympians')->middleware('role:Administrador,Responsable Academico')->group(function () {
-        Route::get('/', [OlympianController::class, 'all']);
+        Route::get('/', [OlympianController::class, 'index']);
+        Route::post('/', [OlympianController::class, 'store']);
+        Route::get('{id}', [OlympianController::class, 'show']);
+        Route::put('{id}', [OlympianController::class, 'update']);
+        Route::patch('{id}', [OlympianController::class, 'update']);
+        Route::delete('{id}', [OlympianController::class, 'destroy']);
         Route::post('/import', [OlympianController::class, 'import']);
     });
 
