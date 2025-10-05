@@ -28,7 +28,7 @@ function Index() {
             Ver reglamento
           </a>
           <Link
-            to="/login"
+            to="/public/login"
             className="inline-block rounded-2xl px-6 py-3.5 font-semibold text-white shadow
                        transition focus:outline-none focus-visible:ring-4
                        focus-visible:ring-[var(--color-accent-red)]/35"

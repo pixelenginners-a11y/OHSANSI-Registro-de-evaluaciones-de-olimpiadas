@@ -9,10 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SharedConstruccionRouteImport } from './routes/shared/construccion'
+import { Route as PublicLoginRouteImport } from './routes/public/login'
 import { Route as AdminResponsablesRouteImport } from './routes/admin/responsables'
 import { Route as AdminNivelesRouteImport } from './routes/admin/niveles'
 import { Route as AdminInscritosRouteImport } from './routes/admin/inscritos'
@@ -20,11 +20,6 @@ import { Route as AdminEvaluadoresRouteImport } from './routes/admin/evaluadores
 import { Route as AdminCsvRouteImport } from './routes/admin/csv'
 import { Route as AdminAreasRouteImport } from './routes/admin/areas'
 
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -38,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
 const SharedConstruccionRoute = SharedConstruccionRouteImport.update({
   id: '/shared/construccion',
   path: '/shared/construccion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicLoginRoute = PublicLoginRouteImport.update({
+  id: '/public/login',
+  path: '/public/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminResponsablesRoute = AdminResponsablesRouteImport.update({
@@ -74,38 +74,38 @@ const AdminAreasRoute = AdminAreasRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/login': typeof LoginRoute
   '/admin/areas': typeof AdminAreasRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
+  '/public/login': typeof PublicLoginRoute
   '/shared/construccion': typeof SharedConstruccionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/login': typeof LoginRoute
   '/admin/areas': typeof AdminAreasRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
+  '/public/login': typeof PublicLoginRoute
   '/shared/construccion': typeof SharedConstruccionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/login': typeof LoginRoute
   '/admin/areas': typeof AdminAreasRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
+  '/public/login': typeof PublicLoginRoute
   '/shared/construccion': typeof SharedConstruccionRoute
 }
 export interface FileRouteTypes {
@@ -113,56 +113,49 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
-    | '/login'
     | '/admin/areas'
     | '/admin/csv'
     | '/admin/evaluadores'
     | '/admin/inscritos'
     | '/admin/niveles'
     | '/admin/responsables'
+    | '/public/login'
     | '/shared/construccion'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
-    | '/login'
     | '/admin/areas'
     | '/admin/csv'
     | '/admin/evaluadores'
     | '/admin/inscritos'
     | '/admin/niveles'
     | '/admin/responsables'
+    | '/public/login'
     | '/shared/construccion'
   id:
     | '__root__'
     | '/'
     | '/admin'
-    | '/login'
     | '/admin/areas'
     | '/admin/csv'
     | '/admin/evaluadores'
     | '/admin/inscritos'
     | '/admin/niveles'
     | '/admin/responsables'
+    | '/public/login'
     | '/shared/construccion'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
-  LoginRoute: typeof LoginRoute
+  PublicLoginRoute: typeof PublicLoginRoute
   SharedConstruccionRoute: typeof SharedConstruccionRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -182,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/shared/construccion'
       fullPath: '/shared/construccion'
       preLoaderRoute: typeof SharedConstruccionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/public/login': {
+      id: '/public/login'
+      path: '/public/login'
+      fullPath: '/public/login'
+      preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/responsables': {
@@ -254,7 +254,7 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
-  LoginRoute: LoginRoute,
+  PublicLoginRoute: PublicLoginRoute,
   SharedConstruccionRoute: SharedConstruccionRoute,
 }
 export const routeTree = rootRouteImport
