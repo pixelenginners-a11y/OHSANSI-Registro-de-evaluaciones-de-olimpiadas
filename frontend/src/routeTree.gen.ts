@@ -9,12 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as AppRouteImport } from './routes/app'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ConcursantesRegistroRouteImport } from './routes/concursantes/registro'
+import { Route as SharedConstruccionRouteImport } from './routes/shared/construccion'
+import { Route as PublicLoginRouteImport } from './routes/public/login'
 import { Route as AdminResponsablesRouteImport } from './routes/admin/responsables'
 import { Route as AdminNivelesRouteImport } from './routes/admin/niveles'
 import { Route as AdminInscritosRouteImport } from './routes/admin/inscritos'
@@ -22,21 +20,6 @@ import { Route as AdminEvaluadoresRouteImport } from './routes/admin/evaluadores
 import { Route as AdminCsvRouteImport } from './routes/admin/csv'
 import { Route as AdminAreasRouteImport } from './routes/admin/areas'
 
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppRoute = AppRouteImport.update({
-  id: '/app',
-  path: '/app',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -47,9 +30,14 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ConcursantesRegistroRoute = ConcursantesRegistroRouteImport.update({
-  id: '/concursantes/registro',
-  path: '/concursantes/registro',
+const SharedConstruccionRoute = SharedConstruccionRouteImport.update({
+  id: '/shared/construccion',
+  path: '/shared/construccion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicLoginRoute = PublicLoginRouteImport.update({
+  id: '/public/login',
+  path: '/public/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminResponsablesRoute = AdminResponsablesRouteImport.update({
@@ -86,123 +74,88 @@ const AdminAreasRoute = AdminAreasRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/about': typeof AboutRoute
-  '/app': typeof AppRoute
-  '/login': typeof LoginRoute
   '/admin/areas': typeof AdminAreasRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
-  '/concursantes/registro': typeof ConcursantesRegistroRoute
+  '/public/login': typeof PublicLoginRoute
+  '/shared/construccion': typeof SharedConstruccionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/about': typeof AboutRoute
-  '/app': typeof AppRoute
-  '/login': typeof LoginRoute
   '/admin/areas': typeof AdminAreasRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
-  '/concursantes/registro': typeof ConcursantesRegistroRoute
+  '/public/login': typeof PublicLoginRoute
+  '/shared/construccion': typeof SharedConstruccionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/about': typeof AboutRoute
-  '/app': typeof AppRoute
-  '/login': typeof LoginRoute
   '/admin/areas': typeof AdminAreasRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
-  '/concursantes/registro': typeof ConcursantesRegistroRoute
+  '/public/login': typeof PublicLoginRoute
+  '/shared/construccion': typeof SharedConstruccionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
-    | '/about'
-    | '/app'
-    | '/login'
     | '/admin/areas'
     | '/admin/csv'
     | '/admin/evaluadores'
     | '/admin/inscritos'
     | '/admin/niveles'
     | '/admin/responsables'
-    | '/concursantes/registro'
+    | '/public/login'
+    | '/shared/construccion'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
-    | '/about'
-    | '/app'
-    | '/login'
     | '/admin/areas'
     | '/admin/csv'
     | '/admin/evaluadores'
     | '/admin/inscritos'
     | '/admin/niveles'
     | '/admin/responsables'
-    | '/concursantes/registro'
+    | '/public/login'
+    | '/shared/construccion'
   id:
     | '__root__'
     | '/'
     | '/admin'
-    | '/about'
-    | '/app'
-    | '/login'
     | '/admin/areas'
     | '/admin/csv'
     | '/admin/evaluadores'
     | '/admin/inscritos'
     | '/admin/niveles'
     | '/admin/responsables'
-    | '/concursantes/registro'
+    | '/public/login'
+    | '/shared/construccion'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
-  AboutRoute: typeof AboutRoute
-  AppRoute: typeof AppRoute
-  LoginRoute: typeof LoginRoute
-  ConcursantesRegistroRoute: typeof ConcursantesRegistroRoute
+  PublicLoginRoute: typeof PublicLoginRoute
+  SharedConstruccionRoute: typeof SharedConstruccionRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -217,11 +170,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/concursantes/registro': {
-      id: '/concursantes/registro'
-      path: '/concursantes/registro'
-      fullPath: '/concursantes/registro'
-      preLoaderRoute: typeof ConcursantesRegistroRouteImport
+    '/shared/construccion': {
+      id: '/shared/construccion'
+      path: '/shared/construccion'
+      fullPath: '/shared/construccion'
+      preLoaderRoute: typeof SharedConstruccionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/public/login': {
+      id: '/public/login'
+      path: '/public/login'
+      fullPath: '/public/login'
+      preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/responsables': {
@@ -294,10 +254,8 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
-  AboutRoute: AboutRoute,
-  AppRoute: AppRoute,
-  LoginRoute: LoginRoute,
-  ConcursantesRegistroRoute: ConcursantesRegistroRoute,
+  PublicLoginRoute: PublicLoginRoute,
+  SharedConstruccionRoute: SharedConstruccionRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
