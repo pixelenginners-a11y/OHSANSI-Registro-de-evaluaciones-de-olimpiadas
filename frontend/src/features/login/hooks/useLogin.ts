@@ -9,7 +9,7 @@ export function useLogin() {
       loginApi(email, password),
     onSuccess: (response) => {
       // Guardar token en localStorage
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.data.access_token);
     },
   });
 
