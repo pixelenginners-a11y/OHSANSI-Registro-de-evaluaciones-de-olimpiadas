@@ -5,12 +5,11 @@ import { Header } from "../components/Header";
 import { PageTitle } from "../components/PageTitle";
 import { LoginPanel } from "../components/LoginPanel";
 import { useLogin } from "../hooks/useLogin";
-import { useGetMe } from "../hooks/useGetMe";
+import { getMe } from "../../../api/auth";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const { loginAsync, loading, error } = useLogin();
-  const { refetch: fetchMe } = useGetMe();
 
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -23,8 +22,8 @@ export default function LoginPage() {
 
     try {
       await loginAsync({ email, password: pwd });
-      const { data } = await fetchMe();
-      const userRole = data?.data.role_id;
+      const response = await getMe();
+      const userRole = response?.data.role_id;
 
       if (userRole === 1) {
         navigate({ to: "/admin", replace: true });
