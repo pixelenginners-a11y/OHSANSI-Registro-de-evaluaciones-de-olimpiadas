@@ -30,7 +30,7 @@ export default function LoginPage() {
         navigate({ to: "/admin", replace: true });
       } else {
         // Otros roles van a página en construcción
-        navigate({ to: "/construccion", replace: true });
+        navigate({ to: "/shared/construccion", replace: true });
       }
     } catch {
       // Error manejado por el hook

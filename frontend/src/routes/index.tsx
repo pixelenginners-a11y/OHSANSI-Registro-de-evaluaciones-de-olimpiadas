@@ -27,8 +27,6 @@ function Index() {
           >
             Ver reglamento
           </a>
-
-          {/* 🔥 Nuevo botón con gradiente igual al del login */}
           <Link
             to="/login"
             className="inline-block rounded-2xl px-6 py-3.5 font-semibold text-white shadow
@@ -38,11 +36,11 @@ function Index() {
               background:
                 "linear-gradient(180deg, color-mix(in srgb, var(--color-accent-red) 92%, white) 0%, var(--color-accent-red) 100%)",
             }}
-            onMouseOver={(e) => {
+            onMouseOver={(e:any) => {
               e.currentTarget.style.background =
                 "linear-gradient(180deg, color-mix(in srgb, var(--color-accent-red) 85%, white) 0%, color-mix(in srgb, var(--color-accent-red) 96%, white) 100%)";
             }}
-            onMouseOut={(e) => {
+            onMouseOut={(e:any) => {
               e.currentTarget.style.background =
                 "linear-gradient(180deg, color-mix(in srgb, var(--color-accent-red) 92%, white) 0%, var(--color-accent-red) 100%)";
             }}
