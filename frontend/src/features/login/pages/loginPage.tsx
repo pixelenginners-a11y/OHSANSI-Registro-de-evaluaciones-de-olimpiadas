@@ -5,10 +5,12 @@ import { Header } from "../components/Header";
 import { PageTitle } from "../components/PageTitle";
 import { LoginPanel } from "../components/LoginPanel";
 import { useLogin } from "../hooks/useLogin";
+import { useGetMe } from "../hooks/useGetMe";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { loginAsync, loading, error, isSuccess } = useLogin();
+  const { loginAsync, loading, error } = useLogin();
+  const { refetch: fetchMe } = useGetMe();
 
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -21,7 +23,15 @@ export default function LoginPage() {
 
     try {
       await loginAsync({ email, password: pwd });
-      navigate({ to: "/app", replace: true });
+      const { data } = await fetchMe();
+      const userRole = data?.data.role_id;
+
+      if (userRole === 1) {
+        navigate({ to: "/admin", replace: true });
+      } else {
+        // Otros roles van a página en construcción
+        navigate({ to: "/construccion", replace: true });
+      }
     } catch {
       // Error manejado por el hook
     }
