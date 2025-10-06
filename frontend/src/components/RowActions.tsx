@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { type UseMutateFunction } from "@tanstack/react-query";
 
-import { type Responsable, type EvaluatorBase, type ResponsableEdit } from "../features/AdministratorUsers";
+import { type Responsable, type EvaluatorBase, type ResponsableEdit, type EvaluatorUpdate } from "../features/AdministratorUsers";
 import Icon from "./Icon";
 import { ConfirmModal } from "./ConfirmModal";
 
@@ -9,7 +9,7 @@ interface RowActionsProps {
   id: number;
   data: Responsable | EvaluatorBase;
   onEdit: (data: Responsable | EvaluatorBase) => void;
-  editActive: (id: string, data: ResponsableEdit) => void;
+  editActive: (id: string, data: ResponsableEdit | EvaluatorUpdate) => void;
   onDelete: UseMutateFunction<void, Error, number, unknown>;
   active?: boolean;
   openRowId: number | null;
@@ -41,7 +41,7 @@ export function RowActions({
   }
 
   const handleToggleStatus = () => {
-    editActive(id.toString(), { ...data, active: !active } as ResponsableEdit);
+    editActive(id.toString(), { ...data, active: !active } as ResponsableEdit | EvaluatorUpdate);
     setOpenRowId(null);
   }
 
