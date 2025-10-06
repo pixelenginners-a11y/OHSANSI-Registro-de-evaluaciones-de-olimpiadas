@@ -28,13 +28,6 @@ function Index() {
             Ver reglamento
           </a>
 
-          <Link
-            to="/areas"
-            className="inline-block rounded-xl border border-[#EAE2B7] text-white px-6 py-3 font-semibold hover:bg-white/10 transition"
-          >
-            Gestión de Áreas
-          </Link>
-
           {/* 🔥 Nuevo botón con gradiente igual al del login */}
           <Link
             to="/public/login"
