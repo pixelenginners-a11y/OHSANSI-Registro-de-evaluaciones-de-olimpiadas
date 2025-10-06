@@ -8,7 +8,17 @@ import {
   Users,
   LogOut,
   Menu,
-  X
+  X,
+  Square,
+  SquareCheck,
+  EllipsisVertical,
+  Edit,
+  Trash,
+  ChevronUp,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Search,
 } from "lucide-react";
 
 export const icons = {
@@ -22,6 +32,16 @@ export const icons = {
   'menu': Menu,
   'x': X,
   'book-open': BookOpen,
+  'square': Square,
+  'square-check': SquareCheck,
+  'ellipsis-vertical': EllipsisVertical,
+  'edit': Edit,
+  'trash': Trash,
+  'chevron-down': ChevronDown,
+  'chevron-up': ChevronUp,
+  'chevron-left': ChevronLeft,
+  'chevron-right': ChevronRight,
+  'search': Search,
 } as const;
 
 export type IconName = keyof typeof icons;
