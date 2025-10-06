@@ -5,6 +5,7 @@ export interface EvaluatorBase {
   email: string;
   phone: string;
   area?: string;
+  area_id?: number;
   role_id?: number;
   active?: boolean;
   created_at?: string;

@@ -14,3 +14,11 @@ export type {
   InscriptionListResponse,
   InscriptionResponse
 } from './inscription';
+
+export type {
+  Responsable,
+  Column,
+  ResponsableEdit,
+  ResponsableParcialEdit,
+  ResponsableCreate,
+} from './responsible';
