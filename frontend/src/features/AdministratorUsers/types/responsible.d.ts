@@ -15,7 +15,7 @@ export interface ResponsableEdit extends Omit<Responsable, 'id'> { }
 
 export interface ResponsableParcialEdit extends Partial<Omit<Responsable, 'id'>> { }
 
-export interface ResponsableCreate extends Omit<Responsable, 'id' | 'area'> {
+export interface ResponsableCreate extends Omit<Responsable, 'id' | 'area' | 'active'> {
   password: string;
 }
 
