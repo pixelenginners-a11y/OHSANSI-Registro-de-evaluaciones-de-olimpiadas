@@ -1,6 +1,6 @@
 import { type UseMutateFunction } from "@tanstack/react-query";
 
-import { type Responsable, type Column, type EvaluatorBase, type ResponsableEdit } from "../index";
+import { type Responsable, type Column, type EvaluatorBase, type ResponsableEdit, type EvaluatorUpdate } from "../index";
 import { RowActions } from "../../../components/RowActions";
 
 interface RowDesktopProps {
@@ -9,8 +9,8 @@ interface RowDesktopProps {
   openRowId: number | null;
   setOpenRowId: React.Dispatch<React.SetStateAction<number | null>>;
   onDelete: UseMutateFunction<void, Error, number, unknown>;
-  editActive: (id: string, data: ResponsableEdit) => void;
-  onEdit: (responsable: Responsable | EvaluatorBase) => void;
+  editActive: (id: string, data: ResponsableEdit | EvaluatorUpdate) => void;
+  onEdit: (data: Responsable | EvaluatorBase) => void;
 }
 
 export function RowDesktop({ data, columns, openRowId, setOpenRowId, onDelete, onEdit, editActive }: RowDesktopProps) {

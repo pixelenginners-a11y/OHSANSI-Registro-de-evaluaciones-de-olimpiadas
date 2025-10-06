@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { type UseMutateFunction } from "@tanstack/react-query";
 
-import { type Responsable, type EvaluatorBase, type ResponsableEdit } from "../index";
+import { type Responsable, type EvaluatorBase, type ResponsableEdit, type EvaluatorUpdate } from "../index";
 import { RowActions } from "../../../components/RowActions";
 import Icon from "../../../components/Icon";
 
@@ -10,7 +10,7 @@ interface RowMobileProps {
   openRowId: number | null;
   setOpenRowId: React.Dispatch<React.SetStateAction<number | null>>;
   onDelete: UseMutateFunction<void, Error, number, unknown>;
-  editActive: (id: string, data: ResponsableEdit) => void;
+  editActive: (id: string, data: ResponsableEdit | EvaluatorUpdate) => void;
   onEdit: (responsable: Responsable | EvaluatorBase) => void;
 }
 
