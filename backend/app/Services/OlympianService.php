@@ -40,4 +40,43 @@ class OlympianService
         $creados = collect($validated['rows'])->map(fn ($fila) => Olympian::create($fila));
         return $creados;
     }
+
+    public function getAll()
+    {
+        return Olympian::all();
+    }
+
+    public function store(array $data)
+    {
+        return Olympian::create($data);
+    }
+
+    public function findById(string $id)
+    {
+        return Olympian::find($id);
+    }
+
+    public function update(string $id, array $data)
+    {
+        $olympian = Olympian::find($id);
+
+        if (!$olympian) {
+            return null;
+        }
+
+        $olympian->update($data);
+        return $olympian;
+    }
+
+    public function delete(string $id)
+    {
+        $olympian = Olympian::find($id);
+
+        if (!$olympian) {
+            return false;
+        }
+
+        $olympian->delete();
+        return true;
+    }
 }
