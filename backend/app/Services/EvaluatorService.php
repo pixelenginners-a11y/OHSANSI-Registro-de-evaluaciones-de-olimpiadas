@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use \Illuminate\Database\Eloquent\Collection;
 use App\Services\UserService;
 use App\Services\EvaluatorAreaService;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class EvaluatorService
 {
@@ -58,7 +59,7 @@ class EvaluatorService
         return $this->userService->findUserWithRole($userId, 'Evaluador');
     }
 
-    public function getAll(): Collection
+    public function getAll(): LengthAwarePaginator
     {
         return User::select(
             'users.id', 
@@ -75,6 +76,42 @@ class EvaluatorService
           ->leftJoin('areas','areas.id','=','ea.area_id')
           ->where('roles.name', 'Evaluador')
           ->orderBy('users.id', 'desc')
-          ->get();
+          ->paginate(10);
+    }
+
+    public function searchEvaluators(string $search, ?string $areaId = null, int $perPage = 10): LengthAwarePaginator
+    {
+        $searchLower = strtolower($search);
+        
+        $query = User::select(
+                'users.id',
+                'users.full_name',
+                'users.username',
+                'users.email',
+                'users.phone',
+                'users.active',
+                'areas.id as area_id',
+                'areas.name as area'
+            )
+            ->join('roles', 'users.role_id', '=', 'roles.id')
+            ->leftJoin('evaluator_areas as ea', 'users.id', '=', 'ea.user_id')
+            ->leftJoin('areas', 'areas.id', '=', 'ea.area_id')
+            ->where('roles.name', 'Evaluador');
+        
+        if (!empty($areaId)) {
+            $query->where('areas.id', $areaId);
+        }
+        
+        if (!empty($search)) {
+            $query->where(function ($q) use ($searchLower) {
+                $q->whereRaw('LOWER(users.full_name) like ?', ["%{$searchLower}%"])
+                  ->orWhereRaw('LOWER(users.username) like ?', ["%{$searchLower}%"])
+                  ->orWhereRaw('LOWER(users.email) like ?', ["%{$searchLower}%"]);
+            });
+        }
+        
+        return $query->distinct()
+                    ->orderBy('users.id', 'desc')
+                    ->paginate($perPage);
     }
 }

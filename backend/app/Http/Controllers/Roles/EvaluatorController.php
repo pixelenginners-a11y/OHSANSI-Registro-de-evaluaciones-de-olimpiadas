@@ -66,4 +66,15 @@ class EvaluatorController extends Controller
         }
         return response()->noContent();
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query', '');
+        $areaId = $request->input('areaId', null);
+        $perPage = $request->input('per_page', 10);
+        
+        $results = $this->evaluatorService->searchEvaluators($query, $areaId, $perPage);
+        
+        return response()->json($results);
+    }
 }
