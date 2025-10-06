@@ -1,107 +1,76 @@
-import { useState } from 'react'
-import type { Inscrito, InscritoCreate, InscritoUpdate } from '../types'
-import ListaInscritos from '../components/ListaInscritos'
-import FormularioInscrito from '../components/FormularioInscrito'
-import FormularioEditarInscrito from '../components/FormularioEditarInscrito'
-import Modal from '../components/Modal'
-import { useGetOlympians, useCreateOlympian, useUpdateOlympian, useDeleteOlympian } from '../hooks'
+import { useState } from "react";
+import { OlympiansList } from "../components/OlympiansList";
+import { CreateOlympianModal } from "../components/CreateOlympianModal";
+import { EditOlympianModal } from "../components/EditOlympianModal";
+import { useGetOlympians } from "../hooks/useOlympianQueries";
+import { useDeleteOlympian, useCreateOlympian, useUpdateOlympian } from "../hooks/useOlympianMutations";
+import type { Olympian, OlympianUpdate, OlympianCreate } from "../types";
 
 export default function InscritosPage() {
-  const { data: inscritos, isLoading } = useGetOlympians()
-  const createInscrito = useCreateOlympian()
-  const updateInscrito = useUpdateOlympian()
-  const deleteInscrito = useDeleteOlympian()
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [inscritoSeleccionado, setInscritoSeleccionado] = useState<Inscrito | null>(null)
+  const { data: olympians = [], isLoading } = useGetOlympians();
+  const { mutate: deleteOlympian } = useDeleteOlympian();
+  const { mutateAsync: createOlympian } = useCreateOlympian();
+  const { mutateAsync: updateOlympian } = useUpdateOlympian();
 
-  const handleEditar = (inscrito: Inscrito) => {
-    setInscritoSeleccionado(inscrito)
-    setIsEditModalOpen(true)
-  }
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedOlympian, setSelectedOlympian] = useState<Olympian | null>(null);
 
-  const handleAgregarInscrito = (data: InscritoCreate) => {
-    createInscrito.mutate(data, {
-      onSuccess: () => {
-        setIsModalOpen(false)
-      }
-    })
-  }
+  const handleEdit = (data: Olympian) => {
+    setSelectedOlympian(data);
+    setIsEditModalOpen(true);
+  };
 
-  const handleEditarInscrito = (id: number, data: InscritoUpdate) => {
-    updateInscrito.mutate({ id, data }, {
-      onSuccess: () => {
-        setIsEditModalOpen(false)
-      }
-    })
-  }
+  const handleEditActive = (_id: string, _data: OlympianUpdate) => {
+    // TODO: Implementar lógica de cambio de estado
+  };
 
-  const handleEliminarInscrito = (id: number) => {
-    if (window.confirm('¿Estás seguro de eliminar este concursante?')) {
-      deleteInscrito.mutate(id)
-    }
-  }
+  const handleCreate = async (data: OlympianCreate) => {
+    await createOlympian(data);
+  };
+
+  const handleUpdate = async (id: number, data: OlympianUpdate) => {
+    await updateOlympian({ id, data });
+  };
 
   if (isLoading) {
-    return <div className="p-6">Cargando concursantes...</div>
+    return <div>Cargando...</div>;
   }
 
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Administrar Concursantes</h1>
+        <h1 className="text-2xl font-bold">Inscritos</h1>
         <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+          onClick={() => setIsCreateModalOpen(true)}
+          className="px-4 py-2 rounded-lg bg-primary-dark text-white hover:bg-primary"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
-            />
-          </svg>
-          Nuevo Concursante
+          Crear inscrito
         </button>
       </div>
 
-      <ListaInscritos
-        inscritos={inscritos || []}
-        onEditar={handleEditar}
-        onEliminar={handleEliminarInscrito}
+      <OlympiansList
+        data={olympians}
+        onDelete={deleteOlympian}
+        onEdit={handleEdit}
+        editActive={handleEditActive}
       />
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Registrar Nuevo Concursante"
-      >
-        <FormularioInscrito
-          onAgregar={handleAgregarInscrito}
-          onClose={() => setIsModalOpen(false)}
-        />
-      </Modal>
+      <CreateOlympianModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSave={handleCreate}
+      />
 
-      {inscritoSeleccionado && (
-        <Modal
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          title="Editar Concursante"
-        >
-          <FormularioEditarInscrito
-            inscrito={inscritoSeleccionado}
-            onEditar={handleEditarInscrito}
-            onClose={() => setIsEditModalOpen(false)}
-          />
-        </Modal>
-      )}
+      <EditOlympianModal
+        isOpen={isEditModalOpen}
+        olympian={selectedOlympian}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedOlympian(null);
+        }}
+        onSave={handleUpdate}
+      />
     </div>
-  )
+  );
 }
