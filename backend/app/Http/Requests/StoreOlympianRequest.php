@@ -22,12 +22,13 @@ class StoreOlympianRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'ci' => 'required|string|max:20|unique:olympians',
-            'birthdate' => 'required|date',
-            'grade_id' => 'required|exists:grades,id',
-            'area_id' => 'required|exists:areas,id',
+            'full_name' => 'required|string|max:100',
+            'identity_document' => 'required|string|max:20|unique:olympians,identity_document',
+            'legal_guardian_contact' => 'required|string|max:100',
+            'educational_institution' => 'required|string|max:100',
+            'department' => 'required|string|max:50',
+            'school_grade' => 'required|string|max:50',
+            'academic_tutor' => 'nullable|string|max:100',
         ];
     }
 }

@@ -24,12 +24,13 @@ class UpdateOlympianRequest extends FormRequest
         $olympianId = $this->route('id');
 
         return [
-            'first_name' => 'sometimes|required|string|max:255',
-            'last_name' => 'sometimes|required|string|max:255',
-            'ci' => 'sometimes|required|string|max:20|unique:olympians,ci,' . $olympianId,
-            'birthdate' => 'sometimes|required|date',
-            'grade_id' => 'sometimes|required|exists:grades,id',
-            'area_id' => 'sometimes|required|exists:areas,id',
+            'full_name' => 'sometimes|required|string|max:100',
+            'identity_document' => 'sometimes|required|string|max:20|unique:olympians,identity_document,' . $olympianId,
+            'legal_guardian_contact' => 'sometimes|required|string|max:100',
+            'educational_institution' => 'sometimes|required|string|max:100',
+            'department' => 'sometimes|required|string|max:50',
+            'school_grade' => 'sometimes|required|string|max:50',
+            'academic_tutor' => 'sometimes|nullable|string|max:100',
         ];
     }
 }
