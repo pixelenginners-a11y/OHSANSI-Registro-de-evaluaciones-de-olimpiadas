@@ -66,4 +66,15 @@ class AcademicResponsibleController extends Controller
         }
         return response()->noContent();
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query', '');
+        $areaId = $request->input('areaId', null);
+        $perPage = $request->input('per_page', 10);
+        
+        $results = $this->academicResponsibleService->searchResponsibles($query, $areaId, $perPage);
+        
+        return response()->json($results);
+    }
 }
