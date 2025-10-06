@@ -67,6 +67,7 @@ class EvaluatorService
             'users.email',  
             'users.phone', 
             'users.active',
+            'areas.id as area_id',
             'areas.name as area'
           )
           ->join('roles','users.role_id','=','roles.id')

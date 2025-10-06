@@ -123,4 +123,29 @@ class AreaService
         $area = Area::find($areaId);
         return $area ? $area->name : null;
     }
+
+    public function assignResponsible(int $areaId, int $userId): ?Area
+    {
+        $area = Area::find($areaId);
+        if (!$area) {
+            return false;
+        }
+        // if ($area->responsable_id !== null) {
+        //     return false;
+        // }
+        $area->responsable_id = $userId;
+        $area->save();
+        return $area;
+    }
+
+    public function unassignResponsible(int $userId): ?Area
+    {
+        $area = Area::where('responsable_id', $userId)->first();
+        if (!$area) {
+            return null;
+        }
+        $area->responsable_id = null;
+        $area->save();
+        return $area;
+    }
 }
