@@ -20,14 +20,6 @@ function Index() {
         </p>
 
         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-          {/* HU-1 */}
-          <Link
-            to="/concursantes/registro"
-            className="inline-block rounded-xl bg-[#F77F00] text-[#003049] px-6 py-3 font-semibold shadow hover:opacity-90 transition"
-          >
-            Inscribirme ahora
-          </Link>
-
           {/* Ver reglamento */}
           <a
             href="/reglamento.pdf"
@@ -45,7 +37,7 @@ function Index() {
 
           {/* 🔥 Nuevo botón con gradiente igual al del login */}
           <Link
-            to="/login"
+            to="/public/login"
             className="inline-block rounded-2xl px-6 py-3.5 font-semibold text-white shadow
                        transition focus:outline-none focus-visible:ring-4
                        focus-visible:ring-[var(--color-accent-red)]/35"
@@ -53,11 +45,11 @@ function Index() {
               background:
                 "linear-gradient(180deg, color-mix(in srgb, var(--color-accent-red) 92%, white) 0%, var(--color-accent-red) 100%)",
             }}
-            onMouseOver={(e) => {
+            onMouseOver={(e:any) => {
               e.currentTarget.style.background =
                 "linear-gradient(180deg, color-mix(in srgb, var(--color-accent-red) 85%, white) 0%, color-mix(in srgb, var(--color-accent-red) 96%, white) 100%)";
             }}
-            onMouseOut={(e) => {
+            onMouseOut={(e:any) => {
               e.currentTarget.style.background =
                 "linear-gradient(180deg, color-mix(in srgb, var(--color-accent-red) 92%, white) 0%, var(--color-accent-red) 100%)";
             }}
