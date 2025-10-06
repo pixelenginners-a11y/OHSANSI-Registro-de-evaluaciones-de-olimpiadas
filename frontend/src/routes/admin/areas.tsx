@@ -1,9 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
+import AreasManager from '../../features/areas/pages/AreasManager'
 
 export const Route = createFileRoute('/admin/areas')({
-  component: RouteComponent,
+  component: AreasManager,
 })
-
-function RouteComponent() {
-  return <div>Hello "/admin/areas"!</div>
-}
