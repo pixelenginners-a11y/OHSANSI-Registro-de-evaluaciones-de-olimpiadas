@@ -5,7 +5,7 @@ export interface EvaluatorBase {
   email: string;
   phone: string;
   area?: string;
-  area_id?: number;
+  area_id?: number | string | null;
   role_id?: number;
   active?: boolean;
   created_at?: string;
@@ -20,7 +20,6 @@ export interface EvaluatorCreate {
   phone: string;
   password: string;
   area_id: number;
-  active?: boolean;
 }
 
 export type EvaluatorUpdate = Partial<Omit<EvaluatorCreate, 'password'>> & {
