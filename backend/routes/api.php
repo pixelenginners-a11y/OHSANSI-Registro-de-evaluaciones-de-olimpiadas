@@ -34,6 +34,7 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('evaluators')->middleware('role:Administrador')->group(function () {
         Route::get('/', [EvaluatorController::class, 'index']);
         Route::post('/', [EvaluatorController::class, 'store']);
+        Route::get('/search', [EvaluatorController::class, 'search']);
         Route::get('{id}', [EvaluatorController::class, 'show']);
         Route::put('{id}', [EvaluatorController::class, 'update']);
         Route::patch('{id}', [EvaluatorController::class, 'update']);
