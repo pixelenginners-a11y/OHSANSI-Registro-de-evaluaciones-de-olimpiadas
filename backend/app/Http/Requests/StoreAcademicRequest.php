@@ -28,6 +28,7 @@ class StoreAcademicRequest extends FormRequest
             'phone'     => ['nullable', 'string', 'max:20'],
             'password'  => ['required', 'string', 'min:6'],
             'active'    => ['nullable', 'boolean'],
+            'area_id'   => ['required', 'integer', 'exists:areas,id'],
         ];
     }
 
@@ -58,6 +59,10 @@ class StoreAcademicRequest extends FormRequest
             'password.min'       => 'La contraseña debe tener al menos :min caracteres.',
 
             'active.boolean'     => 'El valor de activo debe ser verdadero o falso.',
+
+            'area_id.required'   => 'El área es obligatoria.',
+            'area_id.integer'    => 'El área debe ser un número entero.',
+            'area_id.exists'     => 'El área seleccionado no es válido.',
         ];
     }
 }
