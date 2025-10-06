@@ -19,6 +19,16 @@ Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('me', [AuthController::class, 'me']);
+    
+    Route::prefix('academics')->group(function () {
+        Route::get('/', [AcademicResponsibleController::class, 'index']);
+        Route::post('/', [AcademicResponsibleController::class, 'store']);
+        Route::get('/search', [AcademicResponsibleController::class, 'search']);
+        Route::get('{id}', [AcademicResponsibleController::class, 'show']);
+        Route::put('{id}', [AcademicResponsibleController::class, 'update']);
+        Route::patch('{id}', [AcademicResponsibleController::class, 'update']);
+        Route::delete('{id}', [AcademicResponsibleController::class, 'destroy']);
+    });
 
     // Evaluators routes (Solo Administradores)
     Route::prefix('evaluators')->middleware('role:Administrador')->group(function () {
