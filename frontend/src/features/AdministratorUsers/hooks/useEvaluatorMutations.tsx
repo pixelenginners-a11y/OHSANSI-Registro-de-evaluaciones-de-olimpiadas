@@ -5,38 +5,41 @@ import { AxiosError } from "axios";
 import apiInterceptor from "../../../api/axiosInterceptor";
 import type { EvaluatorCreate, EvaluatorUpdate, EvaluatorResponse } from "../types";
 
-export const useUpdateEvaluator = (id: number) => {
-  return useMutation<EvaluatorResponse, AxiosError, EvaluatorUpdate>({
-    mutationFn: async (data: EvaluatorUpdate) => {
+export const useUpdateEvaluator = () => {
+  return useMutation<EvaluatorResponse, AxiosError, { id: number; data: EvaluatorUpdate }, void>({
+    mutationFn: async ({ id, data }) => {
       const res = await apiInterceptor.put(`/evaluators/${id}`, data);
       return res.data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['evaluators'] });
-      queryClient.invalidateQueries({ queryKey: ['evaluator', id] });
-    }
-  })
-}
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['getEvaluators'] });
+      queryClient.invalidateQueries({ queryKey: ['searchEvaluators'] });
+      queryClient.invalidateQueries({ queryKey: ['evaluator', variables.id] });
+    },
+  });
+};
 
-export const useDeleteEvaluator = (id: number) => {
-  return useMutation<void, AxiosError>({
-    mutationFn: async () => {
+export const useDeleteEvaluator = () => {
+  return useMutation<void, AxiosError, number, void>({
+    mutationFn: async (id) => {
       await apiInterceptor.delete(`/evaluators/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['evaluators'] });
-    }
-  })
-}
+      queryClient.invalidateQueries({ queryKey: ['getEvaluators'] });
+      queryClient.invalidateQueries({ queryKey: ['searchEvaluators'] });
+    },
+  });
+};
 
 export const useCreateEvaluator = () => {
-  return useMutation<EvaluatorResponse, AxiosError, EvaluatorCreate>({
-    mutationFn: async (data: EvaluatorCreate) => {
+  return useMutation<EvaluatorResponse, AxiosError, EvaluatorCreate, void>({
+    mutationFn: async (data) => {
       const res = await apiInterceptor.post("/evaluators", data);
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['evaluators'] });
-    }
-  })
-}
+      queryClient.invalidateQueries({ queryKey: ['getEvaluators'] });
+      queryClient.invalidateQueries({ queryKey: ['searchEvaluators'] });
+    },
+  });
+};
