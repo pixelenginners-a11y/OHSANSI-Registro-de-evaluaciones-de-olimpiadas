@@ -1,2 +1,2 @@
-export * from './useInscritoQueries';
-export * from './useInscritoMutations';
+export * from './useOlympianQueries';
+export * from './useOlympianMutations';
