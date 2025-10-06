@@ -9,19 +9,18 @@ type Props = {
 export default function FilaInscrito({ inscrito, onEditar, onEliminar }: Props) {
   return (
     <tr className="hover:bg-gray-50 transition-colors">
-      <td className="border border-gray-300 p-3">{inscrito.olympian.full_name}</td>
-      <td className="border border-gray-300 p-3">{inscrito.olympian.identity_document}</td>
-      <td className="border border-gray-300 p-3">{inscrito.olympian.educational_institution}</td>
-      <td className="border border-gray-300 p-3">{inscrito.olympian.department}</td>
-      <td className="border border-gray-300 p-3">{inscrito.area.name}</td>
-      <td className="border border-gray-300 p-3">{inscrito.grade.name}</td>
+      <td className="border border-gray-300 p-3">{inscrito.full_name}</td>
+      <td className="border border-gray-300 p-3">{inscrito.identity_document}</td>
+      <td className="border border-gray-300 p-3">{inscrito.educational_institution}</td>
+      <td className="border border-gray-300 p-3">{inscrito.department}</td>
+      <td className="border border-gray-300 p-3">{inscrito.academic_tutor || 'N/A'}</td>
       <td className="border border-gray-300 p-3">
         <div className="flex justify-center gap-3">
           <button
             onClick={() => onEditar(inscrito)}
             className="text-gray-600 hover:text-blue-600 transition-colors"
-            title="Editar inscrito"
-            aria-label={`Editar ${inscrito.olympian.full_name}`}
+            title="Editar olympian"
+            aria-label={`Editar ${inscrito.full_name}`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -41,8 +40,8 @@ export default function FilaInscrito({ inscrito, onEditar, onEliminar }: Props) 
           <button
             onClick={() => onEliminar(inscrito.id)}
             className="text-gray-600 hover:text-red-600 transition-colors"
-            title="Eliminar inscrito"
-            aria-label={`Eliminar ${inscrito.olympian.full_name}`}
+            title="Eliminar olympian"
+            aria-label={`Eliminar ${inscrito.full_name}`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

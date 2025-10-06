@@ -1,45 +1,35 @@
 import { useState, useEffect } from 'react'
-import type { Inscrito, InscritoUpdate, Area, Grade } from '../types'
+import type { Inscrito, InscritoUpdate } from '../types'
 
 type Props = {
   inscrito: Inscrito
   onEditar: (id: number, data: InscritoUpdate) => void
   onClose: () => void
-  areas: Area[]
-  grades: Grade[]
 }
 
-export default function FormularioEditarInscrito({ inscrito, onEditar, onClose, areas, grades }: Props) {
-  const [fullName, setFullName] = useState(inscrito.olympian.full_name)
-  const [identityDocument, setIdentityDocument] = useState(inscrito.olympian.identity_document)
-  const [educationalInstitution, setEducationalInstitution] = useState(inscrito.olympian.educational_institution)
-  const [department, setDepartment] = useState(inscrito.olympian.department)
-  const [academicTutor, setAcademicTutor] = useState(inscrito.olympian.academic_tutor || '')
-  const [areaId, setAreaId] = useState<number>(inscrito.area_id)
-  const [gradeId, setGradeId] = useState<number>(inscrito.grade_id)
+export default function FormularioEditarInscrito({ inscrito, onEditar, onClose }: Props) {
+  const [fullName, setFullName] = useState(inscrito.full_name)
+  const [identityDocument, setIdentityDocument] = useState(inscrito.identity_document)
+  const [educationalInstitution, setEducationalInstitution] = useState(inscrito.educational_institution)
+  const [department, setDepartment] = useState(inscrito.department)
+  const [academicTutor, setAcademicTutor] = useState(inscrito.academic_tutor || '')
 
   useEffect(() => {
-    setFullName(inscrito.olympian.full_name)
-    setIdentityDocument(inscrito.olympian.identity_document)
-    setEducationalInstitution(inscrito.olympian.educational_institution)
-    setDepartment(inscrito.olympian.department)
-    setAcademicTutor(inscrito.olympian.academic_tutor || '')
-    setAreaId(inscrito.area_id)
-    setGradeId(inscrito.grade_id)
+    setFullName(inscrito.full_name)
+    setIdentityDocument(inscrito.identity_document)
+    setEducationalInstitution(inscrito.educational_institution)
+    setDepartment(inscrito.department)
+    setAcademicTutor(inscrito.academic_tutor || '')
   }, [inscrito])
 
   const handleSubmit = () => {
-    if (fullName.trim() && identityDocument.trim() && educationalInstitution.trim() && department.trim() && areaId > 0 && gradeId > 0) {
+    if (fullName.trim() && identityDocument.trim() && educationalInstitution.trim() && department.trim()) {
       onEditar(inscrito.id, {
-        olympian: {
-          full_name: fullName,
-          identity_document: identityDocument,
-          educational_institution: educationalInstitution,
-          department: department,
-          academic_tutor: academicTutor || undefined
-        },
-        area_id: areaId,
-        grade_id: gradeId
+        full_name: fullName,
+        identity_document: identityDocument,
+        educational_institution: educationalInstitution,
+        department: department,
+        academic_tutor: academicTutor || undefined
       })
       onClose()
     }
@@ -107,36 +97,6 @@ export default function FormularioEditarInscrito({ inscrito, onEditar, onClose, 
           className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="Ingrese el tutor académico"
         />
-      </div>
-      <div>
-        <label className="block mb-2 text-sm font-medium text-gray-700">
-          Área
-        </label>
-        <select
-          value={areaId}
-          onChange={(e) => setAreaId(Number(e.target.value))}
-          className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
-          <option value={0}>Seleccione un área</option>
-          {areas.map((area) => (
-            <option key={area.id} value={area.id}>{area.name}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label className="block mb-2 text-sm font-medium text-gray-700">
-          Nivel
-        </label>
-        <select
-          value={gradeId}
-          onChange={(e) => setGradeId(Number(e.target.value))}
-          className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
-          <option value={0}>Seleccione un nivel</option>
-          {grades.map((grade) => (
-            <option key={grade.id} value={grade.id}>{grade.name}</option>
-          ))}
-        </select>
       </div>
       <div className="flex gap-3 pt-2">
         <button

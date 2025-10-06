@@ -4,22 +4,16 @@ import ListaInscritos from '../components/ListaInscritos'
 import FormularioInscrito from '../components/FormularioInscrito'
 import FormularioEditarInscrito from '../components/FormularioEditarInscrito'
 import Modal from '../components/Modal'
-import { useGetInscritos, useCreateInscrito, useUpdateInscrito, useDeleteInscrito } from '../hooks'
-import { useGetAreas } from '../../../api/areas'
-import { useGetGrades } from '../../administrar-niveles/hooks'
+import { useGetOlympians, useCreateOlympian, useUpdateOlympian, useDeleteOlympian } from '../hooks'
 
 export default function InscritosPage() {
-  const { data: inscritos, isLoading } = useGetInscritos()
-  const { data: areas = [] } = useGetAreas()
-  const { data: grades = [] } = useGetGrades()
-  const createInscrito = useCreateInscrito()
+  const { data: inscritos, isLoading } = useGetOlympians()
+  const createInscrito = useCreateOlympian()
+  const updateInscrito = useUpdateOlympian()
+  const deleteInscrito = useDeleteOlympian()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [inscritoSeleccionado, setInscritoSeleccionado] = useState<Inscrito | null>(null)
-  const [idToDelete, setIdToDelete] = useState<number>(0)
-
-  const updateInscrito = useUpdateInscrito(inscritoSeleccionado?.id || 0)
-  const deleteInscrito = useDeleteInscrito(idToDelete)
 
   const handleEditar = (inscrito: Inscrito) => {
     setInscritoSeleccionado(inscrito)
@@ -34,8 +28,8 @@ export default function InscritosPage() {
     })
   }
 
-  const handleEditarInscrito = (_id: number, data: InscritoUpdate) => {
-    updateInscrito.mutate(data, {
+  const handleEditarInscrito = (id: number, data: InscritoUpdate) => {
+    updateInscrito.mutate({ id, data }, {
       onSuccess: () => {
         setIsEditModalOpen(false)
       }
@@ -44,8 +38,7 @@ export default function InscritosPage() {
 
   const handleEliminarInscrito = (id: number) => {
     if (window.confirm('¿Estás seguro de eliminar este concursante?')) {
-      setIdToDelete(id)
-      deleteInscrito.mutate()
+      deleteInscrito.mutate(id)
     }
   }
 
@@ -93,8 +86,6 @@ export default function InscritosPage() {
         <FormularioInscrito
           onAgregar={handleAgregarInscrito}
           onClose={() => setIsModalOpen(false)}
-          areas={areas}
-          grades={grades}
         />
       </Modal>
 
@@ -108,8 +99,6 @@ export default function InscritosPage() {
             inscrito={inscritoSeleccionado}
             onEditar={handleEditarInscrito}
             onClose={() => setIsEditModalOpen(false)}
-            areas={areas}
-            grades={grades}
           />
         </Modal>
       )}

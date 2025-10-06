@@ -36,10 +36,7 @@ export default function ListaInscritos({ inscritos, onEditar, onEliminar }: Prop
                 Departamento
               </th>
               <th className="border border-gray-300 p-3 text-left font-semibold text-gray-700">
-                Área
-              </th>
-              <th className="border border-gray-300 p-3 text-left font-semibold text-gray-700">
-                Curso
+                Tutor académico
               </th>
               <th className="border border-gray-300 p-3 text-center font-semibold text-gray-700">
                 Acciones
