@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createFileRoute } from '@tanstack/react-router'
-import { type Column, type Area, type Responsable, type EvaluatorBase, type ResponsableEdit } from '../../features/AdministratorUsers/index'
-import { ResponsablesList } from '../../features/AdministratorUsers/components/ResponsablesList'
+import { type Column, type Area, type Responsable, type EvaluatorBase, type ResponsableEdit, type EvaluatorUpdate } from '../../features/AdministratorUsers/index'
+import { List } from '../../features/AdministratorUsers/components/List'
 import { Select } from '../../components/Select';
 import { SearchBar } from '../../components/SearchBar';
 import { Pagination } from '../../components/Pagination';
@@ -78,7 +78,7 @@ function RouteComponent() {
     setIsModalOpen(false);
   };
 
-  const handleEditActive = async (id: string, data: ResponsableEdit) => {
+  const handleEditActive = async (id: string, data: ResponsableEdit | EvaluatorUpdate) => {
     await updateAcademic({ id: Number(id), data });
   }
 
@@ -116,7 +116,7 @@ function RouteComponent() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <ResponsablesList
+        <List
           data={dataToShow}
           columns={columns}
           onDelete={deleteAcademic}
