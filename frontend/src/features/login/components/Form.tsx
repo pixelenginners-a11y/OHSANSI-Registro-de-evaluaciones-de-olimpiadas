@@ -52,9 +52,9 @@ export const Form = () => {
         {errors.password?.message && <p className="text-red-500 text-sm">{errors.password.message}</p>}
       </div>
 
-      {isError && error && (
+      {isError && (
         <p className="text-red-500 text-sm text-center">
-          {error}
+          Correo o contraseña incorrectos. Por favor, intenta nuevamente.
         </p>
       )}
 
