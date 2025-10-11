@@ -12,7 +12,7 @@ export const Form = () => {
     resolver: zodResolver(loginSchema)
   });
 
-  const { login, loading, error, isError, isSuccess } = useLogin();
+  const { login, loading, isError, isSuccess } = useLogin();
 
   useEffect(() => {
     if (isSuccess) {
