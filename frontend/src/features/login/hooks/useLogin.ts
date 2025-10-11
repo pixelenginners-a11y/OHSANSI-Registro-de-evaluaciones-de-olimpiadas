@@ -17,7 +17,6 @@ export function useLogin() {
     login: mutation.mutate,
     loginAsync: mutation.mutateAsync,
     loading: mutation.isPending,
-    error: mutation.error?.message || null,
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,
     data: mutation.data?.data,
