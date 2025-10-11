@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('areas', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 100)->unique();
+            $table->string('description')->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreignId('responsable_id')->nullable()->references('id')->on('users')->onDelete('set null');
         });
     }
 

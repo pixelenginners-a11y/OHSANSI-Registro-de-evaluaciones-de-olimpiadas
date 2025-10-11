@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('evaluator_areas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('area_id')->references('id')->on('areas')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

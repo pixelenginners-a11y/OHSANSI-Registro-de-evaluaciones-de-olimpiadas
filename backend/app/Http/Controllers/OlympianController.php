@@ -2,64 +2,96 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Olympian;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Services\OlympianService;
+use App\Http\Requests\StoreOlympianRequest;
+use App\Http\Requests\UpdateOlympianRequest;
 
 class OlympianController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    private OlympianService $olympianService;
+
+    public function __construct(OlympianService $olympianService)
     {
-        //
+        $this->olympianService = $olympianService;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function import(Request $request): JsonResponse
     {
-        //
+        $request->validate([
+            'rows' => 'required|array',
+        ]);
+
+        $data = $request->all();
+        $res = $this->olympianService->import($data);
+        return response()->json([
+            'message' => 'Import ejecutado con éxito',
+            'data' => $res,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function index(): JsonResponse
     {
-        //
+        $olympians = $this->olympianService->getAll();
+        return response()->json([
+            'data' => $olympians,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Olympian $olympian)
+    public function store(StoreOlympianRequest $request): JsonResponse
     {
-        //
+        $olympian = $this->olympianService->store($request->validated());
+
+        return response()->json([
+            'message' => 'Olimpista creado con éxito',
+            'data' => $olympian,
+        ], 201);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Olympian $olympian)
+    public function show(string $id): JsonResponse
     {
-        //
+        $olympian = $this->olympianService->findById($id);
+
+        if (!$olympian) {
+            return response()->json([
+                'message' => 'Olimpista no encontrado',
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $olympian,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Olympian $olympian)
+    public function update(UpdateOlympianRequest $request, string $id): JsonResponse
     {
-        //
+        $olympian = $this->olympianService->update($id, $request->validated());
+
+        if (!$olympian) {
+            return response()->json([
+                'message' => 'Olimpista no encontrado',
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'Olimpista actualizado con éxito',
+            'data' => $olympian,
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Olympian $olympian)
+    public function destroy(string $id): JsonResponse
     {
-        //
+        $deleted = $this->olympianService->delete($id);
+
+        if (!$deleted) {
+            return response()->json([
+                'message' => 'Olimpista no encontrado',
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'Olimpista eliminado con éxito',
+        ]);
     }
 }

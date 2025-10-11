@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 50);
+            $table->string('description')->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->unique(['name']);
+            $table->softDeletes();
         });
     }
 
