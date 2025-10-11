@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -25,11 +24,8 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'full_name' => $this->faker->name(),
-            'username' => $this->faker->unique()->userName(),
-            'email' => $this->faker->unique()->safeEmail(),
-            'phone' => $this->faker->optional()->phoneNumber(),
-            'role_id' => Role::inRandomOrder()->first()->id ?? 1,
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
