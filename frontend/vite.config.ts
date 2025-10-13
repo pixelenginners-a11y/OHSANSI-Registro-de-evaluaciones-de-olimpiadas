@@ -12,4 +12,9 @@ export default defineConfig({
     }),
     react(),
   ],
+  server: {
+    allowedHosts: [
+      "ohsansi-registro-de-evaluaciones-de-2cyx.onrender.com"
+    ]
+  }
 })
