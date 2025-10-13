@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { InputField } from "./InputField";
-import { Select } from "./Select";
+import { SelectForm } from "./SelectForm";
 import { type Responsable } from "../features/AdministratorUsers";
+import { responsableEditSchema } from "../features/AdministratorUsers/schemas/editResponsible";
+
+type FormData = z.infer<typeof responsableEditSchema>;
 
 interface AreaOption {
   label: string;
@@ -23,45 +28,42 @@ export const EditResponsableModal = ({
   onSave,
   areaOptions
 }: EditResponsableModalProps) => {
-  const [formData, setFormData] = useState<Partial<Responsable>>({
-    full_name: "",
-    username: "",
-    email: "",
-    area_id: "",
-    phone: "",
-    active: true,
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting }
+  } = useForm<FormData>({
+    resolver: zodResolver(responsableEditSchema),
+    values: responsable ? {
+      full_name: responsable.full_name ?? "",
+      username: responsable.username ?? "",
+      email: responsable.email ?? "",
+      phone: responsable.phone ?? "",
+      password: "",
+      area_id: responsable.area_id ? Number(responsable.area_id) : "",
+      active: responsable.active ?? true,
+    } : undefined
   });
 
-  useEffect(() => {
-    if (responsable) {
-      setFormData({
-        full_name: responsable.full_name ?? "",
-        username: responsable.username ?? "",
-        email: responsable.email ?? "",
-        area_id: Number(responsable.area_id) || "",
-        phone: responsable.phone ?? "",
-        active: responsable.active ?? true,
-      });
-    }
-  }, [responsable]);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleAreaChange = (value: string | number) => {
-    setFormData((prev) => ({ ...prev, area_id: Number(value) }));
-    console.log("Selected area ID:", value);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: FormData) => {
     if (!responsable) return;
-    console.log("Saving data:", formData);
-    await onSave(responsable.id, formData);
+
+    const dataToSend: Partial<Responsable> & { password?: string } = {
+      full_name: data.full_name,
+      username: data.username,
+      email: data.email,
+      phone: data.phone,
+      area_id: Number(data.area_id),
+      active: data.active,
+    };
+
+    if (data.password && data.password.trim() !== "") {
+      dataToSend.password = data.password;
+    }
+
+    console.log("Saving data:", dataToSend);
+    await onSave(responsable.id, dataToSend);
     onClose();
   };
 
@@ -72,47 +74,48 @@ export const EditResponsableModal = ({
       <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
         <h2 className="text-lg font-semibold mb-4">Editar responsable</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <InputField
             label="Nombre completo"
-            name="full_name"
-            value={formData.full_name ?? ""}
-            onChange={handleChange}
+            {...register("full_name")}
+            error={errors.full_name?.message}
           />
 
           <InputField
             label="Nombre de usuario"
-            name="username"
-            value={formData.username ?? ""}
-            onChange={handleChange}
+            {...register("username")}
+            error={errors.username?.message}
           />
 
           <InputField
             label="Correo electrónico"
-            name="email"
             type="email"
-            value={formData.email ?? ""}
-            onChange={handleChange}
+            {...register("email")}
+            error={errors.email?.message}
           />
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Área
-            </label>
-            <Select
-              value={formData.area_id ? String(formData.area_id) : ""}
-              onChange={(area) => handleAreaChange(area)}
-              options={areaOptions}
-              placeholder="Selecciona un área"
-              className="w-full"
-            />
-          </div>
 
           <InputField
             label="Teléfono"
-            name="phone"
-            value={formData.phone ?? ""}
-            onChange={handleChange}
+            {...register("phone")}
+            error={errors.phone?.message}
+          />
+
+          <InputField
+            label="Contraseña (dejar vacío para mantener actual)"
+            type="password"
+            {...register("password")}
+            error={errors.password?.message}
+            placeholder="Nueva contraseña (opcional)"
+          />
+
+          <SelectForm
+            name="area_id"
+            label="Área"
+            control={control}
+            options={areaOptions}
+            placeholder="Selecciona un área"
+            error={errors.area_id}
+            className="w-full"
           />
 
           <div className="flex justify-end gap-3 mt-5">
@@ -120,14 +123,16 @@ export const EditResponsableModal = ({
               type="button"
               onClick={onClose}
               className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100"
+              disabled={isSubmitting}
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-primary-dark text-white hover:bg-primary"
+              className="px-4 py-2 rounded-lg bg-primary-dark text-white hover:bg-primary disabled:opacity-50"
+              disabled={isSubmitting}
             >
-              Guardar
+              {isSubmitting ? "Guardando..." : "Guardar"}
             </button>
           </div>
         </form>
