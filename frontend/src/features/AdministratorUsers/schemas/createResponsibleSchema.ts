@@ -1,4 +1,3 @@
-// createResponsible.ts
 import { z } from "zod";
 
 export const responsableCreateSchema = z.object({

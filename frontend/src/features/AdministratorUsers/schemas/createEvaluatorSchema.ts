@@ -1,4 +1,3 @@
-// createEvaluatorSchema.ts
 import { z } from "zod";
 
 export const evaluatorCreateSchema = z.object({
