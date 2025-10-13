@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { InputField } from "./InputField";
-import { Select } from "./Select";
+import { SelectForm } from "./SelectForm";
 import { type EvaluatorCreate, type ResponsableCreate } from "../features/AdministratorUsers";
+import { evaluatorCreateSchema } from "../features/AdministratorUsers/schemas/createEvaluatorSchema";
+
+type FormData = z.infer<typeof evaluatorCreateSchema>;
 
 interface AreaOption {
   label: string;
@@ -21,59 +26,42 @@ export const CreateEvaluatorModal = ({
   onSave,
   areaOptions
 }: CreateEvaluatorModalProps) => {
-  const [formData, setFormData] = useState({
-    full_name: "",
-    username: "",
-    email: "",
-    phone: "",
-    password: "",
-    area_id: undefined as number | undefined,
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleAreaChange = (value: string | number) => {
-    setFormData((prev) => ({
-      ...prev,
-      area_id: value ? Number(value) : undefined
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    console.log("Creating evaluator with data:", formData);
-    await onSave(formData);
-
-    setFormData({
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors, isSubmitting }
+  } = useForm<FormData>({
+    resolver: zodResolver(evaluatorCreateSchema),
+    defaultValues: {
       full_name: "",
       username: "",
       email: "",
       phone: "",
       password: "",
-      area_id: undefined,
-    });
+      area_id: "",
+    }
+  });
 
+  const onSubmit = async (data: FormData) => {
+    const dataToSend = {
+      full_name: data.full_name,
+      username: data.username,
+      email: data.email,
+      phone: data.phone,
+      password: data.password,
+      area_id: Number(data.area_id),
+    };
+
+    console.log("Creating evaluator with data:", dataToSend);
+    await onSave(dataToSend);
+    reset();
     onClose();
   };
 
   const handleClose = () => {
-    setFormData({
-      full_name: "",
-      username: "",
-      email: "",
-      phone: "",
-      password: "",
-      area_id: undefined,
-    });
+    reset();
     onClose();
   };
 
@@ -84,70 +72,65 @@ export const CreateEvaluatorModal = ({
       <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
         <h2 className="text-lg font-semibold mb-4">Crear evaluador</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <InputField
             label="Nombre completo"
-            name="full_name"
-            value={formData.full_name}
-            onChange={handleChange}
+            {...register("full_name")}
+            error={errors.full_name?.message}
           />
 
           <InputField
             label="Nombre de usuario"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
+            {...register("username")}
+            error={errors.username?.message}
           />
 
           <InputField
             label="Correo electrónico"
-            name="email"
             type="email"
-            value={formData.email}
-            onChange={handleChange}
+            {...register("email")}
+            error={errors.email?.message}
           />
 
           <InputField
             label="Teléfono"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
+            {...register("phone")}
+            error={errors.phone?.message}
           />
 
           <InputField
             label="Contraseña"
-            name="password"
             type="password"
-            value={formData.password}
-            onChange={handleChange}
+            {...register("password")}
+            error={errors.password?.message}
+            placeholder="Ingresa una contraseña segura"
           />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Área <span className="text-red-500">*</span>
-            </label>
-            <Select
-              value={formData.area_id ? String(formData.area_id) : ""}
-              onChange={handleAreaChange}
-              options={areaOptions}
-              placeholder="Selecciona un área"
-              className="w-full"
-            />
-          </div>
+          <SelectForm
+            name="area_id"
+            label="Área"
+            control={control}
+            options={areaOptions}
+            placeholder="Selecciona un área"
+            error={errors.area_id}
+            className="w-full"
+          />
 
           <div className="flex justify-end gap-3 mt-5">
             <button
               type="button"
               onClick={handleClose}
               className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100"
+              disabled={isSubmitting}
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-primary-dark text-white hover:bg-primary"
+              className="px-4 py-2 rounded-lg bg-primary-dark text-white hover:bg-primary disabled:opacity-50"
+              disabled={isSubmitting}
             >
-              Crear
+              {isSubmitting ? "Creando..." : "Crear"}
             </button>
           </div>
         </form>
