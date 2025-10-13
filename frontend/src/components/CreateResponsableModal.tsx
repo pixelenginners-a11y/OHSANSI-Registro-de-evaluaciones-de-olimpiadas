@@ -4,7 +4,7 @@ import { z } from "zod";
 import { InputField } from "./InputField";
 import { SelectForm } from "./SelectForm";
 import { type Responsable } from "../features/AdministratorUsers";
-import { responsableCreateSchema } from "../features/AdministratorUsers/schemas/createResponsible";
+import { responsableCreateSchema } from "../features/AdministratorUsers/schemas/createResponsibleSchema";
 
 type FormData = z.infer<typeof responsableCreateSchema>;
 

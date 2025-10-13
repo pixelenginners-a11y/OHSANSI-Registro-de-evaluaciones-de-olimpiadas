@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Schema para EDITAR (password opcional)
 export const evaluatorEditSchema = z.object({
   full_name: z
     .string()
@@ -46,7 +45,6 @@ export const evaluatorEditSchema = z.object({
   active: z.boolean(),
 });
 
-// Schema para CREAR (password obligatorio)
 export const evaluatorCreateSchema = z.object({
   full_name: z
     .string()

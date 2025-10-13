@@ -4,7 +4,7 @@ import { z } from "zod";
 import { InputField } from "./InputField";
 import { SelectForm } from "./SelectForm";
 import { type Responsable } from "../features/AdministratorUsers";
-import { responsableEditSchema } from "../features/AdministratorUsers/schemas/editResponsible";
+import { responsableEditSchema } from "../features/AdministratorUsers/schemas/editResponsibleSchema";
 
 type FormData = z.infer<typeof responsableEditSchema>;
 
