@@ -13,6 +13,9 @@ export default defineConfig({
     react(),
   ],
   server: {
-    host: true,
+    host: '0.0.0.0',
+    port: 10000, // Puerto por defecto de Render
+    allowedHosts: true, // Debe ser el string 'all', no un array
+    strictPort: false
   }
 })
