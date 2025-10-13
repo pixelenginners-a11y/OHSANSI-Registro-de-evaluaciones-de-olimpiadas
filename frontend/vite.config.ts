@@ -14,8 +14,5 @@ export default defineConfig({
   ],
   server: {
     host: true,
-    allowedHosts: [
-      "ohsansi-registro-de-evaluaciones-de-2cyx.onrender.com"
-    ]
   }
 })
