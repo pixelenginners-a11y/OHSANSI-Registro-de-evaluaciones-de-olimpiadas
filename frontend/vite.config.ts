@@ -15,7 +15,11 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 10000, // Puerto por defecto de Render
-    allowedHosts: true, // Debe ser el string 'all', no un array
+    allowedHosts: [
+      'ohsansi-registro-de-evaluaciones-de-2cyx.onrender.com',
+      'localhost',
+      '.onrender.com' // Permite cualquier subdominio de onrender.com
+    ],
     strictPort: false
   }
 })
