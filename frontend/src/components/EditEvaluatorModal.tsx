@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { InputField } from "./InputField";
-import { Select } from "./Select";
+import { SelectForm } from "./SelectForm";
+import { evaluatorEditSchema } from "../features/AdministratorUsers/schemas/editEvaluatorSchema";
 import { type EvaluatorBase, type Responsable } from "../features/AdministratorUsers";
 
 interface AreaOption {
@@ -16,6 +20,8 @@ interface EditEvaluatorModalProps {
   areaOptions: AreaOption[];
 }
 
+type FormData = z.infer<typeof evaluatorEditSchema>;
+
 export const EditEvaluatorModal = ({
   isOpen,
   evaluator,
@@ -23,50 +29,57 @@ export const EditEvaluatorModal = ({
   onSave,
   areaOptions
 }: EditEvaluatorModalProps) => {
-  const [formData, setFormData] = useState<Partial<EvaluatorBase>>({
-    full_name: "",
-    username: "",
-    email: "",
-    phone: "",
-    area_id: "",
-    active: true,
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors, isSubmitting }
+  } = useForm<FormData>({
+    resolver: zodResolver(evaluatorEditSchema),
+    defaultValues: {
+      full_name: "",
+      username: "",
+      email: "",
+      phone: "",
+      password: "",
+      area_id: "",
+      active: true,
+    }
   });
 
   useEffect(() => {
     if (evaluator) {
-      setFormData({
+      reset({
         full_name: evaluator.full_name ?? "",
         username: evaluator.username ?? "",
         email: evaluator.email ?? "",
         phone: evaluator.phone ?? "",
-        area_id: Number(evaluator.area_id) || "",
+        password: "",
+        area_id: evaluator.area_id ? Number(evaluator.area_id) : "",
         active: evaluator.active ?? true,
       });
     }
-  }, [evaluator]);
+  }, [evaluator, reset]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleAreaChange = (value: string | number) => {
-    setFormData((prev) => ({
-      ...prev,
-      area_id: Number(value)
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: FormData) => {
     if (!evaluator) return;
-    console.log("Saving data edit:", formData);
-    await onSave(evaluator.id, formData);
+
+    const dataToSend: Partial<EvaluatorBase> & { password?: string } = {
+      full_name: data.full_name,
+      username: data.username,
+      email: data.email,
+      phone: data.phone,
+      area_id: Number(data.area_id),
+      active: data.active,
+    };
+
+    if (data.password && data.password.trim() !== "") {
+      dataToSend.password = data.password;
+    }
+
+    console.log("Saving data edit:", dataToSend);
+    await onSave(evaluator.id, dataToSend);
     onClose();
   };
 
@@ -77,62 +90,65 @@ export const EditEvaluatorModal = ({
       <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
         <h2 className="text-lg font-semibold mb-4">Editar evaluador</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <InputField
             label="Nombre completo"
-            name="full_name"
-            value={formData.full_name ?? ""}
-            onChange={handleChange}
+            {...register("full_name")}
+            error={errors.full_name?.message}
           />
 
           <InputField
             label="Nombre de usuario"
-            name="username"
-            value={formData.username ?? ""}
-            onChange={handleChange}
+            {...register("username")}
+            error={errors.username?.message}
           />
 
           <InputField
             label="Correo electrónico"
-            name="email"
             type="email"
-            value={formData.email ?? ""}
-            onChange={handleChange}
+            {...register("email")}
+            error={errors.email?.message}
           />
 
           <InputField
             label="Teléfono"
-            name="phone"
-            value={formData.phone ?? ""}
-            onChange={handleChange}
+            {...register("phone")}
+            error={errors.phone?.message}
           />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Área
-            </label>
-            <Select
-              value={formData.area_id ? String(formData.area_id) : ""}
-              onChange={handleAreaChange}
-              options={areaOptions}
-              placeholder="Selecciona un área"
-              className="w-full"
-            />
-          </div>
+          <InputField
+            label="Contraseña (dejar vacío para mantener actual)"
+            type="password"
+            {...register("password")}
+            error={errors.password?.message}
+            placeholder="Nueva contraseña (opcional)"
+          />
+
+          <SelectForm
+            name="area_id"
+            label="Área"
+            control={control}
+            options={areaOptions}
+            placeholder="Selecciona un área"
+            error={errors.area_id}
+            className="w-full"
+          />
 
           <div className="flex justify-end gap-3 mt-5">
             <button
               type="button"
               onClick={onClose}
               className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100"
+              disabled={isSubmitting}
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-primary-dark text-white hover:bg-primary"
+              className="px-4 py-2 rounded-lg bg-primary-dark text-white hover:bg-primary disabled:opacity-50"
+              disabled={isSubmitting}
             >
-              Guardar
+              {isSubmitting ? "Guardando..." : "Guardar"}
             </button>
           </div>
         </form>
