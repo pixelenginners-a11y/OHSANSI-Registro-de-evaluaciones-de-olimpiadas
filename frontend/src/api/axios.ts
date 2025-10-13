@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8200/api',
+  baseURL: 'https://ohsansi-registro-de-evaluaciones-de.onrender.com/api',
   headers: { Accept: "application/json" },
+  timeout: 10000, // 10 segundos
 });
 
 export default api;
