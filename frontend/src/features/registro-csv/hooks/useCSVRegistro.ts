@@ -25,7 +25,7 @@ export function useCSVRegistro() {
 
   const onCSVParseado = (rows: Record<string,string>[], nombreArchivo: string) => {
     const { validas, errores } = validarCSVInscritos(rows);
-    setValidas(validas);
+    setValidas(validas);  
     setErrores(errores);
     setCsvNombre(nombreArchivo);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -89,10 +89,8 @@ export function useCSVRegistro() {
                   const nombresCampos: Record<string, string> = {
                     full_name: 'Nombre completo',
                     identity_document: 'Documento de identidad',
-                    legal_guardian_contact: 'Contacto del tutor legal',
                     educational_institution: 'Unidad educativa',
                     department: 'Departamento',
-                    school_grade: 'Grado escolar'
                   };
                   mensajeAmigable = `El campo "${nombresCampos[campo] || campo}" es obligatorio`;
                 }
@@ -117,10 +115,8 @@ export function useCSVRegistro() {
           const datos = validas[indiceFila] || {
             full_name: '',
             identity_document: '',
-            legal_guardian_contact: '',
             educational_institution: '',
             department: '',
-            school_grade: ''
           };
 
           return {

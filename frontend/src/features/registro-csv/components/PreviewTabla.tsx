@@ -30,7 +30,7 @@ export default function PreviewTabla({
           <table className="w-full border-collapse text-sm">
             <thead className="sticky top-0 z-10 bg-neutral-50 text-neutral-800">
               <tr>
-                {["Nombre completo","Documento","Contacto tutor","Unidad educativa","Departamento","Grado","Tutor académico","Estado"].map((h) => (
+                {["Nombre completo","Documento","Unidad educativa","Departamento","Tutor académico","Estado"].map((h) => (
                   <th key={h} className="border-b border-neutral-200 px-3 py-2 text-left font-semibold">
                     {h}
                   </th>
@@ -39,13 +39,11 @@ export default function PreviewTabla({
             </thead>
             <tbody>
               {slice.map((r) => (
-                <tr key={`${r.identity_document}-${r.__row}`} className="even:bg-neutral-50/60">
+                <tr key={`${r.identity_document}`} className="even:bg-neutral-50/60">
                   <td className="border-b border-neutral-200 px-3 py-2">{r.full_name}</td>
                   <td className="border-b border-neutral-200 px-3 py-2">{r.identity_document}</td>
-                  <td className="border-b border-neutral-200 px-3 py-2">{r.legal_guardian_contact}</td>
                   <td className="border-b border-neutral-200 px-3 py-2">{r.educational_institution}</td>
                   <td className="border-b border-neutral-200 px-3 py-2">{r.department}</td>
-                  <td className="border-b border-neutral-200 px-3 py-2">{r.school_grade}</td>
                   <td className="border-b border-neutral-200 px-3 py-2">{r.academic_tutor || '-'}</td>
                   <td className="border-b border-neutral-200 px-3 py-2">
                     <span className="inline-flex items-center rounded-md bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-500/20">

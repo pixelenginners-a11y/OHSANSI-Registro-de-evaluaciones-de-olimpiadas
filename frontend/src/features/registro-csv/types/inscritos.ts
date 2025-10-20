@@ -3,10 +3,8 @@
 export type FilaCSVValida = {
   full_name: string;
   identity_document: string;
-  legal_guardian_contact: string;
   educational_institution: string;
   department: string;
-  school_grade: string;
   academic_tutor?: string;
 };
 
@@ -18,10 +16,8 @@ export type FilaCSVConError = {
 export const CAMPOS_PLANTILLA = [
   "full_name",
   "identity_document",
-  "legal_guardian_contact",
   "educational_institution",
   "department",
-  "school_grade",
   "academic_tutor",
 ] as const;
 
