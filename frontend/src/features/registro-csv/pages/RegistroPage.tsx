@@ -117,15 +117,6 @@ export default function RegistroPage() {
                           <div className="mt-0.5 text-sm font-medium text-neutral-900">{e.datos.department || '-'}</div>
                         </div>
 
-                        <div className="rounded-md bg-neutral-50 px-3 py-2">
-                          <div className="text-xs font-medium text-neutral-500">Grado escolar</div>
-                          <div className="mt-0.5 text-sm font-medium text-neutral-900">{e.datos.school_grade || '-'}</div>
-                        </div>
-
-                        <div className="rounded-md bg-neutral-50 px-3 py-2">
-                          <div className="text-xs font-medium text-neutral-500">Contacto del tutor</div>
-                          <div className="mt-0.5 text-sm font-medium text-neutral-900">{e.datos.legal_guardian_contact || '-'}</div>
-                        </div>
                       </div>
                     </div>
                   ))}
