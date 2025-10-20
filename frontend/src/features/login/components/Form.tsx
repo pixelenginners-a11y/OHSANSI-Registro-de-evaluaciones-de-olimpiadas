@@ -27,7 +27,7 @@ export const Form = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-80 mx-auto space-y-4"
+      className="w-80 px-3 space-y-4"
       noValidate
     >
       <div>
