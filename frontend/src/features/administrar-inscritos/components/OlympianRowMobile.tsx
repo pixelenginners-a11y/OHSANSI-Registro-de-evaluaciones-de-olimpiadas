@@ -66,9 +66,6 @@ export function OlympianRowMobile({ data, openRowId, setOpenRowId, onDelete, onE
           <p>
             <b>Departamento:</b> {data.department}
           </p>
-          <p>
-            <b>Grado Escolar:</b> {data.school_grade}
-          </p>
           {data.academic_tutor && (
             <p>
               <b>Tutor Académico:</b> {data.academic_tutor}

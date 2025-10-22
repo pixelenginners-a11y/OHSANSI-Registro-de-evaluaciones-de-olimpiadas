@@ -19,7 +19,6 @@ export function OlympiansList({ data, onDelete, onEdit, editActive }: OlympiansL
     { label: "Documento" },
     { label: "Institución" },
     { label: "Departamento" },
-    { label: "Grado" },
     { label: "Tutor Académico" },
   ];
 
@@ -40,7 +39,7 @@ export function OlympiansList({ data, onDelete, onEdit, editActive }: OlympiansL
       </div>
 
       <div className="hidden lg:block">
-        <div className="grid grid-cols-[1.5fr_1fr_1.5fr_1fr_0.8fr_1.2fr_1fr] bg-primary-dark text-white font-semibold rounded-t-lg">
+        <div className="grid grid-cols-[1.5fr_1fr_1.5fr_1fr_0.8fr_1.2fr] bg-primary-dark text-white font-semibold rounded-t-lg">
           {columns.map((col, index) => (
             <div
               key={index}
