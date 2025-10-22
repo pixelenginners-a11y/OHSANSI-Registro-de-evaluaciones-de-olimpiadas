@@ -17,12 +17,11 @@ export function OlympianRowDesktop({ data, openRowId, setOpenRowId, onDelete, on
     { key: "identity_document", value: data.identity_document },
     { key: "educational_institution", value: data.educational_institution },
     { key: "department", value: data.department },
-    { key: "school_grade", value: data.school_grade },
     { key: "academic_tutor", value: data.academic_tutor || "-" },
   ];
 
   return (
-    <div className="grid grid-cols-[1.5fr_1fr_1.5fr_1fr_0.8fr_1.2fr_1fr] items-center hover:bg-gray-50 transition">
+    <div className="grid grid-cols-[1.5fr_1fr_1.5fr_1fr_0.8fr_1.2fr] items-center hover:bg-gray-50 transition">
       {columns.map((col) => (
         <div
           key={col.key}
