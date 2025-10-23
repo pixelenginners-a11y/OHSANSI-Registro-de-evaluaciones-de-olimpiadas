@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\OlympianService;
 use App\Http\Requests\StoreOlympianRequest;
 use App\Http\Requests\UpdateOlympianRequest;
+use App\Http\Requests\ImportOlympianRequest;
 
 class OlympianController extends Controller
 {
@@ -17,12 +18,8 @@ class OlympianController extends Controller
         $this->olympianService = $olympianService;
     }
 
-    public function import(Request $request): JsonResponse
+    public function import(ImportOlympianRequest $request): JsonResponse
     {
-        $request->validate([
-            'rows' => 'required|array',
-        ]);
-
         $data = $request->all();
         $res = $this->olympianService->import($data);
         return response()->json([
