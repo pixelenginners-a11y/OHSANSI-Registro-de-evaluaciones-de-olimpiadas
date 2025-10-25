@@ -17,12 +17,6 @@ class OlympianService
         return Olympian::create($req);
     }
 
-    public function import(array $data)
-    {
-        $creados = collect($data['rows'])->map(fn ($fila) => Olympian::create($fila));
-        return $creados;
-    }
-
     public function getAll()
     {
         return Olympian::all();

@@ -59,7 +59,6 @@ Route::middleware('auth:api')->group(function () {
         Route::put('{id}', [OlympianController::class, 'update']);
         Route::patch('{id}', [OlympianController::class, 'update']);
         Route::delete('{id}', [OlympianController::class, 'destroy']);
-        Route::post('/import', [OlympianController::class, 'import']);
     });
 
     // Areas routes (Solo Administradores)
@@ -90,5 +89,6 @@ Route::middleware('auth:api')->group(function () {
         Route::put('{id}', [InscriptionController::class, 'update']);
         Route::patch('{id}', [InscriptionController::class, 'update']);
         Route::delete('{id}', [InscriptionController::class, 'destroy']);
+        Route::post('/import', [InscriptionController::class, 'import']);
     });
 });

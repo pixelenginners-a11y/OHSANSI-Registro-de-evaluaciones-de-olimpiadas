@@ -18,16 +18,6 @@ class OlympianController extends Controller
         $this->olympianService = $olympianService;
     }
 
-    public function import(ImportOlympianRequest $request): JsonResponse
-    {
-        $data = $request->all();
-        $res = $this->olympianService->import($data);
-        return response()->json([
-            'message' => 'Import ejecutado con éxito',
-            'data' => $res,
-        ]);
-    }
-
     public function index(): JsonResponse
     {
         $olympians = $this->olympianService->getAll();

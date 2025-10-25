@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreInscriptionRequest;
 use App\Http\Requests\UpdateInscriptionRequest;
+use App\Http\Requests\ImportInscriptionRequest;
 use App\Services\InscriptionService;
 use App\Models\Inscription;
 use Illuminate\Http\Request;
@@ -84,5 +85,26 @@ class InscriptionController extends Controller
           ],404);
         }
         return response()->noContent();
+    }
+
+    /**
+     * Import multiple inscriptions from an array of data.
+     */
+    public function import(ImportInscriptionRequest $request)
+    {
+        $validated = $request->validated();
+        $inscriptions = $this->inscriptionService->import($validated['data']);
+
+        if($inscriptions->isEmpty()){
+          return response()->json([
+            'message' => 'No se pudieron importar las inscripciones'
+          ], 400);
+        }
+
+        return response()->json([
+            'message' => 'Inscripciones importadas con éxito',
+            'data' => $inscriptions,
+            'count' => $inscriptions->count()
+        ], 201);
     }
 }
