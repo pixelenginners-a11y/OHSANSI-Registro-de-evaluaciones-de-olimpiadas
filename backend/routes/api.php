@@ -85,10 +85,14 @@ Route::middleware('auth:api')->group(function () {
     // Inscriptions routes (Administrador, Evaluador y Responsable Academico)
     Route::prefix('inscriptions')->middleware('role:Administrador,Evaluador,Responsable Academico')->group(function () {
         Route::get('/', [InscriptionController::class, 'index']);
-        Route::post('/', [InscriptionController::class, 'store']);
         Route::get('{id}', [InscriptionController::class, 'show']);
-        Route::put('{id}', [InscriptionController::class, 'update']);
-        Route::patch('{id}', [InscriptionController::class, 'update']);
-        Route::delete('{id}', [InscriptionController::class, 'destroy']);
+
+        // Solo permitir crear inscripciones en fase de Inscripciones
+        Route::post('/', [InscriptionController::class, 'store'])->middleware('fase:Inscripciones');
+
+        // Solo permitir actualizar y eliminar en fase de Inscripciones
+        Route::put('{id}', [InscriptionController::class, 'update'])->middleware('fase:Inscripciones');
+        Route::patch('{id}', [InscriptionController::class, 'update'])->middleware('fase:Inscripciones');
+        Route::delete('{id}', [InscriptionController::class, 'destroy'])->middleware('fase:Inscripciones');
     });
 });
