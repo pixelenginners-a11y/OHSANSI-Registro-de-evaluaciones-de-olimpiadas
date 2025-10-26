@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(EvaluatorAreaSeeder::class);
         $this->call(GradeSeeder::class);
         $this->call(AreaGradeSeeder::class);
+        $this->call(OlimpiadaSeeder::class);
     }
 }
