@@ -14,7 +14,10 @@ class Area extends Model
       'name', 
       'description', 
       'active',
-      'responsable_id'
+      'responsable_id',
+      'is_group',
+      'group_min_size',
+      'group_max_size',
     ];
 
     public function medalParameter()
@@ -45,5 +48,15 @@ class Area extends Model
     public function responsable()
     {
         return $this->belongsTo(User::class, 'responsable_id');
+    }
+
+    public function listings()
+    {
+        return $this->hasMany(Listing::class);
+    }
+
+    public function groups()
+    {
+        return $this->hasMany(Group::class);
     }
 }
