@@ -41,6 +41,37 @@ class InscriptionService
     }
 
     /**
+     * Importar inscripciones desde un array de datos.
+     */
+    public function import(array $data)
+    {
+        return DB::transaction(function () use ($data) {
+            $creados = collect($data)->map(function ($fila) {
+                $olympian = $this->olympianService->store($fila['olympian']);
+
+                if (!$olympian) {
+                    return null;
+                }
+
+                $inscription = Inscription::create([
+                    'olympian_id' => $olympian->id,
+                    'area_id'     => $fila['area_id'],
+                    'grade_id'    => $fila['grade_id'],
+                    'status'      => $fila['status'] ?? 'pending',
+                ]);
+
+                return $inscription->load([
+                    'olympian:id,full_name,identity_document,educational_institution,department',
+                    'area:id,name',
+                    'grade:id,name'
+                ]);
+            })->filter();
+
+            return $creados;
+        });
+    }
+
+    /**
      * Crear un nuevo inscription.
      */
     public function create(array $data): ?Inscription

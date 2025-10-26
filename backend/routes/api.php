@@ -59,7 +59,6 @@ Route::middleware('auth:api')->group(function () {
         Route::put('{id}', [OlympianController::class, 'update']);
         Route::patch('{id}', [OlympianController::class, 'update']);
         Route::delete('{id}', [OlympianController::class, 'destroy']);
-        Route::post('/import', [OlympianController::class, 'import']);
     });
 
     // Areas routes (Solo Administradores)
@@ -86,7 +85,7 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('inscriptions')->middleware('role:Administrador,Evaluador,Responsable Academico')->group(function () {
         Route::get('/', [InscriptionController::class, 'index']);
         Route::get('{id}', [InscriptionController::class, 'show']);
-
+        Route::post('/import', [InscriptionController::class, 'import']);
         // Solo permitir crear inscripciones en fase de Inscripciones
         Route::post('/', [InscriptionController::class, 'store'])->middleware('fase:Inscripciones');
 

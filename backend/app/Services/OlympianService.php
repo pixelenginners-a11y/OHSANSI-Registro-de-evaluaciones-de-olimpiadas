@@ -14,28 +14,7 @@ class OlympianService
 {
     public function create(Request $req)
     {
-        $validated = $req->validate([
-            'full_name' => 'required|string|max:100',
-            'identity_document' => 'required|string|max:20|unique:olympians,identity_document',
-            'educational_institution' => 'required|string|max:100',
-            'department' => 'required|string|max:50',
-            'academic_tutor' => 'nullable|string|max:100',
-        ]);
-        return Olympian::create($validated);
-    }
-
-    public function import(array $data)
-    {
-        $validator = Validator::make($data, [
-            'rows.*.full_name' => 'required|string|max:100',
-            'rows.*.identity_document' => 'required|string|max:20|unique:olympians,identity_document',
-            'rows.*.educational_institution' => 'required|string|max:100',
-            'rows.*.department' => 'required|string|max:50',
-            'rows.*.academic_tutor' => 'nullable|string|max:100',
-        ]);
-        $validated = $validator->validate();
-        $creados = collect($validated['rows'])->map(fn ($fila) => Olympian::create($fila));
-        return $creados;
+        return Olympian::create($req);
     }
 
     public function getAll()
