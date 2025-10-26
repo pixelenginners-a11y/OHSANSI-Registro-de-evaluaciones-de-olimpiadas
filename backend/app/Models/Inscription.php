@@ -10,6 +10,8 @@ class Inscription extends Model
         'olympian_id',
         'area_id',
         'grade_id',
+        'group_id',
+        'is_group',
         'status',
     ];
     
@@ -31,5 +33,10 @@ class Inscription extends Model
     public function evaluations()
     {
         return $this->hasMany(Evaluation::class);
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
     }
 }

@@ -20,8 +20,23 @@ class Grade extends Model
         return $this->hasMany(AreaGrade::class);
     }
 
+    public function evaluatorGrades()
+    {
+        return $this->hasMany(EvaluatorGrade::class);
+    }
+
     public function inscriptions()
     {
         return $this->hasMany(Inscription::class);
+    }
+
+    public function groups()
+    {
+        return $this->hasMany(Group::class);
+    }
+
+    public function listings()
+    {
+        return $this->hasMany(Listing::class);
     }
 }

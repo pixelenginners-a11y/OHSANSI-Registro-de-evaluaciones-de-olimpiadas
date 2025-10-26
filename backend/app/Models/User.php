@@ -47,6 +47,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(evaluatorArea::class);
     }
 
+    public function evaluatorGrades()
+    {
+        return $this->hasMany(EvaluatorGrade::class, 'evaluator_id');
+    }
+
     public function areaResponsable()
     {
         return $this->hasOne(Area::class, 'responsable_id');
