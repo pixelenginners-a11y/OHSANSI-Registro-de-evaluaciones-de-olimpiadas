@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { InputField } from "../../../components/InputField";
+import { SelectField } from "../../../components/SelectField";
 import { type Olympian, type OlympianUpdate } from "../types";
+import { useGetAreas } from "../../../api/areas";
+import { useQuery } from "@tanstack/react-query";
+import { getGrades } from "../../../api/grades";
 
 interface EditOlympianModalProps {
   isOpen: boolean;
@@ -15,26 +19,40 @@ export const EditOlympianModal = ({
   onClose,
   onSave,
 }: EditOlympianModalProps) => {
+  // Obtener áreas y grados disponibles
+  const { data: areas = [] } = useGetAreas();
+  const { data: gradesResponse } = useQuery({
+    queryKey: ["grades"],
+    queryFn: getGrades,
+  });
+  const grades = gradesResponse?.data || [];
+
   const [formData, setFormData] = useState<OlympianUpdate>({
-    full_name: "",
-    identity_document: "",
-    legal_guardian_contact: "",
-    educational_institution: "",
-    department: "",
-    school_grade: "",
-    academic_tutor: "",
+    area_id: undefined,
+    grade_id: undefined,
+    status: undefined,
+    olympian: {
+      full_name: "",
+      identity_document: "",
+      educational_institution: "",
+      department: "",
+      academic_tutor: "",
+    },
   });
 
   useEffect(() => {
     if (olympian) {
       setFormData({
-        full_name: olympian.full_name ?? "",
-        identity_document: olympian.identity_document ?? "",
-        legal_guardian_contact: olympian.legal_guardian_contact ?? "",
-        educational_institution: olympian.educational_institution ?? "",
-        department: olympian.department ?? "",
-        school_grade: olympian.school_grade ?? "",
-        academic_tutor: olympian.academic_tutor ?? "",
+        area_id: olympian.area_id,
+        grade_id: olympian.grade_id,
+        status: olympian.status as "pending" | "approved" | "rejected",
+        olympian: {
+          full_name: olympian.olympian.full_name ?? "",
+          identity_document: olympian.olympian.identity_document ?? "",
+          educational_institution: olympian.olympian.educational_institution ?? "",
+          department: olympian.olympian.department ?? "",
+          academic_tutor: olympian.olympian.academic_tutor ?? "",
+        },
       });
     }
   }, [olympian]);
@@ -45,7 +63,20 @@ export const EditOlympianModal = ({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      olympian: {
+        ...prev.olympian,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleSelectChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value ? Number(value) : undefined,
     }));
   };
 
@@ -68,50 +99,54 @@ export const EditOlympianModal = ({
           <InputField
             label="Nombre completo"
             name="full_name"
-            value={formData.full_name ?? ""}
+            value={formData.olympian?.full_name ?? ""}
             onChange={handleChange}
           />
 
           <InputField
             label="Documento de identidad"
             name="identity_document"
-            value={formData.identity_document ?? ""}
-            onChange={handleChange}
-          />
-
-          <InputField
-            label="Contacto del tutor legal"
-            name="legal_guardian_contact"
-            value={formData.legal_guardian_contact ?? ""}
+            value={formData.olympian?.identity_document ?? ""}
             onChange={handleChange}
           />
 
           <InputField
             label="Institución educativa"
             name="educational_institution"
-            value={formData.educational_institution ?? ""}
+            value={formData.olympian?.educational_institution ?? ""}
             onChange={handleChange}
           />
 
           <InputField
             label="Departamento"
             name="department"
-            value={formData.department ?? ""}
-            onChange={handleChange}
-          />
-
-          <InputField
-            label="Grado escolar"
-            name="school_grade"
-            value={formData.school_grade ?? ""}
+            value={formData.olympian?.department ?? ""}
             onChange={handleChange}
           />
 
           <InputField
             label="Tutor académico"
             name="academic_tutor"
-            value={formData.academic_tutor ?? ""}
+            value={formData.olympian?.academic_tutor ?? ""}
             onChange={handleChange}
+          />
+
+          <SelectField
+            label="Área"
+            name="area_id"
+            options={areas}
+            value={formData.area_id ?? ""}
+            onChange={handleSelectChange}
+            placeholder="Seleccionar área"
+          />
+
+          <SelectField
+            label="Grado"
+            name="grade_id"
+            options={grades}
+            value={formData.grade_id ?? ""}
+            onChange={handleSelectChange}
+            placeholder="Seleccionar grado"
           />
 
           <div className="flex justify-end gap-3 mt-5">
