@@ -2,7 +2,7 @@ import api from "./axios";
 
 export const getOlympians = () => {
   const token = localStorage.getItem("token");
-  return api.get("/olympians", {
+  return api.get("/inscriptions/", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
