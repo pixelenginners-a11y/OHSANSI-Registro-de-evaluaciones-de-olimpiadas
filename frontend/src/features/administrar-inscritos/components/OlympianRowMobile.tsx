@@ -25,9 +25,9 @@ export function OlympianRowMobile({ data, openRowId, setOpenRowId, onDelete, onE
         >
           <div>
             <div className="font-medium text-gray-900">
-              {data.full_name}
+              {data.olympian.full_name}
             </div>
-            <div className="text-sm text-gray-500">{data.educational_institution}</div>
+            <div className="text-sm text-gray-500">{data.olympian.educational_institution}</div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -55,22 +55,23 @@ export function OlympianRowMobile({ data, openRowId, setOpenRowId, onDelete, onE
       {expanded && (
         <div className="px-4 pb-3 text-sm text-gray-600 rounded-b-lg border-t bg-gray-50">
           <p>
-            <b>Documento:</b> {data.identity_document}
+            <b>Documento:</b> {data.olympian.identity_document}
           </p>
           <p>
-            <b>Contacto Tutor Legal:</b> {data.legal_guardian_contact}
+            <b>Institución:</b> {data.olympian.educational_institution}
           </p>
           <p>
-            <b>Institución:</b> {data.educational_institution}
+            <b>Departamento:</b> {data.olympian.department}
           </p>
           <p>
-            <b>Departamento:</b> {data.department}
+            <b>Tutor Académico:</b> {data.olympian.academic_tutor}
           </p>
-          {data.academic_tutor && (
-            <p>
-              <b>Tutor Académico:</b> {data.academic_tutor}
-            </p>
-          )}
+          <p>
+            <b>Área:</b> {data.area.name}
+          </p>
+          <p>
+            <b>Grado:</b> {data.grade.name}
+          </p>
         </div>
       )}
     </div>
