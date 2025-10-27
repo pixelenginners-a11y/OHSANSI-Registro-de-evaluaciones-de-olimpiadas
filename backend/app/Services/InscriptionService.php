@@ -19,7 +19,7 @@ class InscriptionService
     public function getAll(): Collection
     {
         return Inscription::with([
-            'olympian:id,full_name,identity_document,educational_institution',
+            'olympian:id,full_name,identity_document,educational_institution,department,academic_tutor',
             'area:id,name',
             'grade:id,name'
         ])
