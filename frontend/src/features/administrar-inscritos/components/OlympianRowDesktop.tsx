@@ -13,15 +13,17 @@ interface OlympianRowDesktopProps {
 
 export function OlympianRowDesktop({ data, openRowId, setOpenRowId, onDelete, onEdit, editActive }: OlympianRowDesktopProps) {
   const columns = [
-    { key: "full_name", value: data.full_name },
-    { key: "identity_document", value: data.identity_document },
-    { key: "educational_institution", value: data.educational_institution },
-    { key: "department", value: data.department },
-    { key: "academic_tutor", value: data.academic_tutor || "-" },
+    { key: "full_name", value: data.olympian.full_name },
+    { key: "identity_document", value: data.olympian.identity_document },
+    { key: "educational_institution", value: data.olympian.educational_institution },
+    { key: "department", value: data.olympian.department },
+    { key: "academic_tutor", value: data.olympian.academic_tutor },
+    { key: "area", value: data.area.name },
+    { key: "grade", value: data.grade.name },
   ];
 
   return (
-    <div className="grid grid-cols-[1.5fr_1fr_1.5fr_1fr_0.8fr_1.2fr] items-center hover:bg-gray-50 transition">
+    <div className="grid grid-cols-[1.5fr_1fr_1.5fr_1fr_1.2fr_1fr_1fr_1.2fr] items-center hover:bg-gray-50 transition">
       {columns.map((col) => (
         <div
           key={col.key}
