@@ -1,11 +1,27 @@
-
-
-export type FilaCSVValida = {
+// Tipo para los datos parseados del CSV (intermedio)
+export type FilaCSVParseada = {
+  __row?: number; // Número de fila en el CSV original
   full_name: string;
   identity_document: string;
   educational_institution: string;
   department: string;
   academic_tutor?: string;
+  area?: string;
+  grade?: string;
+};
+
+// Tipo para los datos validados listos para el backend
+export type FilaCSVValida = {
+  olympian: {
+    full_name: string;
+    identity_document: string;
+    educational_institution: string;
+    department: string;
+    academic_tutor?: string;
+  };
+  area_id: number;
+  grade_id: number;
+  status?: string;
 };
 
 export type FilaCSVConError = {
@@ -14,14 +30,27 @@ export type FilaCSVConError = {
 };
 
 export const CAMPOS_PLANTILLA = [
-  "full_name",
-  "identity_document",
-  "educational_institution",
-  "department",
-  "academic_tutor",
+  "nombre_completo",
+  "documento_identidad",
+  "unidad_educativa",
+  "departamento",
+  "tutor_academico",
+  "area",
+  "grado",
 ] as const;
 
 export type CampoPlantilla = (typeof CAMPOS_PLANTILLA)[number];
+
+// Mapeo de campos en español (CSV) a campos en inglés (parseado)
+export const MAPEO_CAMPOS: Record<string, keyof FilaCSVParseada> = {
+  "nombre_completo": "full_name",
+  "documento_identidad": "identity_document",
+  "unidad_educativa": "educational_institution",
+  "departamento": "department",
+  "tutor_academico": "academic_tutor",
+  "area": "area",
+  "grado": "grade",
+};
 
 export const DEPARTAMENTOS_DEFAULT = [
   "Chuquisaca","La Paz","Cochabamba","Oruro","Potosí","Tarija","Santa Cruz","Beni","Pando",
