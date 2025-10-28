@@ -1,12 +1,12 @@
 import {
-  type FilaCSVValida,
+  type FilaCSVParseada,
   type FilaCSVConError,
   CAMPOS_PLANTILLA,
+  MAPEO_CAMPOS,
 } from "../types/inscritos";
 
 // Utils
 const normalize = (s: string) => s?.trim();
-const nonEmpty = (s?: string | null) => !!(s && s.trim().length > 0);
 
 // CSV parser (simple, con comillas básicas)
 export function parseCSVText(text: string): Record<string, string>[] {
@@ -37,60 +37,35 @@ function splitCsvLine(line: string): string[] {
 
 export function validarCSVInscritos(
   rows: Record<string, string>[]
-): { validas: FilaCSVValida[]; errores: FilaCSVConError[] } {
+): { validas: FilaCSVParseada[]; errores: FilaCSVConError[] } {
   const errores: FilaCSVConError[] = [];
-  const validas: FilaCSVValida[] = [];
+  const validas: FilaCSVParseada[] = [];
 
-  const header = Object.keys(rows[0] ?? {});
-  const faltantes = (CAMPOS_PLANTILLA as readonly string[]).filter((h) => !header.includes(h));
-  const extra = header.filter((h) => !(CAMPOS_PLANTILLA as readonly string[]).includes(h));
-  if (faltantes.length || extra.length) {
-    errores.push({
-      __row: 0,
-      errores: [
-        ...(faltantes.length ? [`Encabezados faltantes: ${faltantes.join(", ")}`] : []),
-        ...(extra.length ? [`Encabezados desconocidos: ${extra.join(", ")}`] : []),
-      ],
-    });
-  }
-
-  const seen = new Set<string>(); // CI|Area|Nivel
-
+  // Solo parsear los datos, sin validaciones
   rows.forEach((raw, idx) => {
     const rowNum = idx + 1;
-    const errs: string[] = [];
 
     const data = {
-      full_name: normalize(raw.full_name ?? ""),
-      identity_document: normalize(raw.identity_document ?? ""),
-      educational_institution: normalize(raw.educational_institution ?? ""),
-      department: normalize(raw.department ?? ""),
-      academic_tutor: normalize(raw.academic_tutor ?? ""),
+      full_name: normalize(raw.nombre_completo ?? ""),
+      identity_document: normalize(raw.documento_identidad ?? ""),
+      educational_institution: normalize(raw.unidad_educativa ?? ""),
+      department: normalize(raw.departamento ?? ""),
+      academic_tutor: normalize(raw.tutor_academico ?? ""),
+      area: normalize(raw.area ?? ""),
+      grade: normalize(raw.grado ?? ""),
     };
 
-    // Reglas de validación
-    if (!nonEmpty(data.full_name)) errs.push("full_name vacío");
-    if (!nonEmpty(data.identity_document)) errs.push("identity_document vacío");
-    if (!nonEmpty(data.educational_institution)) errs.push("educational_institution vacío");
-    if (!nonEmpty(data.department)) errs.push("department vacío");
-
-    // Validar duplicados por identity_document
-    if (nonEmpty(data.identity_document)) {
-      const key = data.identity_document.toLowerCase();
-      if (seen.has(key)) errs.push("Duplicado (mismo identity_document)");
-      else seen.add(key);
-    }
-
-    if (errs.length) errores.push({ __row: rowNum, errores: errs });
-    else {
-      validas.push({
-        full_name: data.full_name!,
-        identity_document: data.identity_document!,
-        educational_institution: data.educational_institution!,
-        department: data.department!,
-        academic_tutor: data.academic_tutor || undefined,
-      });
-    }
+    // Agregar todas las filas parseadas sin validar
+    validas.push({
+      __row: rowNum,
+      full_name: data.full_name,
+      identity_document: data.identity_document,
+      educational_institution: data.educational_institution,
+      department: data.department,
+      academic_tutor: data.academic_tutor || undefined,
+      area: data.area,
+      grade: data.grade,
+    });
   });
 
   return { validas, errores };
