@@ -11,7 +11,7 @@ export const FIELD_NAMES: Record<string, string> = {
   grade: 'Grado',
 };
 
-type ErrorInfo = {
+export type ErrorInfo = {
   camposConError: Set<string>;
   mensajes: string[];
 };
