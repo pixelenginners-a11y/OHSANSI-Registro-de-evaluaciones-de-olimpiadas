@@ -15,9 +15,13 @@ type DesktopSideBarProps = {
 }
 
 export const DesktopSideBar = ({ open, setOpen, sideBarItems }: DesktopSideBarProps) => {
+  const handleLogout = () => {
+    localStorage.removeItem('token'); //borrar token
+  };
+
   return (
     <div
-      className={`${open ? "basis-1/5 min-w-[14rem]" : "basis-[4%] min-w-[3rem]"} 
+      className={`${open ? "basis-1/5 min-w-[14rem]" : "basis-[4%] min-w-[3rem]"}
         bg-white h-screen shadow-md flex-col justify-between transition-all duration-300 hidden lg:flex`}
     >
       <div>
@@ -51,9 +55,10 @@ export const DesktopSideBar = ({ open, setOpen, sideBarItems }: DesktopSideBarPr
         <SidebarItem
           iconName="logOut"
           text="Cerrar Sesión"
-          route="/login"
+          route="/public/login"
           open={open}
           red={true}
+          onClick={handleLogout}
         />
       </div>
     </div>
