@@ -9,6 +9,11 @@ use App\Http\Controllers\OlympianController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\InscriptionController;
+use App\Http\Controllers\ListingController;
+use App\Http\Controllers\ListItemController;
+use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\CompetitionPhaseController;
+
 
 // Rutas públicas de autenticación
 Route::post('login', [AuthController::class, 'login']);
@@ -62,7 +67,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Areas routes (Solo Administradores)
-    Route::prefix('areas')->middleware('role:Administrador')->group(function () {
+    Route::prefix('areas')->middleware('role:Administrador,Evaluador,Responsable Academico')->group(function () {
         Route::get('/', [AreaController::class, 'index']);
         Route::post('/', [AreaController::class, 'store']);
         Route::get('{id}', [AreaController::class, 'show']);
@@ -72,7 +77,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Grades routes (Solo Administradores)
-    Route::prefix('grades')->middleware('role:Administrador')->group(function () {
+    Route::prefix('grades')->middleware('role:Administrador,Evaluador,Responsable Academico')->group(function () {
         Route::get('/', [GradeController::class, 'index']);
         Route::post('/', [GradeController::class, 'store']);
         Route::get('{id}', [GradeController::class, 'show']);
@@ -93,5 +98,29 @@ Route::middleware('auth:api')->group(function () {
         Route::put('{id}', [InscriptionController::class, 'update'])->middleware('fase:Inscripciones');
         Route::patch('{id}', [InscriptionController::class, 'update'])->middleware('fase:Inscripciones');
         Route::delete('{id}', [InscriptionController::class, 'destroy'])->middleware('fase:Inscripciones');
+    });
+
+    Route::prefix('listings')->middleware('role:Administrador,Evaluador, Responsable Academico')->group(function () {
+        Route::get('/', [ListingController::class, 'index']);
+        Route::post('/', [ListingController::class, 'store']);
+        Route::get('{id}', [ListingController::class, 'show']);
+        Route::put('{id}', [ListingController::class, 'update']);
+        Route::patch('{id}', [ListingController::class, 'update']);
+        Route::delete('{id}', [ListingController::class, 'destroy']);
+    });
+
+    Route::prefix('list-items')->middleware('role:Administrador,Evaluador, Responsable Academico')->group(function () {
+        Route::get('{id}', [ListItemController::class, 'index']);
+    });
+
+    Route::prefix('evaluations')->middleware(['auth:api', 'role:Administrador,Evaluador,Responsable Academico'])->group(function () {
+        Route::get('/', [EvaluationController::class, 'index']);
+        Route::get('/stats', [EvaluationController::class, 'stats']);
+        Route::patch('{id}', [EvaluationController::class, 'update']);
+    });
+
+    Route::prefix('admin/competition/phases')->middleware('auth:api')->group(function () {
+        Route::get('/', [CompetitionPhaseController::class, 'index']);
+        Route::post('{phase}/{action}', [CompetitionPhaseController::class, 'togglePhase']);
     });
 });
