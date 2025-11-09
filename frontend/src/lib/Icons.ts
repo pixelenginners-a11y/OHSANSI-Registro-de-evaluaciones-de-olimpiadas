@@ -19,6 +19,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
+  Album,
+  Settings,
 } from "lucide-react";
 
 export const icons = {
@@ -42,6 +44,8 @@ export const icons = {
   'chevron-left': ChevronLeft,
   'chevron-right': ChevronRight,
   'search': Search,
+  'album': Album,
+  'settings': Settings,
 } as const;
 
 export type IconName = keyof typeof icons;
