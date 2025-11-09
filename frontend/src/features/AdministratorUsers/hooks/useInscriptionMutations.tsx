@@ -1,12 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 
-import apiInterceptor from "../../../api/axiosInterceptor";
+import api from "../../../api/axios";
 import { queryClient } from "../../../lib/QueryClient";
 
 export const useUpdateInscription = (id: number) => {
   return useMutation({
     mutationFn: async (data) => {
-      const res = await apiInterceptor.put(`/inscriptions/${id}`, data);
+      const res = await api.put(`/inscriptions/${id}`, data);
       return res.data;
     },
     onSuccess: () => {
@@ -19,7 +19,7 @@ export const useUpdateInscription = (id: number) => {
 export const useDeleteInscription = (id: number) => {
   return useMutation({
     mutationFn: async () => {
-      await apiInterceptor.delete(`/inscriptions/${id}`);
+      await api.delete(`/inscriptions/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['inscriptions'] });
@@ -30,7 +30,7 @@ export const useDeleteInscription = (id: number) => {
 export const useCreateInscription = () => {
   return useMutation({
     mutationFn: async (data) => {
-      const res = await apiInterceptor.post("/inscriptions", data);
+      const res = await api.post("/inscriptions", data);
       return res.data;
     },
     onSuccess: () => {
