@@ -18,18 +18,22 @@ type MenuProps = {
 const Sidebar = ({ items }: MenuProps) => {
   const [open, setOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  const [seleccion, setseleccion] = useState('');
   return (
     <>
       <TopBarMobile
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
         itemRoutes={items}
+        seleccion={seleccion}
+        setseleccion={setseleccion}
       />
       <DesktopSideBar
         open={open}
         setOpen={setOpen}
         sideBarItems={items}
+        seleccion={seleccion}
+        setseleccion={setseleccion}
       />
     </>
   );

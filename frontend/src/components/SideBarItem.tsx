@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 import Icon from "./Icon";
 import { type MenuItem } from "./Menu";
@@ -10,17 +10,20 @@ type SidebarItemProps = {
   red?: boolean;
   onClick?: () => void;
   isChild?: boolean;
+  seleccion?: string;
+  setseleccion: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const SidebarItem = ({ item, open, red, onClick, isChild }: SidebarItemProps) => {
+export const SidebarItem = ({ item, open, red, onClick, isChild, seleccion, setseleccion }: SidebarItemProps) => {
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
   const hasChildren = item.children && item.children.length > 0;
-
   const handleClick = () => {
     if (hasChildren) {
       setIsExpanded(!isExpanded);
-    } else if (item.route && onClick) {
-      onClick();
+    } else if (item.route) {
+      navigate({ to: item.route});
+      setseleccion(item.text)
     }
   };
 
@@ -28,7 +31,9 @@ export const SidebarItem = ({ item, open, red, onClick, isChild }: SidebarItemPr
     <button
       onClick={handleClick}
       className={`${red ? "text-red-500 hover:bg-red-50" : "hover:bg-gray-100"
-        } ${isChild ? "pl-8" : ""} flex items-center gap-3 p-3 rounded-lg transition-colors w-full`}
+        } ${isChild ? "pl-8" : ""
+        } ${seleccion === item.text ? "bg-blue-100 font-semibold text-blue-700 border-l-4 border-blue-500" : ""
+        } flex items-center gap-3 p-3 rounded-lg transition-colors w-full`}
     >
       <Icon name={item.icon} />
       <span className={`${open ? "block" : "hidden"} text-sm font-medium flex-1 text-left`}>
@@ -51,8 +56,9 @@ export const SidebarItem = ({ item, open, red, onClick, isChild }: SidebarItemPr
                 key={index}
                 item={child}
                 open={open}
-                onClick={onClick}
                 isChild={true}
+                seleccion={seleccion}
+                setseleccion={setseleccion}
               />
             ))}
           </div>
@@ -63,9 +69,7 @@ export const SidebarItem = ({ item, open, red, onClick, isChild }: SidebarItemPr
 
   if (item.route) {
     return (
-      <Link to={item.route} className="w-full">
-        <ButtonContent />
-      </Link>
+      <ButtonContent />
     );
   }
 
