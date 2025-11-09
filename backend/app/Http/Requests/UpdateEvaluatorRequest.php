@@ -41,7 +41,7 @@ class UpdateEvaluatorRequest extends FormRequest
             ],
             'phone'      => ['nullable', 'string', 'max:20'],
             'password'   => ['sometimes', 'string', 'min:6'],
-            'area_id'    => ['sometimes', 'exists:areas,id'],
+            'grades'    => ['sometimes', 'exists:grades,id'],
             'active'     => ['nullable', 'boolean'],
         ];
     }
@@ -58,7 +58,9 @@ class UpdateEvaluatorRequest extends FormRequest
           'email.unique'       => 'Ese email ya existe.',
           'phone.max'          => 'El teléfono no puede superar :max caracteres.',
           'password.min'       => 'La contraseña debe tener al menos :min caracteres.',
-          'area_id.exists'     => 'El área seleccionada no es válida.',
+          'grades.exists'   => 'El grado seleccionado no existe.',
+          'grades.array'     => 'Los grados deben ser un arreglo.',
+          'grades.sometimes'  => 'Los grados deben ser un arreglo.',
           'active.boolean'     => 'El valor de activo debe ser verdadero o falso.',
         ];  
     }

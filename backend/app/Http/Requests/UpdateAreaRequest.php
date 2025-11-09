@@ -26,6 +26,9 @@ class UpdateAreaRequest extends FormRequest
             'area.description' => 'sometimes|nullable|string',
             'area.active' => 'sometimes|boolean',
             'area.responsable_id' => 'sometimes|nullable|exists:users,id',
+            'area.is_group' => 'sometimes|boolean',
+            'area.group_min_size' => 'required_if:area.is_group,1|integer|min:1',
+            'area.group_max_size' => 'required_if:area.is_group,1|integer|min:1|gte:area.group_min_size',
 
             'medalParameter.gold' => 'sometimes|integer|min:0',
             'medalParameter.silver' => 'sometimes|integer|min:0',
@@ -43,6 +46,14 @@ class UpdateAreaRequest extends FormRequest
             'area.name.string' => 'El nombre del área debe ser texto.',
             'area.name.max' => 'El nombre del área no puede exceder 255 caracteres.',
             'area.name.unique' => 'Ya existe un área con este nombre.',
+            'area.is_group.boolean' => 'El valor de el grupo no es correcto.',
+            'area.group_min_size.required_if' => 'El tamaño mínimo del grupo es obligatorio cuando el área es grupal.',
+            'area.group_min_size.integer' => 'El tamaño mínimo del grupo debe ser un número entero.',
+            'area.group_min_size.min' => 'El tamaño mínimo del grupo debe ser al menos 1.',
+            'area.group_max_size.required_if' => 'El tamaño máximo del grupo es obligatorio cuando el área es grupal.',
+            'area.group_max_size.integer' => 'El tamaño máximo del grupo debe ser un número entero.',
+            'area.group_max_size.min' => 'El tamaño máximo del grupo debe ser al menos 1.',
+            'area.group_max_size.gte' => 'El tamaño máximo del grupo debe ser mayor o igual al tamaño mínimo del grupo.',
 
             'area.responsable_id.exists' => 'El responsable seleccionado no existe.',
 

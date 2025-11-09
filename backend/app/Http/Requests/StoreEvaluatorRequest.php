@@ -19,8 +19,8 @@ class StoreEvaluatorRequest extends FormRequest
             'email'     => ['required','email:rfc,dns','max:50','unique:users,email'],
             'phone'     => ['nullable','string','max:20'],
             'password'  => ['required','string','min:6'],
-            'area_id'  => ['required','exists:areas,id'],
             'active'    => ['nullable','boolean'],
+            'grades'    => ['sometimes', 'exists:grades,id'],
         ];
     }
 
@@ -45,8 +45,9 @@ class StoreEvaluatorRequest extends FormRequest
             'password.required'  => 'La contraseña es obligatoria.',
             'password.min'       => 'La contraseña debe tener al menos :min caracteres.',
 
-            'area_id.required'=> 'Debe asignarse un área al evaluador.',
-            'area_id.exists'  => 'El área seleccionada no es válida.',
+            'grades.*.exists' => 'El grado seleccionado no existe.',
+            'grades.array' => 'Los grados deben ser un arreglo.',
+            'grades.*.integer' => 'Cada grado debe ser un número entero.',
 
             'active.boolean' => 'El valor de activo debe ser verdadero o falso.',
         ];

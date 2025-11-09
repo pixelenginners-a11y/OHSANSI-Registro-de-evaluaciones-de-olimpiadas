@@ -26,6 +26,9 @@ class StoreAreaRequest extends FormRequest
             'description' => 'nullable|string',
             'active' => 'sometimes|boolean',
             'responsable_id' => 'nullable|exists:users,id',
+            'is_group' => 'required|boolean',
+            'group_min_size' => 'required_if:is_group,1|integer|min:1',
+            'group_max_size' => 'required_if:is_group,1|integer|min:1|gte:group_min_size',
 
             'gold' => 'sometimes|integer|min:0',
             'silver' => 'sometimes|integer|min:0',
@@ -44,6 +47,17 @@ class StoreAreaRequest extends FormRequest
             'name.unique' => 'Ya existe un área con este nombre.',
             'name.string' => 'El nombre del área debe ser texto.',
             'name.max' => 'El nombre del área no puede exceder 255 caracteres.',
+            'is_group.required' => 'Debe especificar si el área es grupal.',
+            'is_group.boolean' => 'El valor de el grupo no es correcto.',
+            'group_min_size.required_if' => 'El tamaño mínimo del grupo es obligatorio cuando el área es grupal.',
+            'group_min_size.integer' => 'El tamaño mínimo del grupo debe ser un número entero.',
+            'group_min_size.min' => 'El tamaño mínimo del grupo debe ser al menos 1.',
+            'group_max_size.required_if' => 'El tamaño máximo del grupo es obligatorio cuando el área es grupal.',
+            'group_max_size.integer' => 'El tamaño máximo del grupo debe ser un número entero.',
+            'group_max_size.min' => 'El tamaño máximo del grupo debe ser al menos 1.',
+            'group_max_size.gte' => 'El tamaño máximo del grupo debe ser mayor o igual al tamaño mínimo del grupo.',
+
+
 
             'responsable_id.exists' => 'El responsable seleccionado no existe.',
 
@@ -56,7 +70,9 @@ class StoreAreaRequest extends FormRequest
             'bronze.integer' => 'La cantidad de medallas de bronce debe ser un número.',
             'bronze.min' => 'La cantidad de medallas de bronce no puede ser negativa.',
 
-            'grades.*.exists' => 'Uno de los grados seleccionados no existe.',
+            'grades.*.exists' => 'Se requi.',
+            'grades.array' => 'Los grados deben enviarse como un arreglo.',
+            'grades.*.integer' => 'Cada grado debe ser un ID válido.',
         ];
     }
 }
