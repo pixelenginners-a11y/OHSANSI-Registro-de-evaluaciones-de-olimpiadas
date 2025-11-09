@@ -1,12 +1,8 @@
+// src/features/login/types.ts
+
 export type LoginCredentials = {
   email: string;
   password: string;
-};
-
-export type LoginResponse = {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
 };
 
 export type User = {
@@ -21,4 +17,11 @@ export type User = {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
+};
+
+export type LoginResponse = {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  user: User;
 };

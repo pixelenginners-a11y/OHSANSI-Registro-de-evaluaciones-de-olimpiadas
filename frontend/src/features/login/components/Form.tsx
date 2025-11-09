@@ -8,17 +8,21 @@ import { useEffect } from "react";
 export const Form = () => {
   const navigate = useNavigate();
 
-  const { register, handleSubmit, formState: { errors }} = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema)
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
   });
 
-  const { login, loading, isError, isSuccess } = useLogin();
+  const { login, loading, isError, isSuccess, user } = useLogin();
 
   useEffect(() => {
-    if (isSuccess) {
-      navigate({ to: '/admin' });
+    if (isSuccess && user) {
+      if (user.role_id === 1) {
+        navigate({ to: '/admin' });
+      } else if (user.role_id === 2) {
+        navigate({ to: '/evaluator/evaluations' });
+      }
     }
-  }, [isSuccess, navigate]);
+  }, [isSuccess, user, navigate]);
 
   const onSubmit = (data: LoginFormData) => {
     login(data);

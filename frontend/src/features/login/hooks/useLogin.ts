@@ -1,17 +1,40 @@
 // src/features/login/hooks/useLogin.ts
 import { useMutation } from "@tanstack/react-query";
 import { login as loginApi } from "../../../api/auth";
-import type { LoginCredentials } from "../types";
+import { setAuthToken } from "../../../api/axios";
+import type { LoginCredentials, LoginResponse, User } from "../types";
+import type { AxiosError, AxiosResponse } from "axios";
 
 export function useLogin() {
-  const mutation = useMutation({
+  const mutation = useMutation<AxiosResponse<LoginResponse>, AxiosError, LoginCredentials>({
     mutationFn: ({ email, password }: LoginCredentials) =>
       loginApi(email, password),
+
     onSuccess: (response) => {
-      // Guardar token en localStorage
-      localStorage.setItem("token", response.data.access_token);
+      const accessToken = response.data.access_token;
+      const user = response.data.user;
+
+      if (accessToken) {
+        localStorage.setItem("token", accessToken);
+        setAuthToken(accessToken);
+      }
+
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+      }
     },
   });
+
+  const currentUser: User | null = (() => {
+    try {
+      const raw = localStorage.getItem("user");
+      return raw ? (JSON.parse(raw) as User) : null;
+    } catch {
+      return null;
+    }
+  })();
+
+  const loginData = mutation.data?.data ?? null;
 
   return {
     login: mutation.mutate,
@@ -19,6 +42,8 @@ export function useLogin() {
     loading: mutation.isPending,
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,
-    data: mutation.data?.data,
+    error: mutation.error,
+    loginData,
+    user: currentUser,
   };
 }
