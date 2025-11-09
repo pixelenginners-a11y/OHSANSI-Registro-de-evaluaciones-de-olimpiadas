@@ -54,6 +54,9 @@ class AreaService
                 'description'    => $data['description'] ?? null,
                 'active'         => $data['active'] ?? true,
                 'responsable_id' => $data['responsable_id'] ?? null,
+                'is_group'       => $data['is_group'],
+                'group_min_size' => $data['is_group'] ? ($data['group_min_size']) : null,
+                'group_max_size' => $data['is_group'] ? ($data['group_max_size']) : null,
             ]);
 
             $this->medalParameterService->create([
@@ -81,6 +84,10 @@ class AreaService
             if (!$area) return null;
 
             if (!empty($data['area'])) {
+                if (isset($data['area']['is_group']) && !$data['area']['is_group']) {
+                  $data['area']['group_min_size'] = null;
+                  $data['area']['group_max_size'] = null;
+                }
                 $area->update($data['area']);
             }
 
