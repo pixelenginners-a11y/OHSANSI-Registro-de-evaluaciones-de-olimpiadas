@@ -21,7 +21,7 @@ class Listing extends Model
         'visibility',
     ];
 
-    public function listItems()
+    public function items()
     {
         return $this->hasMany(ListItem::class);
     }
