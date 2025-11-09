@@ -1,17 +1,11 @@
-import { SidebarItem } from "./SideBarItem"
-import { type IconName } from "../lib/Icons"
+import { SidebarItem } from "./SideBarItem";
+import { type MenuItem } from "./Menu";
 import Icon from "./Icon";
-
-type SideBarItemProps = {
-  icon: IconName;
-  text: string;
-  route: string;
-}
 
 type DesktopSideBarProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  sideBarItems: SideBarItemProps[];
+  sideBarItems: MenuItem[];
 }
 
 export const DesktopSideBar = ({ open, setOpen, sideBarItems }: DesktopSideBarProps) => {
@@ -43,9 +37,7 @@ export const DesktopSideBar = ({ open, setOpen, sideBarItems }: DesktopSideBarPr
           {sideBarItems.map((item, index) => (
             <SidebarItem
               key={index}
-              iconName={item.icon}
-              text={item.text}
-              route={item.route}
+              item={item}
               open={open}
             />
           ))}
@@ -53,12 +45,14 @@ export const DesktopSideBar = ({ open, setOpen, sideBarItems }: DesktopSideBarPr
       </div>
       <div>
         <SidebarItem
-          iconName="logOut"
-          text="Cerrar Sesión"
-          route="/public/login"
+          item={{
+            icon: "logOut",
+            text: "Cerrar Sesión",
+            route: "/public/public/login"
+          }}
           open={open}
           red={true}
-          onClick={handleLogout}
+          onClick={() => { handleLogout }}
         />
       </div>
     </div>

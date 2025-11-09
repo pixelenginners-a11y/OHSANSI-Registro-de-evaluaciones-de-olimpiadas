@@ -4,14 +4,15 @@ import { type IconName } from "../lib/Icons";
 import { DesktopSideBar } from "./DesktopSideBar";
 import { TopBarMobile } from "./TopBarMobile";
 
-type SideBarItemProps = {
-  icon: IconName,
+export type MenuItem = {
+  icon: IconName;
   text: string;
-  route: string;
+  route?: string;
+  children?: MenuItem[];
 }
 
 type MenuProps = {
-  items: SideBarItemProps[]
+  items: MenuItem[]
 }
 
 const Sidebar = ({ items }: MenuProps) => {
