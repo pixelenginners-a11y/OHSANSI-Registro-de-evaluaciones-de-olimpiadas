@@ -2,22 +2,26 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 const api = axios.create({
-  baseURL: "http://localhost:8200/api",
+  baseURL: 'https://ohsansi-registro-de-evaluaciones-de.onrender.com/api',
   headers: { Accept: "application/json" },
-  timeout: 20000, // 20 segundos
 });
 
-// Función util para establecer el header Authorization en runtime
-export function setAuthToken(token: string | null) {
-  if (token) {
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  } else {
-    delete api.defaults.headers.common["Authorization"];
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = jwtDecode<{ exp?: number }>(token);
+      const currentTime = Date.now() / 1000;
+
+      if (decoded.exp && decoded.exp < currentTime) {
+        localStorage.removeItem('token');
+        window.location.href = '/public/login';
+      }
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-}
-
-// Si hay token en localStorage al arrancar, lo aplicamos
-const stored = localStorage.getItem("token");
-if (stored) setAuthToken(stored);
-
-export default api;
+);

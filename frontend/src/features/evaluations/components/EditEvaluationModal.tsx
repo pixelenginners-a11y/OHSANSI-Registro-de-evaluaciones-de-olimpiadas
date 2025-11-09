@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-// Tipos internos
 export type EditEvaluationForm = {
   score: number;
   description?: string;
@@ -24,7 +23,6 @@ export type Evaluation = {
   is_group: boolean;
 };
 
-// Zod schema actualizado para 4.24+
 const editEvaluationSchema = z.object({
   score: z
     .number({ message: "Debe ser un número" })
@@ -34,7 +32,6 @@ const editEvaluationSchema = z.object({
   status: z.enum(["pendiente", "clasificado", "no_clasificado", "desclasificado"]),
 });
 
-// Props del componente
 export interface EditEvaluationModalProps {
   evaluation: Evaluation;
   onClose: () => void;
@@ -46,7 +43,6 @@ export const EditEvaluationModal: React.FC<EditEvaluationModalProps> = ({
   onClose,
   onSave,
 }) => {
-  // Estado por defecto
   const defaultStatus: EditEvaluationForm["status"] =
     ["pendiente", "clasificado", "no_clasificado", "desclasificado"].includes(
       evaluation.status ?? ""
@@ -84,7 +80,7 @@ export const EditEvaluationModal: React.FC<EditEvaluationModalProps> = ({
         </h2>
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-3">
-          {/* Puntaje */}
+
           <div>
             <label className="text-sm font-medium block mb-1">Puntaje</label>
             <input
@@ -99,7 +95,7 @@ export const EditEvaluationModal: React.FC<EditEvaluationModalProps> = ({
             )}
           </div>
 
-          {/* Descripción */}
+
           <div>
             <label className="text-sm font-medium block mb-1">Descripción</label>
             <textarea
@@ -111,7 +107,7 @@ export const EditEvaluationModal: React.FC<EditEvaluationModalProps> = ({
             )}
           </div>
 
-          {/* Estado */}
+
           <div>
             <label className="text-sm font-medium block mb-1">Estado</label>
             <select {...register("status")} className="w-full border rounded px-2 py-1">
@@ -125,7 +121,7 @@ export const EditEvaluationModal: React.FC<EditEvaluationModalProps> = ({
             )}
           </div>
 
-          {/* Botones */}
+
           <div className="flex justify-end gap-3 mt-5">
             <button
               type="button"
