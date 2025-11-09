@@ -1,7 +1,6 @@
 // src/features/login/hooks/useLogin.ts
 import { useMutation } from "@tanstack/react-query";
 import { login as loginApi } from "../../../api/auth";
-import { setAuthToken } from "../../../api/axios";
 import type { LoginCredentials, LoginResponse, User } from "../types";
 import type { AxiosError, AxiosResponse } from "axios";
 
@@ -16,7 +15,6 @@ export function useLogin() {
 
       if (accessToken) {
         localStorage.setItem("token", accessToken);
-        setAuthToken(accessToken);
       }
 
       if (user) {
