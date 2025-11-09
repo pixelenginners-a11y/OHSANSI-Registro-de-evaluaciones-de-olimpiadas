@@ -13,6 +13,7 @@ class EvaluatorController extends Controller
     public function __construct(
       protected EvaluatorService $evaluatorService
     ) {}
+    
     /**
      * Display a listing of the resource.
      */
