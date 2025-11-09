@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 
-import apiInterceptor from "../../../api/axiosInterceptor";
+import api from "../../../api/axios";
 
 export const useGetAcademics = (page: number = 1) => {
 
   return useQuery({
     queryKey: ["getAcademics", page],
     queryFn: async () => {
-      const res = await apiInterceptor.get(`/academics?page=${page}`);
+      const res = await api.get(`/academics?page=${page}`);
       return res.data;
     }
   })
@@ -18,7 +18,7 @@ export const useGetAcademicsById = (id: number) => {
   return useQuery({
     queryKey: ["academics", id],
     queryFn: async () => {
-      const res = await apiInterceptor.get(`/academics/${id}`);
+      const res = await api.get(`/academics/${id}`);
       return res.data;
     }
   })
@@ -32,7 +32,7 @@ export const useSearchAcademics = (query: string, areaId: string) => {
       const params: Record<string, string> = {};
       if (query) params.query = query;
       if (areaId) params.areaId = areaId
-      const res = await apiInterceptor.get("academics/search", {
+      const res = await api.get("academics/search", {
         params,
       });
       return res.data;

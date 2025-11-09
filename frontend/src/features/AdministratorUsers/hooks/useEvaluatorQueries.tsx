@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import apiInterceptor from "../../../api/axiosInterceptor";
+import api from "../../../api/axios";
 
 export const useGetEvaluators = (page: number = 1) => {
   return useQuery({
     queryKey: ["getEvaluators", page],
     queryFn: async () => {
-      const res = await apiInterceptor.get(`/evaluators?page=${page}`);
+      const res = await api.get(`/evaluators?page=${page}`);
       return res.data;
     },
   });
@@ -15,7 +15,7 @@ export const useGetEvaluatorById = (id: number) => {
   return useQuery({
     queryKey: ["evaluator", id],
     queryFn: async () => {
-      const res = await apiInterceptor.get(`/evaluators/${id}`);
+      const res = await api.get(`/evaluators/${id}`);
       return res.data;
     },
   });
@@ -28,7 +28,7 @@ export const useSearchEvaluators = (query: string, areaId: string) => {
       const params: Record<string, string> = {};
       if (query) params.query = query;
       if (areaId) params.areaId = areaId;
-      const res = await apiInterceptor.get("/evaluators/search", { params });
+      const res = await api.get("/evaluators/search", { params });
       return res.data;
     },
     enabled: !!query || !!areaId,
