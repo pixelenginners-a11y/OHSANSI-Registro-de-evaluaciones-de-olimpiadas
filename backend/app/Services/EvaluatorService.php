@@ -6,14 +6,14 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use \Illuminate\Database\Eloquent\Collection;
 use App\Services\UserService;
-use App\Services\EvaluatorAreaService;
+use App\Services\EvaluatorGradeService;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class EvaluatorService
 {
     public function __construct(
         protected UserService $userService,
-        protected EvaluatorAreaService $evaluatorAreaService
+        protected EvaluatorGradeService $evaluatorGradeService
     )
     {}
 
@@ -28,7 +28,7 @@ class EvaluatorService
                 'password' => $data['password'],
                 'role_id' => 2,
             ]);
-            $this->evaluatorAreaService->assign($user->id, $data['area_id']);
+            $this->evaluatorGradeService->assign($user->id, $data['grades']);
             return $user;
         });
     }
@@ -38,8 +38,8 @@ class EvaluatorService
         return DB::transaction(function () use ($userId, $data) {
             $this->userService->ensureUserHasRole($userId, 'Evaluador');
             $user = $this->userService->updateUser($userId, $data);
-            if (isset($data['area_id'])) {
-                $this->evaluatorAreaService->updateArea($userId, $data['area_id']);
+            if (isset($data['grades'])) {
+                $this->evaluatorGradeService->updateGrades($userId, $data['grades']);
             }
             return $user;
         });
@@ -49,7 +49,7 @@ class EvaluatorService
     {
         return DB::transaction(function () use ($userId) {
             $this->userService->ensureUserHasRole($userId, 'Evaluador');
-            $this->evaluatorAreaService->remove($userId);
+            $this->evaluatorGradeService->remove($userId);
             return $this->userService->deleteUser($userId);
         });
     }
@@ -68,18 +68,19 @@ class EvaluatorService
             'users.email',  
             'users.phone', 
             'users.active',
-            'areas.id as area_id',
-            'areas.name as area'
+            DB::raw('JSON_AGG(DISTINCT grades.id) as grade_ids'),
+            DB::raw('JSON_AGG(DISTINCT grades.name) as grade_names')
           )
           ->join('roles','users.role_id','=','roles.id')
-          ->leftJoin('evaluator_areas as ea','users.id','=','ea.user_id')
-          ->leftJoin('areas','areas.id','=','ea.area_id')
+          ->leftJoin('evaluator_grades as eg','users.id','=','eg.evaluator_id')
+          ->leftJoin('grades','grades.id','=','eg.grade_id')
           ->where('roles.name', 'Evaluador')
+          ->groupBy('users.id', 'users.full_name', 'users.username', 'users.email', 'users.phone', 'users.active')
           ->orderBy('users.id', 'desc')
           ->paginate(10);
     }
 
-    public function searchEvaluators(string $search, ?string $areaId = null, int $perPage = 10): LengthAwarePaginator
+    public function searchEvaluators(string $search, ?string $gradeId = null, int $perPage = 10): LengthAwarePaginator
     {
         $searchLower = strtolower($search);
         
@@ -90,18 +91,24 @@ class EvaluatorService
                 'users.email',
                 'users.phone',
                 'users.active',
-                'areas.id as area_id',
-                'areas.name as area'
+                DB::raw('JSON_AGG(DISTINCT grades.id) as grade_ids'),
+                DB::raw('JSON_AGG(DISTINCT grades.name) as grade_names')
             )
             ->join('roles', 'users.role_id', '=', 'roles.id')
-            ->leftJoin('evaluator_areas as ea', 'users.id', '=', 'ea.user_id')
-            ->leftJoin('areas', 'areas.id', '=', 'ea.area_id')
-            ->where('roles.name', 'Evaluador');
+            ->leftJoin('evaluator_grades as eg', 'users.id', '=', 'eg.evaluator_id')
+            ->leftJoin('grades', 'grades.id', '=', 'eg.grade_id')
+            ->where('roles.name', 'Evaluador')
+            ->groupBy('users.id', 'users.full_name', 'users.username', 'users.email', 'users.phone', 'users.active');
         
-        if (!empty($areaId)) {
-            $query->where('areas.id', $areaId);
+        if (!empty($gradeId)) {
+            $query->whereExists(function ($existsQuery) use ($gradeId) {
+            $existsQuery->select(DB::raw(1))
+                       ->from('evaluator_grades')
+                       ->whereColumn('evaluator_grades.evaluator_id', 'users.id')
+                       ->where('evaluator_grades.grade_id', $gradeId);
+            });
         }
-        
+
         if (!empty($search)) {
             $query->where(function ($q) use ($searchLower) {
                 $q->whereRaw('LOWER(users.full_name) like ?', ["%{$searchLower}%"])
@@ -110,8 +117,7 @@ class EvaluatorService
             });
         }
         
-        return $query->distinct()
-                    ->orderBy('users.id', 'desc')
+        return $query->orderBy('users.id', 'desc')
                     ->paginate($perPage);
     }
 }
