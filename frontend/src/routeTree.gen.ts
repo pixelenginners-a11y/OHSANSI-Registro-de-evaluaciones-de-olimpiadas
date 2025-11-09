@@ -9,17 +9,27 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as EvaluatorRouteRouteImport } from './routes/evaluator/route'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SharedConstruccionRouteImport } from './routes/shared/construccion'
 import { Route as PublicLoginRouteImport } from './routes/public/login'
+import { Route as EvaluatorEvaluationsRouteImport } from './routes/evaluator/evaluations'
 import { Route as AdminResponsablesRouteImport } from './routes/admin/responsables'
 import { Route as AdminNivelesRouteImport } from './routes/admin/niveles'
+import { Route as AdminListsRouteImport } from './routes/admin/lists'
 import { Route as AdminInscritosRouteImport } from './routes/admin/inscritos'
 import { Route as AdminEvaluadoresRouteImport } from './routes/admin/evaluadores'
 import { Route as AdminCsvRouteImport } from './routes/admin/csv'
+import { Route as AdminCompetitionRouteImport } from './routes/admin/competition'
 import { Route as AdminAreasRouteImport } from './routes/admin/areas'
+import { Route as PublicListsListIdRouteImport } from './routes/public/lists/$listId'
 
+const EvaluatorRouteRoute = EvaluatorRouteRouteImport.update({
+  id: '/evaluator',
+  path: '/evaluator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -40,6 +50,11 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   path: '/public/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EvaluatorEvaluationsRoute = EvaluatorEvaluationsRouteImport.update({
+  id: '/evaluations',
+  path: '/evaluations',
+  getParentRoute: () => EvaluatorRouteRoute,
+} as any)
 const AdminResponsablesRoute = AdminResponsablesRouteImport.update({
   id: '/responsables',
   path: '/responsables',
@@ -48,6 +63,11 @@ const AdminResponsablesRoute = AdminResponsablesRouteImport.update({
 const AdminNivelesRoute = AdminNivelesRouteImport.update({
   id: '/niveles',
   path: '/niveles',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminListsRoute = AdminListsRouteImport.update({
+  id: '/lists',
+  path: '/lists',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminInscritosRoute = AdminInscritosRouteImport.update({
@@ -65,97 +85,146 @@ const AdminCsvRoute = AdminCsvRouteImport.update({
   path: '/csv',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminCompetitionRoute = AdminCompetitionRouteImport.update({
+  id: '/competition',
+  path: '/competition',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminAreasRoute = AdminAreasRouteImport.update({
   id: '/areas',
   path: '/areas',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const PublicListsListIdRoute = PublicListsListIdRouteImport.update({
+  id: '/public/lists/$listId',
+  path: '/public/lists/$listId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/evaluator': typeof EvaluatorRouteRouteWithChildren
   '/admin/areas': typeof AdminAreasRoute
+  '/admin/competition': typeof AdminCompetitionRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
+  '/admin/lists': typeof AdminListsRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
+  '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
   '/public/login': typeof PublicLoginRoute
   '/shared/construccion': typeof SharedConstruccionRoute
+  '/public/lists/$listId': typeof PublicListsListIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/evaluator': typeof EvaluatorRouteRouteWithChildren
   '/admin/areas': typeof AdminAreasRoute
+  '/admin/competition': typeof AdminCompetitionRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
+  '/admin/lists': typeof AdminListsRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
+  '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
   '/public/login': typeof PublicLoginRoute
   '/shared/construccion': typeof SharedConstruccionRoute
+  '/public/lists/$listId': typeof PublicListsListIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/evaluator': typeof EvaluatorRouteRouteWithChildren
   '/admin/areas': typeof AdminAreasRoute
+  '/admin/competition': typeof AdminCompetitionRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
+  '/admin/lists': typeof AdminListsRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
+  '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
   '/public/login': typeof PublicLoginRoute
   '/shared/construccion': typeof SharedConstruccionRoute
+  '/public/lists/$listId': typeof PublicListsListIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/evaluator'
     | '/admin/areas'
+    | '/admin/competition'
     | '/admin/csv'
     | '/admin/evaluadores'
     | '/admin/inscritos'
+    | '/admin/lists'
     | '/admin/niveles'
     | '/admin/responsables'
+    | '/evaluator/evaluations'
     | '/public/login'
     | '/shared/construccion'
+    | '/public/lists/$listId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
+    | '/evaluator'
     | '/admin/areas'
+    | '/admin/competition'
     | '/admin/csv'
     | '/admin/evaluadores'
     | '/admin/inscritos'
+    | '/admin/lists'
     | '/admin/niveles'
     | '/admin/responsables'
+    | '/evaluator/evaluations'
     | '/public/login'
     | '/shared/construccion'
+    | '/public/lists/$listId'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/evaluator'
     | '/admin/areas'
+    | '/admin/competition'
     | '/admin/csv'
     | '/admin/evaluadores'
     | '/admin/inscritos'
+    | '/admin/lists'
     | '/admin/niveles'
     | '/admin/responsables'
+    | '/evaluator/evaluations'
     | '/public/login'
     | '/shared/construccion'
+    | '/public/lists/$listId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  EvaluatorRouteRoute: typeof EvaluatorRouteRouteWithChildren
   PublicLoginRoute: typeof PublicLoginRoute
   SharedConstruccionRoute: typeof SharedConstruccionRoute
+  PublicListsListIdRoute: typeof PublicListsListIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/evaluator': {
+      id: '/evaluator'
+      path: '/evaluator'
+      fullPath: '/evaluator'
+      preLoaderRoute: typeof EvaluatorRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -184,6 +253,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/evaluator/evaluations': {
+      id: '/evaluator/evaluations'
+      path: '/evaluations'
+      fullPath: '/evaluator/evaluations'
+      preLoaderRoute: typeof EvaluatorEvaluationsRouteImport
+      parentRoute: typeof EvaluatorRouteRoute
+    }
     '/admin/responsables': {
       id: '/admin/responsables'
       path: '/responsables'
@@ -196,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/niveles'
       fullPath: '/admin/niveles'
       preLoaderRoute: typeof AdminNivelesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/lists': {
+      id: '/admin/lists'
+      path: '/lists'
+      fullPath: '/admin/lists'
+      preLoaderRoute: typeof AdminListsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/inscritos': {
@@ -219,6 +302,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCsvRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/competition': {
+      id: '/admin/competition'
+      path: '/competition'
+      fullPath: '/admin/competition'
+      preLoaderRoute: typeof AdminCompetitionRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/areas': {
       id: '/admin/areas'
       path: '/areas'
@@ -226,23 +316,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAreasRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/public/lists/$listId': {
+      id: '/public/lists/$listId'
+      path: '/public/lists/$listId'
+      fullPath: '/public/lists/$listId'
+      preLoaderRoute: typeof PublicListsListIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AdminRouteRouteChildren {
   AdminAreasRoute: typeof AdminAreasRoute
+  AdminCompetitionRoute: typeof AdminCompetitionRoute
   AdminCsvRoute: typeof AdminCsvRoute
   AdminEvaluadoresRoute: typeof AdminEvaluadoresRoute
   AdminInscritosRoute: typeof AdminInscritosRoute
+  AdminListsRoute: typeof AdminListsRoute
   AdminNivelesRoute: typeof AdminNivelesRoute
   AdminResponsablesRoute: typeof AdminResponsablesRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAreasRoute: AdminAreasRoute,
+  AdminCompetitionRoute: AdminCompetitionRoute,
   AdminCsvRoute: AdminCsvRoute,
   AdminEvaluadoresRoute: AdminEvaluadoresRoute,
   AdminInscritosRoute: AdminInscritosRoute,
+  AdminListsRoute: AdminListsRoute,
   AdminNivelesRoute: AdminNivelesRoute,
   AdminResponsablesRoute: AdminResponsablesRoute,
 }
@@ -251,11 +352,25 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface EvaluatorRouteRouteChildren {
+  EvaluatorEvaluationsRoute: typeof EvaluatorEvaluationsRoute
+}
+
+const EvaluatorRouteRouteChildren: EvaluatorRouteRouteChildren = {
+  EvaluatorEvaluationsRoute: EvaluatorEvaluationsRoute,
+}
+
+const EvaluatorRouteRouteWithChildren = EvaluatorRouteRoute._addFileChildren(
+  EvaluatorRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  EvaluatorRouteRoute: EvaluatorRouteRouteWithChildren,
   PublicLoginRoute: PublicLoginRoute,
   SharedConstruccionRoute: SharedConstruccionRoute,
+  PublicListsListIdRoute: PublicListsListIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
