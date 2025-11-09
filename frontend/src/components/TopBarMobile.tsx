@@ -1,19 +1,13 @@
 import React from 'react'
 
-import { type IconName } from '../lib/Icons'
+import { type MenuItem } from './Menu'
 import { SidebarItem } from './SideBarItem'
 import Icon from './Icon'
-
-type SideBarItemProps = {
-  icon: IconName,
-  text: string;
-  route: string;
-}
 
 type TopBarMobileProps = {
   mobileMenuOpen: boolean,
   setMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>,
-  itemRoutes: SideBarItemProps[]
+  itemRoutes: MenuItem[]
 }
 
 export const TopBarMobile = ({ mobileMenuOpen, setMobileMenuOpen, itemRoutes }: TopBarMobileProps) => {
@@ -41,20 +35,21 @@ export const TopBarMobile = ({ mobileMenuOpen, setMobileMenuOpen, itemRoutes }: 
               {itemRoutes.map((item, index) => (
                 <SidebarItem
                   key={index}
-                  route={item.route}
-                  iconName={item.icon}
-                  text={item.text}
+                  item={item}
                   open={true}
                   onClick={() => setMobileMenuOpen(false)}
                 />
               ))}
               <div className="border-t pt-2 mt-2">
                 <SidebarItem
-                  text="Cerrar Sesión"
+                  item={{
+                    text: "Cerrar Sesión",
+                    route: "/login",
+                    icon: "logOut"
+                  }}
                   open={true}
-                  route="/login"
-                  iconName="logOut"
                   red={true}
+                  onClick={() => setMobileMenuOpen(false)}
                 />
               </div>
             </nav>
