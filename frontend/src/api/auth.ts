@@ -6,10 +6,13 @@ export const login = (email: string, password: string) => {
 };
 
 export const getMe = () => {
-  const token = localStorage.getItem("token");
-  return api.get<User>("/me", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  return api.get<User>("/me");
 };
+
+export const refreshToken = () => {
+  return api.post<LoginResponse>("/refresh");
+}
+
+export const logout = () => {
+  return api.post("/logout");
+}
