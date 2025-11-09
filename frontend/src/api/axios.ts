@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: 'https://ohsansi-registro-de-evaluaciones-de.onrender.com/api',
   headers: { Accept: "application/json" },
 });
