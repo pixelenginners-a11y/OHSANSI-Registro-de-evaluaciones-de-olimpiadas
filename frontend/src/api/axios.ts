@@ -16,6 +16,7 @@ api.interceptors.request.use(
       if (decoded.exp && decoded.exp < currentTime) {
         localStorage.removeItem('token');
         window.location.href = '/public/login';
+        return Promise.reject(new Error('Token inválido'));
       }
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -25,5 +26,14 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '/public/login';
+    }
+    return Promise.reject(error);
+  }
+);
 export default api;
