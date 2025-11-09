@@ -44,7 +44,7 @@ export const TopBarMobile = ({ mobileMenuOpen, setMobileMenuOpen, itemRoutes }: 
                 <SidebarItem
                   item={{
                     text: "Cerrar Sesión",
-                    route: "/login",
+                    route: "/public/login",
                     icon: "logOut"
                   }}
                   open={true}

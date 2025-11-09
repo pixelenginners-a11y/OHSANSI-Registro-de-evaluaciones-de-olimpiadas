@@ -48,7 +48,7 @@ export const DesktopSideBar = ({ open, setOpen, sideBarItems }: DesktopSideBarPr
           item={{
             icon: "logOut",
             text: "Cerrar Sesión",
-            route: "/public/public/login"
+            route: "/public/login"
           }}
           open={open}
           red={true}
