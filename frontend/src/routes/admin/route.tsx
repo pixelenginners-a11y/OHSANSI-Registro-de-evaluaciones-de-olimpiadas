@@ -7,16 +7,30 @@ export const Route = createFileRoute('/admin')({
   component: RouteComponent,
 })
 
-function RouteComponent() {
+export type MenuItem = {
+  text: string;
+  route?: string;
+  icon: IconName;
+  children?: MenuItem[];
+}
 
-  const items = [
+function RouteComponent() {
+  const items: MenuItem[] = [
     { text: "Cargar CSV", route: "/admin/csv", icon: "upload" },
-    { text: "Administrar Niveles", route: "/admin/niveles", icon: "layers" },
-    { text: "Administrar Areas", route: "/admin/areas", icon: "book-open" },
-    { text: "Administrar Evaluadores", route: "/admin/evaluadores", icon: "userCog" },
-    { text: "Administrar Responsables", route: "/admin/responsables", icon: "userCheck" },
-    { text: "Administrar Inscritos", route: "/admin/inscritos", icon: "users" },
-  ] satisfies { text: string; route: string; icon: IconName }[];
+    {
+      text: "Administrar",
+      icon: "settings",
+      children: [
+        { text: "Competencia", route: "/admin/competition", icon: "trophy" },
+        { text: "Niveles", route: "/admin/niveles", icon: "layers" },
+        { text: "Áreas", route: "/admin/areas", icon: "book-open" },
+        { text: "Evaluadores", route: "/admin/evaluadores", icon: "userCog" },
+        { text: "Responsables", route: "/admin/responsables", icon: "userCheck" },
+        { text: "Inscritos", route: "/admin/inscritos", icon: "users" },
+      ]
+    },
+    { text: "Generar Listas", route: "/admin/lists", icon: "album" },
+  ];
 
   return (
     <div className="flex flex-col lg:flex-row">
