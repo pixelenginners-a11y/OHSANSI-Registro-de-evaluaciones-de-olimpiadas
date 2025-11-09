@@ -70,7 +70,7 @@ class EvaluatorController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query', '');
-        $areaId = $request->input('areaId', null);
+        $areaId = $request->input('gradeId', null);
         $perPage = $request->input('per_page', 10);
         
         $results = $this->evaluatorService->searchEvaluators($query, $areaId, $perPage);
