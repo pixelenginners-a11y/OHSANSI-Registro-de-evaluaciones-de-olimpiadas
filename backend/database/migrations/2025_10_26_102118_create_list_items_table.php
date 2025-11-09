@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('list_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('listing_id')->references('id')->on('listings')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('inscription_id')->references('id')->on('inscriptions')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('group_id')->references('id')->on('groups')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('inscription_id')->nullable()->references('id')->nullable()->on('inscriptions')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('group_id')->nullable()->references('id')->on('groups')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

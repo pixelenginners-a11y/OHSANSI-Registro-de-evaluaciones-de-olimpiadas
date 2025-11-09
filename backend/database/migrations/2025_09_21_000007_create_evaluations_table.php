@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('evaluations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('inscription_id')->references('id')->on('inscriptions')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('group_id')->references('id')->on('groups')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('evaluator_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('inscription_id')->nullable()->references('id')->on('inscriptions')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('group_id')->nullable()->references('id')->on('groups')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('evaluator_id')->nullable()->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->decimal('score', 5, 2);
             $table->text('description')->nullable();
             $table->string('phase',20);

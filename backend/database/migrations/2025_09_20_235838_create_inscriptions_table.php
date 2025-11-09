@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('inscriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('olympian_id')->references('id')->on('olympians')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('group_id')->references('id')->on('groups')->onUpdate('cascade')->onDelete('cascade')->nullable();
+            $table->foreignId('group_id')->nullable()->references('id')->on('groups')->onUpdate('cascade')->onDelete('cascade')->nullable();
             $table->foreignId('area_id')->references('id')->on('areas')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('grade_id')->references('id')->on('grades')->onUpdate('cascade')->onDelete('cascade');
-            $table->boolean('is_group')->default(false);
             $table->string('status',20)->default('inscribed');
             $table->timestamps();
             $table->unique(['olympian_id', 'area_id', 'grade_id', 'group_id']);
