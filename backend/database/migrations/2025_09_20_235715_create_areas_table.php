@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->boolean('active')->default(true);
             $table->boolean('is_group')->default(false);
-            $table->integer('group_min_size');
-            $table->integer('group_max_size');
+            $table->integer('group_min_size')->nullable();
+            $table->integer('group_max_size')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

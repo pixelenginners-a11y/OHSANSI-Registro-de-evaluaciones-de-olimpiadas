@@ -17,6 +17,9 @@ return new class extends Migration
             $table->foreignId('area_id')->references('id')->on('areas')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('grade_id')->references('id')->on('grades')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->unique(['name', 'area_id', 'grade_id'], 'groups_name_area_grade_unique');
         });
     }
 
