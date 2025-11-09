@@ -6,9 +6,11 @@ type DesktopSideBarProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   sideBarItems: MenuItem[];
+  seleccion: string;
+  setseleccion: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const DesktopSideBar = ({ open, setOpen, sideBarItems }: DesktopSideBarProps) => {
+export const DesktopSideBar = ({ open, setOpen, sideBarItems, seleccion, setseleccion }: DesktopSideBarProps) => {
   const handleLogout = () => {
     localStorage.removeItem('token'); //borrar token
   };
@@ -39,6 +41,8 @@ export const DesktopSideBar = ({ open, setOpen, sideBarItems }: DesktopSideBarPr
               key={index}
               item={item}
               open={open}
+              seleccion={seleccion}
+              setseleccion={setseleccion}
             />
           ))}
         </nav>
@@ -53,6 +57,8 @@ export const DesktopSideBar = ({ open, setOpen, sideBarItems }: DesktopSideBarPr
           open={open}
           red={true}
           onClick={() => { handleLogout }}
+          seleccion={seleccion}
+          setseleccion={setseleccion}
         />
       </div>
     </div>

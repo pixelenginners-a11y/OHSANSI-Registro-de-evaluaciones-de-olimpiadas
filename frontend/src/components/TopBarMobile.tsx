@@ -7,10 +7,12 @@ import Icon from './Icon'
 type TopBarMobileProps = {
   mobileMenuOpen: boolean,
   setMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  seleccion?: string;
+  setseleccion: React.Dispatch<React.SetStateAction<string>>;
   itemRoutes: MenuItem[]
 }
 
-export const TopBarMobile = ({ mobileMenuOpen, setMobileMenuOpen, itemRoutes }: TopBarMobileProps) => {
+export const TopBarMobile = ({ mobileMenuOpen, setMobileMenuOpen, seleccion, setseleccion, itemRoutes }: TopBarMobileProps) => {
   return (
     <div>
       <div className="lg:hidden fixed top-0 left-0 right-0 bg-white shadow-md z-50">
@@ -38,6 +40,8 @@ export const TopBarMobile = ({ mobileMenuOpen, setMobileMenuOpen, itemRoutes }: 
                   item={item}
                   open={true}
                   onClick={() => setMobileMenuOpen(false)}
+                  seleccion={seleccion}
+                  setseleccion={setseleccion}
                 />
               ))}
               <div className="border-t pt-2 mt-2">
@@ -50,6 +54,8 @@ export const TopBarMobile = ({ mobileMenuOpen, setMobileMenuOpen, itemRoutes }: 
                   open={true}
                   red={true}
                   onClick={() => setMobileMenuOpen(false)}
+                  seleccion={seleccion}
+                  setseleccion={setseleccion}
                 />
               </div>
             </nav>
