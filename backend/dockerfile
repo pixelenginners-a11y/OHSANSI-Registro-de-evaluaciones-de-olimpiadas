@@ -1,27 +1,42 @@
 FROM php:8.2-cli AS vendor
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Instalar dependencias del sistema (AGREGANDO librerías para GD)
 RUN apt-get update && apt-get install -y --no-install-recommends \
       git \
       unzip \
       libzip-dev \
- && docker-php-ext-install zip \
+      libfreetype6-dev \
+      libjpeg62-turbo-dev \
+      libpng-dev \
+ && docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install zip gd \
  && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist
 
+# ============================================
+# STAGE 2: Imagen final con Apache
+# ============================================
 FROM php:8.2-apache-bookworm
 
-# Paquetes necesarios para extensiones
+# Paquetes necesarios para extensiones (AGREGANDO librerías para GD)
 RUN apt-get update && apt-get install -y --no-install-recommends \
       libpq-dev \
       libzip-dev \
       unzip \
       libicu-dev \
       pkg-config \
+      libfreetype6-dev \
+      libjpeg62-turbo-dev \
+      libpng-dev \
   && docker-php-ext-configure intl \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-ext-install -j"$(nproc)" \
-      intl zip bcmath pdo_pgsql \
+      intl zip bcmath pdo_pgsql gd \
   && rm -rf /var/lib/apt/lists/*
 
 # Habilitar rewrite y apuntar Apache a /public; permitir .htaccess
