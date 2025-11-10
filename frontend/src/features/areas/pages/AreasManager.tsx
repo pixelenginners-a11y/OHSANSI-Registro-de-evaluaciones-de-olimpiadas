@@ -8,10 +8,15 @@ import {
   useUpdateArea,
   useDeleteArea
 } from '../hooks';
+import { useGetAcademics } from '../../AdministratorUsers/hooks/useResponsibleQueries';
 
 const AreasManager = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedArea, setSelectedArea] = useState<Area | null>(null);
+  const { data: academicsData } = useGetAcademics(1);
+
+  // Extraer el array de responsables de la respuesta paginada
+  const responsables = academicsData?.data || [];
 
   // Queries
   const { data: areas = [], isLoading, error } = useGetAreas();
@@ -36,7 +41,7 @@ const AreasManager = () => {
     setSelectedArea(null);
   };
 
-  const handleSubmit = (data: { name: string; description: string | null; active: boolean }) => {
+  const handleSubmit = (data: { name: string; description: string | null; active: boolean; responsable_id: number | null; is_group: boolean; group_min_size: number | null; group_max_size: number | null }) => {
     if (selectedArea) {
       updateArea.mutate(
         { id: selectedArea.id, data },
@@ -131,7 +136,8 @@ const AreasManager = () => {
           onSubmit={handleSubmit}
           area={selectedArea}
           isLoading={createArea.isPending || updateArea.isPending}
-          />
+          responsables={responsables}
+        />
       </div>
     </div>
   );

@@ -5,12 +5,20 @@ type CreateAreaData = {
   name: string;
   description: string | null;
   active: boolean;
+  responsable_id: number | null;
+  is_group: boolean;
+  group_min_size: number | null;
+  group_max_size: number | null;
 };
 
 type UpdateAreaData = {
   name: string;
   description: string | null;
   active: boolean;
+  responsable_id: number | null;
+  is_group: boolean;
+  group_min_size: number | null;
+  group_max_size: number | null;
 };
 
 export const useCreateArea = () => {
@@ -38,7 +46,11 @@ export const useUpdateArea = () => {
         area: {
           name: data.name,
           description: data.description,
-          active: data.active
+          active: data.active,
+          responsable_id: data.responsable_id,
+          is_group: data.is_group,
+          group_min_size: data.group_min_size,
+          group_max_size: data.group_max_size
         }
       };
       const res = await areasEndpoints.update(id, payload as any);
