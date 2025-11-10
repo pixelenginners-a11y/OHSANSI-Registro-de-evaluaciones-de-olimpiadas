@@ -17,6 +17,8 @@ import { Pagination } from '../../components/Pagination';
 import { EditEvaluatorModal } from '../../components/EditEvaluatorModal';
 import { CreateEvaluatorModal } from '../../components/CreateEvaluatorModal';
 import { useGetEvaluators, useGetAreas, useSearchEvaluators, useDeleteEvaluator, useUpdateEvaluator, useCreateEvaluator } from "../../features/AdministratorUsers/hooks/index";
+import { useGetGrades } from '../../features/administrar-niveles/hooks';
+import { type Nivel } from '../../features/administrar-niveles/types';
 
 export const Route = createFileRoute('/admin/evaluadores')({
   component: RouteComponent,
@@ -43,6 +45,7 @@ function RouteComponent() {
 
   const { data: fetchedData, isLoading, isError } = useGetEvaluators(page);
   const { data: areasData, isLoading: areasLoading, isError: areasError } = useGetAreas();
+  const { data: gradesData, isLoading: gradeLoading, isError: gradesError } = useGetGrades();
   const { data: searchResults } = useSearchEvaluators(query, filter);
   const { mutateAsync: deleteEvaluator } = useDeleteEvaluator();
   const { mutateAsync: updateEvaluator } = useUpdateEvaluator();
@@ -56,8 +59,13 @@ function RouteComponent() {
     return () => clearTimeout(handler);
   }, [inputValue]);
 
-  if (isLoading || areasLoading) return <div className="p-6">Cargando...</div>;
-  if (isError || areasError) return <div className="p-6">Error al cargar los datos.</div>;
+  if (isLoading || areasLoading || gradeLoading) return <div className="p-6">Cargando...</div>;
+  if (isError || areasError || gradesError || !gradesData) return <div className="p-6">Error al cargar los datos.</div>;
+
+  const gradeOptions = gradesData.map((grade: Nivel) => ({
+    value: grade.id,
+    label: grade.name,
+  }));
 
   const areaOptions = areasData.map((area: Area) => ({
     value: area.id,
@@ -146,7 +154,7 @@ function RouteComponent() {
           onSave={handleSave}
         />
         <CreateEvaluatorModal
-          areaOptions={areaOptions}
+          gradeOptions={gradeOptions}
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           onSave={handleSaveCreate}
