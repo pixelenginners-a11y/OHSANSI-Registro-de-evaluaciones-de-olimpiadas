@@ -2,29 +2,29 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { InputField } from "./InputField";
-import { SelectForm } from "./SelectForm";
+import { MultiSelectForm } from "./MultiSelectForm";
 import { type EvaluatorCreate, type ResponsableCreate } from "../features/AdministratorUsers";
 import { evaluatorCreateSchema } from "../features/AdministratorUsers/schemas/createEvaluatorSchema";
 
 type FormData = z.infer<typeof evaluatorCreateSchema>;
 
-interface AreaOption {
+type gradeOptions = {
+  value: number;
   label: string;
-  value: string | number;
-}
+}[];
 
 interface CreateEvaluatorModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (data: EvaluatorCreate | ResponsableCreate) => Promise<void>;
-  areaOptions: AreaOption[];
+  gradeOptions: gradeOptions;
 }
 
 export const CreateEvaluatorModal = ({
   isOpen,
   onClose,
   onSave,
-  areaOptions
+  gradeOptions,
 }: CreateEvaluatorModalProps) => {
   const {
     register,
@@ -40,7 +40,7 @@ export const CreateEvaluatorModal = ({
       email: "",
       phone: "",
       password: "",
-      area_id: "",
+      grades: [],
     }
   });
 
@@ -51,7 +51,7 @@ export const CreateEvaluatorModal = ({
       email: data.email,
       phone: data.phone,
       password: data.password,
-      area_id: Number(data.area_id),
+      grades: data.grades,
     };
 
     console.log("Creating evaluator with data:", dataToSend);
@@ -69,10 +69,10 @@ export const CreateEvaluatorModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
         <h2 className="text-lg font-semibold mb-4">Crear evaluador</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-3">
           <InputField
             label="Nombre completo"
             {...register("full_name")}
@@ -106,13 +106,13 @@ export const CreateEvaluatorModal = ({
             placeholder="Ingresa una contraseña segura"
           />
 
-          <SelectForm
-            name="area_id"
-            label="Área"
+          <MultiSelectForm
+            name="grades"
+            label="Grados"
             control={control}
-            options={areaOptions}
-            placeholder="Selecciona un área"
-            error={errors.area_id}
+            options={gradeOptions}
+            placeholder="Selecciona los grados"
+            error={errors.grades}
             className="w-full"
           />
 
