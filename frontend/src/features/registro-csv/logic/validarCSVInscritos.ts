@@ -2,7 +2,6 @@ import {
   type FilaCSVParseada,
   type FilaCSVConError,
   CAMPOS_PLANTILLA,
-  MAPEO_CAMPOS,
 } from "../types/inscritos";
 
 // Utils
@@ -40,6 +39,21 @@ export function validarCSVInscritos(
 ): { validas: FilaCSVParseada[]; errores: FilaCSVConError[] } {
   const errores: FilaCSVConError[] = [];
   const validas: FilaCSVParseada[] = [];
+
+  // Validar que el archivo tenga los campos de la plantilla
+  if (rows.length > 0) {
+    const primeraFila = rows[0];
+    const camposActuales = Object.keys(primeraFila);
+    const camposFaltantes = CAMPOS_PLANTILLA.filter(
+      campo => !camposActuales.includes(campo)
+    );
+
+    if (camposFaltantes.length > 0) {
+      throw new Error(
+        `El archivo CSV no tiene el formato correcto. Campos faltantes: ${camposFaltantes.join(", ")}. Por favor, descarga y usa la plantilla correcta.`
+      );
+    }
+  }
 
   // Solo parsear los datos, sin validaciones
   rows.forEach((raw, idx) => {
