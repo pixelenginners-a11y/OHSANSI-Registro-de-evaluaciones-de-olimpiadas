@@ -37,7 +37,7 @@ export default function FileDropZone({
           type="file"
           accept={accept}
           hidden
-          onChange={(e)=>{ const f = e.target.files?.[0]; if(f) onFile(f); }}
+          onChange={(e)=>{ const f = e.target.files?.[0]; if(f) onFile(f);e.target.value = ''; }}
         />
       </div>
     </div>
