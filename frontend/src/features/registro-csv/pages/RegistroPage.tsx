@@ -1,8 +1,6 @@
 import CSVDropZone from "../components/CSVDropZone";
 import PreviewTabla from "../components/PreviewTabla";
 import { useCSVRegistro } from "../hooks/useCSVRegistro";
-
-import Modal from "../ui/Modal";
 import Toast from "../ui/Toast";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
@@ -11,7 +9,7 @@ import { Stat } from "../ui/Stats";
 
 export default function RegistroPage() {
   const { state, actions } = useCSVRegistro();
-  const { validas, errores, csvNombre, totales, confirmOpen, toastText, loading } = state;
+  const { validas, errores, csvNombre, totales, toastText, loading } = state;
   const showEmpty = totales.validas === 0 && totales.errores === 0;
 
   return (
@@ -53,7 +51,7 @@ export default function RegistroPage() {
             </div>
 
             <div className="mb-3 flex flex-col gap-2 sm:flex-row">
-              <Button onClick={actions.confirmarImportacion} isLoading={loading}>Registrar todos</Button>
+              <Button onClick={actions.doImport} isLoading={loading}>Registrar todos</Button>
               <Button variant="outline" onClick={actions.reiniciar} disabled={loading}>Cancelar</Button>
             </div>
 
@@ -61,16 +59,6 @@ export default function RegistroPage() {
           </>
         )}
       </main>
-      <Modal
-        open={confirmOpen}
-        title="Confirmar registro de concursantes"
-        description={`Se registrarán ${totales.validas} filas válidas. Las filas con error no serán importadas.`}
-        confirmText={loading ? "Registrando..." : "Registrar"}
-        confirmDisabled={loading}
-        cancelText="Volver"
-        onConfirm={actions.doImport}
-        onClose={()=>actions.setConfirmOpen(false)}
-      />
     </div>
   );
 }
