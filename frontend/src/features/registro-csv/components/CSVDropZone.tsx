@@ -13,6 +13,7 @@ export default function CSVDropZone({ onParse }: Props) {
     const rows = parseCSVText(text);
     if (rows.length === 0) {
       setShowModal(true);
+    }else{
       onParse(rows, file.name);
     }
   };
