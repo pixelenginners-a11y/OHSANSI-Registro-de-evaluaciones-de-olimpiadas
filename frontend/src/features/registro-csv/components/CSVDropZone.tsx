@@ -6,15 +6,20 @@ import { InfoModal } from "./InfoModal";
 type Props = { onParse: (rows: Record<string, string>[], fileName: string) => void };
 
 export default function CSVDropZone({ onParse }: Props) {
-  const [showModal, setShowModal] = useState(false);
+  const [showEmptyModal, setShowEmptyModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const handleFile = async (file: File) => {
     const text = await file.text();
     const rows = parseCSVText(text);
     if (rows.length === 0) {
-      setShowModal(true);
+      setShowEmptyModal(true);
     }else{
-      onParse(rows, file.name);
+      try {
+        onParse(rows, file.name);
+      } catch (error) {
+        setShowErrorModal(true);
+      }
     }
   };
 
@@ -28,11 +33,19 @@ export default function CSVDropZone({ onParse }: Props) {
       />
 
       <InfoModal
-        isOpen={showModal}
+        isOpen={showEmptyModal}
         title="Archivo vacío"
         message="El archivo CSV que has subido no contiene datos."
         type="warning"
-        onClose={() => setShowModal(false)}
+        onClose={() => setShowEmptyModal(false)}
+      />
+
+      <InfoModal
+        isOpen={showErrorModal}
+        title="Formato incorrecto"
+        message="El archivo CSV tiene un formato incorrecto o contiene datos inválidos."
+        type="error"
+        onClose={() => setShowErrorModal(false)}
       />
     </>
   );
