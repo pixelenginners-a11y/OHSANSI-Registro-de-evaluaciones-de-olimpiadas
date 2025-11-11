@@ -18,11 +18,9 @@ export const TableBody = ({ slice, erroresPorFila, page, pageSize, handleErrorCl
     <tbody>
       {
         slice.map((r, idx) => {
-          // Usar numeración consecutiva basada en la posición actual
           const numeroFilaConsecutivo = (page - 1) * pageSize + idx + 1;
           const filaOriginal = r.__row || numeroFilaConsecutivo;
           const errorInfo = erroresPorFila.get(filaOriginal);
-          const tieneError = !!errorInfo;
 
           return (
             <tr key={`${r.identity_document}-${filaOriginal}`} className="even:bg-neutral-50/60">
@@ -38,17 +36,6 @@ export const TableBody = ({ slice, erroresPorFila, page, pageSize, handleErrorCl
                   />
                 </td>
               ))}
-              <td className="border-b border-neutral-200 px-3 py-2">
-                {tieneError ? (
-                  <span className="inline-flex items-center rounded-md bg-rose-500/10 px-2 py-0.5 text-xs font-semibold text-rose-700 ring-1 ring-inset ring-rose-500/20">
-                    ⚠ Con errores
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center rounded-md bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-500/20">
-                    ✓ Válida
-                  </span>
-                )}
-              </td>
               <td className="border-b border-neutral-200 px-3 py-2">
                 <div className="flex items-center gap-2">
                   <button onClick={() => handleEdit(r)} className="text-blue-600 hover:text-blue-800 transition-colors" title="Editar">

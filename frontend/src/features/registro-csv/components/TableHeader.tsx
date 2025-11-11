@@ -1,4 +1,4 @@
-const TABLE_HEADERS = ["#", "Nombre completo", "Documento", "Unidad educativa", "Departamento", "Tutor académico", "Área", "Grado", "Estado", "Acciones"];
+const TABLE_HEADERS = ["#", "Nombre completo", "Documento", "Unidad educativa", "Departamento", "Tutor académico", "Área", "Grado", "Acciones"];
 
 export default function TableHeader() {
   return (
