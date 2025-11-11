@@ -16,7 +16,6 @@ export function useCSVRegistro() {
   const [parseadas, setParseadas] = useState<FilaCSVParseada[]>([]);
   const [erroresBackend, setErroresBackend] = useState<ErrorBackendConDatos[]>([]);
   const [csvNombre, setCsvNombre] = useState("");
-  const [confirmOpen, setConfirmOpen] = useState(false);
   const [toastText, setToastText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const importMutation = useImportOlympians();
@@ -44,10 +43,6 @@ export function useCSVRegistro() {
     a.href = url; a.download = "plantilla_inscritos.csv"; a.click();
     URL.revokeObjectURL(url);
   };
-
-  const confirmarImportacion = () => {
-    setConfirmOpen(true);
-  }
 
   const doImport = async () => {
     setLoading(true);
@@ -80,14 +75,14 @@ export function useCSVRegistro() {
 
       const payload = { data: validas };
       await importMutation.mutateAsync(payload);
-      setToastText(`✅ Importación exitosa: ${validas.length} concursantes registrados.`);
+      setToastText(`✅ ${validas.length} concursante${validas.length !== 1 ? 's' : ''} registrado${validas.length !== 1 ? 's' : ''} exitosamente`);
       // Limpiar después de éxito
       setTimeout(() => {
         reiniciar();
       }, 2000);
     } catch (error: any) {
       console.error('Error importando:', error);
-      let mensaje = '❌ No se pudo completar la importación. Revise el reporte de errores más abajo.';
+      let mensaje = '❌ Error en el registro. Revise los detalles más abajo.';
 
       // Manejar errores de validación de Laravel
       if (error?.response?.data?.errors) {
@@ -181,8 +176,7 @@ export function useCSVRegistro() {
 
         setErroresBackend(erroresFormateados);
 
-        const cantidadErrores = erroresFormateados.length;
-        mensaje = `❌ No se pudieron importar ${cantidadErrores} fila${cantidadErrores > 1 ? 's' : ''}. Revise el reporte más abajo.`;
+        mensaje = `❌ Error en el registro. Revise los detalles más abajo.`;
       } else if (error?.response?.data?.message) {
         mensaje = `❌ ${error.response.data.message}`;
       } else if (error?.message) {
@@ -193,7 +187,6 @@ export function useCSVRegistro() {
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } finally {
       setLoading(false);
-      setConfirmOpen(false);
     }
   };
 
@@ -210,10 +203,9 @@ export function useCSVRegistro() {
       erroresBackend,
       csvNombre,
       totales,
-      confirmOpen,
       toastText,
       loading
     },
-    actions: { onCSVParseado, descargarPlantilla, confirmarImportacion, doImport, reiniciar, setToastText, setConfirmOpen },
+    actions: { onCSVParseado, descargarPlantilla, doImport, reiniciar, setToastText },
   };
 }
