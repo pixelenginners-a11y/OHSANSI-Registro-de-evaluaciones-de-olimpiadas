@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { type FilaCSVParseada } from "../types/inscritos";
 import FormField from "./FormField";
+import { useGetAreas } from "../../areas/hooks/useAreaQueries";
+import { useGetGrades } from "../../administrar-niveles/hooks/useGradeQueries";
 
 type Props = {
   isOpen: boolean;
@@ -13,6 +15,8 @@ type Props = {
 
 export default function EditModal({ isOpen, row, onClose, onSave, getFieldErrors, hasFieldError }: Props) {
   const [editedData, setEditedData] = useState<FilaCSVParseada>(row);
+  const { data: areas } = useGetAreas();
+  const { data: grades } = useGetGrades();
 
   if (!isOpen) return null;
 
@@ -85,20 +89,40 @@ export default function EditModal({ isOpen, row, onClose, onSave, getFieldErrors
               errors={getFieldErrors('academic_tutor')}
             />
             <div className="grid grid-cols-2 gap-4">
-              <FormField
-                label="Área"
-                value={editedData.area || ''}
-                onChange={(val) => setEditedData({ ...editedData, area: val })}
-                hasError={hasFieldError('area')}
-                errors={getFieldErrors('area')}
-              />
-              <FormField
-                label="Grado"
-                value={editedData.grade || ''}
-                onChange={(val) => setEditedData({ ...editedData, grade: val })}
-                hasError={hasFieldError('grade')}
-                errors={getFieldErrors('grade')}
-              />
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                  Área
+                </label>
+                <select
+                  value={editedData.area || ''}
+                  onChange={(e) => setEditedData({...editedData, area: e.target.value})}
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                >
+                  <option value="">Seleccionar área</option>
+                  {areas?.map((area) => (
+                    <option key={area.id} value={area.name}>
+                      {area.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                  Grado
+                </label>
+                <select
+                  value={editedData.grade || ''}
+                  onChange={(e) => setEditedData({...editedData, grade: e.target.value})}
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                >
+                  <option value="">Seleccionar grado</option>
+                  {grades?.map((grade) => (
+                    <option key={grade.id} value={grade.name}>
+                      {grade.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
         </div>
