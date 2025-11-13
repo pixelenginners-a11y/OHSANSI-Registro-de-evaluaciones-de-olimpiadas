@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { type FilaCSVParseada, type FilaCSVConError } from "../types/inscritos";
 import { useErrorMapping, FIELD_NAMES } from "../hooks/useErrorMapping";
 import { usePageController } from "../hooks/usePageController";
@@ -13,9 +13,12 @@ type Props = {
   errores: FilaCSVConError[];
   pageSize?: number;
   showErroresTable?: boolean;
+  actions?: {
+    setParseadas: (parseadas: FilaCSVParseada[]) => void;
+  };
 };
 
-export default function PreviewTabla({ validas, errores, pageSize = 10}: Props) {
+export default function PreviewTabla({ validas, errores, pageSize = 10, actions }: Props) {
   const [filas, setFilas] = useState<FilaCSVParseada[]>(validas);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedError, setSelectedError] = useState<{ campo: string; mensajes: string[]; fila: number } | null>(null);
@@ -23,6 +26,12 @@ export default function PreviewTabla({ validas, errores, pageSize = 10}: Props) 
   const [selectedRow, setSelectedRow] = useState<FilaCSVParseada | null>(null);
   const { erroresPorFila, getMensajesError, hasFieldError } = useErrorMapping(errores);
   const { page, setPage, pages, slice } = usePageController(filas, pageSize);
+
+  useEffect(() => {
+    if (actions?.setParseadas) {
+      actions.setParseadas(filas);
+    }
+  }, [filas, actions]);
 
   const handleErrorClick = (campo: string, fila: number) => {
     const mensajes = getMensajesError(fila, campo);
