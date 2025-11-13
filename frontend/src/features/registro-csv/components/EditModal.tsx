@@ -96,7 +96,9 @@ export default function EditModal({ isOpen, row, onClose, onSave, getFieldErrors
                 <select
                   value={editedData.area || ''}
                   onChange={(e) => setEditedData({...editedData, area: e.target.value})}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className={`w-full px-3 py-2 border rounded-lg text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                    hasFieldError('area') ? 'border-red-300 bg-red-50' : 'border-neutral-300'
+                  }`}
                 >
                   <option value="">Seleccionar área</option>
                   {areas?.map((area) => (
@@ -105,6 +107,13 @@ export default function EditModal({ isOpen, row, onClose, onSave, getFieldErrors
                     </option>
                   ))}
                 </select>
+                {hasFieldError('area') && (
+                  <div className="mt-1.5 space-y-1">
+                    {getFieldErrors('area').map((error, idx) => (
+                      <p key={idx} className="text-xs text-red-600">{error}</p>
+                    ))}
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1.5">
@@ -113,7 +122,9 @@ export default function EditModal({ isOpen, row, onClose, onSave, getFieldErrors
                 <select
                   value={editedData.grade || ''}
                   onChange={(e) => setEditedData({...editedData, grade: e.target.value})}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className={`w-full px-3 py-2 border rounded-lg text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                    hasFieldError('grade') ? 'border-red-300 bg-red-50' : 'border-neutral-300'
+                  }`}
                 >
                   <option value="">Seleccionar grado</option>
                   {grades?.map((grade) => (
@@ -122,6 +133,13 @@ export default function EditModal({ isOpen, row, onClose, onSave, getFieldErrors
                     </option>
                   ))}
                 </select>
+                {hasFieldError('grade') && (
+                  <div className="mt-1.5 space-y-1">
+                    {getFieldErrors('grade').map((error, idx) => (
+                      <p key={idx} className="text-xs text-red-600">{error}</p>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
