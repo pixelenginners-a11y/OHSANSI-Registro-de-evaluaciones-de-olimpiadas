@@ -51,11 +51,11 @@ export default function RegistroPage() {
             </div>
 
             <div className="mb-3 flex flex-col gap-2 sm:flex-row">
-              <Button onClick={actions.doImport} isLoading={loading}>Registrar todos</Button>
+              <Button onClick={actions.doImport} isLoading={loading}>Validar y registrar</Button>
               <Button variant="outline" onClick={actions.reiniciar} disabled={loading}>Cancelar</Button>
             </div>
 
-            <PreviewTabla validas={validas} errores={errores} showErroresTable={false} />
+            <PreviewTabla validas={validas} errores={errores} showErroresTable={false} actions={{ setParseadas: actions.setParseadas }} />
           </>
         )}
       </main>
