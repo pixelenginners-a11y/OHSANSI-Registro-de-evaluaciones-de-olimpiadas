@@ -206,6 +206,6 @@ export function useCSVRegistro() {
       toastText,
       loading
     },
-    actions: { onCSVParseado, descargarPlantilla, doImport, reiniciar, setToastText },
+    actions: { onCSVParseado, descargarPlantilla, doImport, reiniciar, setToastText, setParseadas },
   };
 }
