@@ -2,9 +2,11 @@ import { useMutation } from "@tanstack/react-query";
 import { type ResponsableParcialEdit } from "../types";
 import api from "../../../api/axios";
 import { queryClient } from "../../../lib/QueryClient";
+import type { AxiosError } from "axios";
+import type { ErrorResponsable } from "../../../types/Error";
 
 export const useUpdateAcademic = () => {
-  return useMutation<any, Error, { id: number; data: ResponsableParcialEdit }, void>({
+  return useMutation<any, AxiosError<ErrorResponsable>, { id: number; data: ResponsableParcialEdit }, void>({
     mutationFn: async ({ id, data }) => {
       const res = await api.put(`/academics/${id}`, data);
       return res.data;
@@ -29,7 +31,7 @@ export const useDeleteAcademic = () => {
 };
 
 export const useCreateAcademic = () => {
-  return useMutation<any, Error, ResponsableParcialEdit, void>({
+  return useMutation<any, AxiosError<ErrorResponsable>, ResponsableParcialEdit, void>({
     mutationFn: async (data) => {
       const res = await api.post("/academics", data);
       return res.data;

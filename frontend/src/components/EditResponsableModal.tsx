@@ -5,6 +5,8 @@ import { InputField } from "./InputField";
 import { SelectForm } from "./SelectForm";
 import { type Responsable } from "../features/AdministratorUsers";
 import { responsableEditSchema } from "../features/AdministratorUsers/schemas/editResponsibleSchema";
+import type { ErrorResponsable } from "../types/Error";
+import type { AxiosError } from "axios";
 
 type FormData = z.infer<typeof responsableEditSchema>;
 
@@ -19,6 +21,7 @@ interface EditResponsableModalProps {
   onClose: () => void;
   onSave: (id: number, data: Partial<Responsable>) => Promise<void>;
   areaOptions: AreaOption[];
+  updateResponsableError?: AxiosError<ErrorResponsable, any> | null;
 }
 
 export const EditResponsableModal = ({
@@ -26,7 +29,8 @@ export const EditResponsableModal = ({
   responsable,
   onClose,
   onSave,
-  areaOptions
+  areaOptions,
+  updateResponsableError
 }: EditResponsableModalProps) => {
   const {
     register,
@@ -61,8 +65,6 @@ export const EditResponsableModal = ({
     if (data.password && data.password.trim() !== "") {
       dataToSend.password = data.password;
     }
-
-    console.log("Saving data:", dataToSend);
     await onSave(responsable.id, dataToSend);
     onClose();
   };
@@ -117,6 +119,12 @@ export const EditResponsableModal = ({
             error={errors.area_id}
             className="w-full"
           />
+
+          {updateResponsableError?.response?.data.message && (
+            <p className="text-red-500 text-sm">
+              {updateResponsableError.response.data.message}
+            </p>
+          )}
 
           <div className="flex justify-end gap-3 mt-5">
             <button

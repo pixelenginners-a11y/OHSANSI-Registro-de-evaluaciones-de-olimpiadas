@@ -5,6 +5,8 @@ import { InputField } from "./InputField";
 import { SelectForm } from "./SelectForm";
 import { type Responsable } from "../features/AdministratorUsers";
 import { responsableCreateSchema } from "../features/AdministratorUsers/schemas/createResponsibleSchema";
+import type { AxiosError } from "axios";
+import type { ErrorResponsable } from "../types/Error";
 
 type FormData = z.infer<typeof responsableCreateSchema>;
 
@@ -18,13 +20,15 @@ interface CreateResponsableModalProps {
   onClose: () => void;
   onSave: (data: Partial<Responsable>) => Promise<void>;
   areaOptions: AreaOption[];
+  createResponsableError?: AxiosError<ErrorResponsable, any> | null;
 }
 
 export const CreateResponsableModal = ({
   isOpen,
   onClose,
   onSave,
-  areaOptions
+  areaOptions,
+  createResponsableError
 }: CreateResponsableModalProps) => {
   const {
     register,
@@ -53,15 +57,13 @@ export const CreateResponsableModal = ({
       password: data.password,
       area_id: Number(data.area_id),
     };
-
-    console.log("Creating responsable:", dataToSend);
     await onSave(dataToSend);
-    reset(); // Resetea el formulario después de crear
+    reset();
     onClose();
   };
 
   const handleClose = () => {
-    reset(); // Limpia el formulario al cerrar
+    reset();
     onClose();
   };
 
@@ -115,6 +117,12 @@ export const CreateResponsableModal = ({
             error={errors.password?.message}
             placeholder="Ingresa una contraseña segura"
           />
+
+          {createResponsableError?.response?.data?.message && (
+            <span className="text-sm text-center text-red-500 mt-2">
+              {createResponsableError.response.data.message}
+            </span>
+          )}
 
           <div className="flex justify-end gap-3 mt-5">
             <button
