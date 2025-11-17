@@ -1,31 +1,27 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import areasEndpoints, { type Area } from "../../../api/endpointAreas";
 
-type CreateAreaData = {
-  name: string;
-  description: string | null;
-  active: boolean;
-  responsable_id: number | null;
-  is_group: boolean;
-  group_min_size: number | null;
-  group_max_size: number | null;
-};
-
 type UpdateAreaData = {
   name: string;
   description: string | null;
   active: boolean;
   responsable_id: number | null;
   is_group: boolean;
-  group_min_size: number | null;
-  group_max_size: number | null;
+  group_min_size: number;
+  group_max_size: number;
+  medalParameter?: {
+    gold: number | null;
+    silver: number | null;
+    bronze: number | null;
+    honor_mentions: number;
+  };
 };
 
 export const useCreateArea = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: CreateAreaData) => {
+    mutationFn: async (data: Area) => {
       const res = await areasEndpoints.create(data as any);
       if (!res) throw new Error("Error al crear el área");
       return res.data;
@@ -42,7 +38,7 @@ export const useUpdateArea = () => {
   return useMutation({
     mutationFn: async ({ id, data }: { id: number; data: UpdateAreaData }) => {
       // Transformar datos al formato esperado por el backend
-      const payload = {
+      const payload: any = {
         area: {
           name: data.name,
           description: data.description,
@@ -53,6 +49,17 @@ export const useUpdateArea = () => {
           group_max_size: data.group_max_size
         }
       };
+
+      // Agregar medalParameter si existe
+      if (data.medalParameter) {
+        payload.medalParameter = {
+          gold: data.medalParameter.gold,
+          silver: data.medalParameter.silver,
+          bronze: data.medalParameter.bronze,
+          honor_mentions: data.medalParameter.honor_mentions
+        };
+      }
+
       const res = await areasEndpoints.update(id, payload as any);
       if (!res) throw new Error("Error al actualizar el área");
       return res.data;

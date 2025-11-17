@@ -7,7 +7,7 @@ export const useGetResponsables = () => {
     queryFn: async () => {
       const res = await responsablesEndpoints.getAll();
       if (!res) throw new Error("Error al obtener los responsables");
-      return res.data;
+      return res.data.data;
     }
   });
 };

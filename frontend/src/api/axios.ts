@@ -2,7 +2,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 export const api = axios.create({
-  baseURL: 'https://ohsansi-registro-de-evaluaciones-de.onrender.com/api',
+  baseURL: 'http://localhost:8000/api',
   headers: { Accept: "application/json" },
 });
 

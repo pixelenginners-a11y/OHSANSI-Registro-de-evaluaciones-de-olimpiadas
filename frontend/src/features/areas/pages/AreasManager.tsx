@@ -1,144 +1,106 @@
-import { useState } from 'react';
-import AreaCard from '../components/AreaCard';
-import AreaFormModal from '../components/AreaFormModal';
+import { useState, useEffect } from 'react';
+import AreasTableHeader from '../components/AreasTableHeader';
+import { AreaTableBody } from '../components/AreaTableBody';
+import { DeleteAreaModal } from '../components/DeleteAreaModal';
+import { CreateAreaModal } from '../components/CreateAreaModal';
+import { EditAreaModal } from '../components/EditAreaModal';
+import { Toast } from '../../../components/Toast';
+import { useGetAreas, useDeleteArea } from '../hooks';
 import type { Area } from '../types/area';
-import {
-  useGetAreas,
-  useCreateArea,
-  useUpdateArea,
-  useDeleteArea
-} from '../hooks';
-import { useGetAcademics } from '../../AdministratorUsers/hooks/useResponsibleQueries';
 
 const AreasManager = () => {
+  const { data: areas, isLoading, isError } = useGetAreas();
+  const deleteAreaMutation = useDeleteArea();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedArea, setSelectedArea] = useState<Area | null>(null);
-  const { data: academicsData } = useGetAcademics(1);
+  const [areaToDelete, setAreaToDelete] = useState<Area | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [areaToEdit, setAreaToEdit] = useState<Area | null>(null);
+  const [showDeleteToast, setShowDeleteToast] = useState(false);
 
-  // Extraer el array de responsables de la respuesta paginada
-  const responsables = academicsData?.data || [];
+  const handleEditClick = (area: Area) => {
+    setAreaToEdit(area);
+    setIsEditModalOpen(true);
+  };
 
-  // Queries
-  const { data: areas = [], isLoading, error } = useGetAreas();
-
-  // Mutations
-  const createArea = useCreateArea();
-  const updateArea = useUpdateArea();
-  const deleteArea = useDeleteArea();
-
-  const handleOpenCreate = () => {
-    setSelectedArea(null);
+  const handleDeleteClick = (area: Area) => {
+    setAreaToDelete(area);
     setIsModalOpen(true);
   };
 
-  const handleOpenEdit = (area: Area) => {
-    setSelectedArea(area);
-    setIsModalOpen(true);
+  const handleConfirmDelete = () => {
+    if (areaToDelete) {
+      deleteAreaMutation.mutate(areaToDelete.id);
+      setIsModalOpen(false);
+    }
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedArea(null);
+    setAreaToDelete(null);
   };
 
-  const handleSubmit = (data: { name: string; description: string | null; active: boolean; responsable_id: number | null; is_group: boolean; group_min_size: number | null; group_max_size: number | null }) => {
-    if (selectedArea) {
-      updateArea.mutate(
-        { id: selectedArea.id, data },
-        {
-          onSuccess: () => {
-            handleCloseModal();
-          },
-        }
-      );
-    } else {
-      createArea.mutate(data, {
-        onSuccess: () => {
-          handleCloseModal();
-        },
-      });
+  // Mostrar mensaje cuando la eliminación sea exitosa
+  useEffect(() => {
+    if (deleteAreaMutation.isSuccess) {
+      setShowDeleteToast(true);
+      deleteAreaMutation.reset();
     }
-  };
-
-  const handleDelete = (id: number) => {
-    if (confirm('¿Estás seguro de que deseas eliminar esta área?')) {
-      deleteArea.mutate(id);
-    }
-  };
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">Error al cargar las áreas</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-secondary-1 text-white rounded hover:bg-primary-dark transition-colors"
-          >
-            Reintentar
-          </button>
-        </div>
-      </div>
-    );
-  }
+  }, [deleteAreaMutation.isSuccess, deleteAreaMutation]);
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="mb-12">
-          <h1 className="text-4xl font-light text-primary-dark mb-2">
-            Gestión de Áreas Olímpicas
-          </h1>
-          <p className="text-sm text-gray-500">
-            Administra las áreas académicas y sus logros
-          </p>
-        </div>
-
-        <div className="flex justify-end mb-8">
-          <button
-            onClick={handleOpenCreate}
-            className="px-6 py-2.5 bg-secondary-1 hover:bg-primary-dark text-white text-sm font-medium rounded transition-colors duration-200"
-          >
-            + Nueva Área
-          </button>
-        </div>
-
-        {isLoading ? (
-          <div className="flex justify-center items-center py-12">
-            <div className="text-gray-500">Cargando áreas...</div>
-          </div>
-        ) : areas.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 mb-4">No hay áreas registradas</p>
-            <button
-              onClick={handleOpenCreate}
-              className="px-6 py-2.5 bg-secondary-1 hover:bg-primary-dark text-white text-sm font-medium rounded transition-colors duration-200"
-            >
-              Crear primera área
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {areas.map((area) => (
-              <AreaCard
-                key={area.id}
-                area={area}
-                onEdit={handleOpenEdit}
-                onDelete={handleDelete}
-              />
-            ))}
-          </div>
-        )}
-
-        <AreaFormModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onSubmit={handleSubmit}
-          area={selectedArea}
-          isLoading={createArea.isPending || updateArea.isPending}
-          responsables={responsables}
-        />
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold text-gray-800">Gestión de Áreas</h1>
+        <button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Crear Área
+        </button>
       </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
+          <AreasTableHeader />
+          <AreaTableBody
+            areas={areas}
+            isLoading={isLoading}
+            isError={isError}
+            onEdit={handleEditClick}
+            onDelete={handleDeleteClick}
+          />
+        </table>
+      </div>
+
+      <DeleteAreaModal
+        isOpen={isModalOpen}
+        area={areaToDelete}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+      />
+
+      <CreateAreaModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      />
+
+      <EditAreaModal
+        isOpen={isEditModalOpen}
+        area={areaToEdit}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setAreaToEdit(null);
+        }}
+      />
+
+      <Toast
+        message="Área eliminada exitosamente"
+        type="success"
+        isVisible={showDeleteToast}
+        onClose={() => setShowDeleteToast(false)}
+        duration={3000}
+      />
     </div>
   );
 };

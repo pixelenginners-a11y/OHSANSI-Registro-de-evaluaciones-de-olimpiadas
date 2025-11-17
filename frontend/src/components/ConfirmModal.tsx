@@ -1,54 +1,43 @@
-import Icon from "./Icon";
-
 interface ConfirmModalProps {
   isOpen: boolean;
-  title?: string;
-  description?: string;
+  onClose: () => void;
   onConfirm: () => void;
-  onCancel: () => void;
-  confirmText?: string;
-  cancelText?: string;
+  message: string;
 }
 
 export function ConfirmModal({
   isOpen,
-  title = "¿Estás seguro?",
-  description = "Esta acción no se puede deshacer.",
+  onClose,
   onConfirm,
-  onCancel,
-  confirmText = "Confirmar",
-  cancelText = "Cancelar",
+  message,
 }: ConfirmModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-6 relative">
-        <button
-          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-          onClick={onCancel}
-        >
-          <Icon name="x" />
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="absolute inset-0 bg-gray-400 opacity-50" onClick={onClose} />
 
-        <h2 className="text-lg font-semibold mb-2">{title}</h2>
-        <p className="text-sm text-gray-600 mb-4">{description}</p>
+      <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+        <p className="text-gray-900 mb-6">{message}</p>
 
-        <div className="flex justify-between gap-2">
+        <div className="flex gap-3 justify-end">
           <button
-            className="px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50"
-            onClick={onCancel}
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
           >
-            {cancelText}
+            Cancelar
           </button>
           <button
-            className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600"
-            onClick={onConfirm}
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
           >
-            {confirmText}
+            Eliminar
           </button>
         </div>
       </div>
     </div>
   );
-};
+}
