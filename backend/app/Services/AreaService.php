@@ -22,7 +22,8 @@ class AreaService
     {
         return Area::with([
             'medalParameter',
-            'grades'
+            'grades',
+            'responsable'
         ])->orderBy('id', 'desc')
           ->get();
     }
