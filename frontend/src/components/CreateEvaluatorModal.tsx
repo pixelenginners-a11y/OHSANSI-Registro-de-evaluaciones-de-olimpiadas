@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
+import { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { type ErrorEvaluator } from "../types/Error";
 import { z } from "zod";
 import { InputField } from "./InputField";
 import { MultiSelectForm } from "./MultiSelectForm";
@@ -18,6 +20,7 @@ interface CreateEvaluatorModalProps {
   onClose: () => void;
   onSave: (data: EvaluatorCreate | ResponsableCreate) => Promise<void>;
   gradeOptions: gradeOptions;
+  createEvaluatorError: AxiosError<ErrorEvaluator, any> | null;
 }
 
 export const CreateEvaluatorModal = ({
@@ -25,6 +28,7 @@ export const CreateEvaluatorModal = ({
   onClose,
   onSave,
   gradeOptions,
+  createEvaluatorError
 }: CreateEvaluatorModalProps) => {
   const {
     register,
@@ -53,8 +57,6 @@ export const CreateEvaluatorModal = ({
       password: data.password,
       grades: data.grades,
     };
-
-    console.log("Creating evaluator with data:", dataToSend);
     await onSave(dataToSend);
     reset();
     onClose();
@@ -115,6 +117,8 @@ export const CreateEvaluatorModal = ({
             error={errors.grades}
             className="w-full"
           />
+
+          {createEvaluatorError?.response?.data?.message && <span className="text-sm text-red-500">{createEvaluatorError.response?.data?.message}</span>}
 
           <div className="flex justify-end gap-3 mt-5">
             <button

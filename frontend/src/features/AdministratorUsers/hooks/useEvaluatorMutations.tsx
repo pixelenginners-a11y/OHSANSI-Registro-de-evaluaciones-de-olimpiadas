@@ -4,9 +4,10 @@ import { AxiosError } from "axios";
 
 import api from "../../../api/axios";
 import type { EvaluatorCreate, EvaluatorUpdate, EvaluatorResponse } from "../types";
+import { type ErrorEvaluator } from "../../../types/Error";
 
 export const useUpdateEvaluator = () => {
-  return useMutation<EvaluatorResponse, AxiosError, { id: number; data: EvaluatorUpdate }, void>({
+  return useMutation<EvaluatorResponse, AxiosError<ErrorEvaluator>, { id: number; data: EvaluatorUpdate }, void>({
     mutationFn: async ({ id, data }) => {
       const res = await api.put(`/evaluators/${id}`, data);
       return res.data;
@@ -32,7 +33,7 @@ export const useDeleteEvaluator = () => {
 };
 
 export const useCreateEvaluator = () => {
-  return useMutation<EvaluatorResponse, AxiosError, EvaluatorCreate, void>({
+  return useMutation<EvaluatorResponse, AxiosError<ErrorEvaluator>, EvaluatorCreate, void>({
     mutationFn: async (data) => {
       const res = await api.post("/evaluators", data);
       return res.data;
