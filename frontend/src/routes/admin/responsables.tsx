@@ -36,8 +36,8 @@ function RouteComponent() {
   const { data: areasData, isLoading: areasLoading, isError: areasError } = useGetAreas();
   const { data: searchResults } = useSearchAcademics(query, filter);
   const { mutateAsync: deleteAcademic } = useDeleteAcademic();
-  const { mutateAsync: updateAcademic } = useUpdateAcademic();
-  const { mutateAsync: createAcademic } = useCreateAcademic();
+  const { mutateAsync: updateAcademic, error: errorUpdateResponsable } = useUpdateAcademic();
+  const { mutateAsync: createAcademic, error: errorCreateResponsable } = useCreateAcademic();
   useEffect(() => {
     const handler = setTimeout(() => {
       setQuery(inputValue);
@@ -144,8 +144,10 @@ function RouteComponent() {
           responsable={selectedResponsable}
           onClose={() => setIsModalOpen(false)}
           onSave={handleSave}
+          updateResponsableError={errorUpdateResponsable}
         />
         <CreateResponsableModal
+          createResponsableError={errorCreateResponsable}
           areaOptions={areaOptions}
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
