@@ -13,9 +13,8 @@ export const evaluatorEditSchema = z.object({
     .max(50, "El nombre de usuario no puede superar 50 caracteres."),
 
   email: z
-    .string()
-    .min(1, "El correo electrónico es obligatorio.")
     .email("El correo electrónico no es válido.")
+    .min(1, "El correo electrónico es obligatorio.")
     .max(100, "El correo electrónico no puede superar 100 caracteres."),
 
   phone: z
@@ -35,12 +34,9 @@ export const evaluatorEditSchema = z.object({
       "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un símbolo."
     ),
 
-  area_id: z
-    .union([z.string(), z.number()])
-    .refine(
-      (val) => val !== "" && val !== undefined && val !== null,
-      "Debe seleccionar un área válida."
-    ),
+  grades: z
+    .array(z.union([z.string(), z.number()]))
+    .min(1, "Debe seleccionar al menos un nivel."),
 
   active: z.boolean(),
 });
@@ -58,9 +54,8 @@ export const evaluatorCreateSchema = z.object({
     .max(50, "El nombre de usuario no puede superar 50 caracteres."),
 
   email: z
-    .string()
-    .min(1, "El correo electrónico es obligatorio.")
     .email("El correo electrónico no es válido.")
+    .min(1, "El correo electrónico es obligatorio.")
     .max(100, "El correo electrónico no puede superar 100 caracteres."),
 
   phone: z
@@ -79,12 +74,9 @@ export const evaluatorCreateSchema = z.object({
       "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un símbolo."
     ),
 
-  area_id: z
-    .union([z.string(), z.number()])
-    .refine(
-      (val) => val !== "" && val !== undefined && val !== null,
-      "Debe seleccionar un área válida."
-    ),
+  grades: z
+    .array(z.union([z.string(), z.number()]))
+    .min(1, "Debe seleccionar al menos un nivel."),
 
   active: z.boolean(),
 });

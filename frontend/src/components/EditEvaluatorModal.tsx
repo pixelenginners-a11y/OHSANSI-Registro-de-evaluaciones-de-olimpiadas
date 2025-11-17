@@ -1,23 +1,26 @@
 import { useEffect } from "react";
+import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { InputField } from "./InputField";
-import { SelectForm } from "./SelectForm";
+import { MultiSelectForm } from "./MultiSelectForm";
 import { evaluatorEditSchema } from "../features/AdministratorUsers/schemas/editEvaluatorSchema";
-import { type EvaluatorBase, type Responsable } from "../features/AdministratorUsers";
+import { type EvaluatorBase, type EvaluatorUpdate } from "../features/AdministratorUsers";
+import type { ErrorEvaluator } from "../types/Error";
 
-interface AreaOption {
+type GradeOption = {
   label: string;
-  value: string | number;
-}
+  value: number;
+};
 
 interface EditEvaluatorModalProps {
   isOpen: boolean;
-  evaluator: EvaluatorBase | Responsable | null;
+  evaluator: EvaluatorBase;
   onClose: () => void;
-  onSave: (id: number, data: Partial<EvaluatorBase>) => Promise<void>;
-  areaOptions: AreaOption[];
+  onSave: (id: number, data: Partial<EvaluatorUpdate>) => Promise<void>;
+  gradeOptions: GradeOption[];
+  updateEvaluatorError: AxiosError<ErrorEvaluator, any> | null;
 }
 
 type FormData = z.infer<typeof evaluatorEditSchema>;
@@ -27,14 +30,15 @@ export const EditEvaluatorModal = ({
   evaluator,
   onClose,
   onSave,
-  areaOptions
+  gradeOptions,
+  updateEvaluatorError,
 }: EditEvaluatorModalProps) => {
   const {
     register,
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(evaluatorEditSchema),
     defaultValues: {
@@ -43,20 +47,27 @@ export const EditEvaluatorModal = ({
       email: "",
       phone: "",
       password: "",
-      area_id: "",
+      grades: [],
       active: true,
-    }
+    },
   });
 
   useEffect(() => {
     if (evaluator) {
+      const parsedGradeIds =
+        typeof evaluator.grade_ids === "string"
+          ? JSON.parse(evaluator.grade_ids)
+          : evaluator.grade_ids;
+
       reset({
         full_name: evaluator.full_name ?? "",
         username: evaluator.username ?? "",
         email: evaluator.email ?? "",
         phone: evaluator.phone ?? "",
         password: "",
-        area_id: evaluator.area_id ? Number(evaluator.area_id) : "",
+        grades: Array.isArray(parsedGradeIds)
+          ? parsedGradeIds.map((grade: number | string) => Number(grade))
+          : [],
         active: evaluator.active ?? true,
       });
     }
@@ -65,20 +76,18 @@ export const EditEvaluatorModal = ({
   const onSubmit = async (data: FormData) => {
     if (!evaluator) return;
 
-    const dataToSend: Partial<EvaluatorBase> & { password?: string } = {
+    const dataToSend: Partial<EvaluatorUpdate> & { password?: string } = {
       full_name: data.full_name,
       username: data.username,
       email: data.email,
       phone: data.phone,
-      area_id: Number(data.area_id),
+      grades: data.grades,
       active: data.active,
     };
 
     if (data.password && data.password.trim() !== "") {
       dataToSend.password = data.password;
     }
-
-    console.log("Saving data edit:", dataToSend);
     await onSave(evaluator.id, dataToSend);
     onClose();
   };
@@ -87,7 +96,7 @@ export const EditEvaluatorModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
         <h2 className="text-lg font-semibold mb-4">Editar evaluador</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
@@ -124,15 +133,21 @@ export const EditEvaluatorModal = ({
             placeholder="Nueva contraseña (opcional)"
           />
 
-          <SelectForm
-            name="area_id"
-            label="Área"
+          <MultiSelectForm
+            name="grades"
+            label="Grados"
             control={control}
-            options={areaOptions}
-            placeholder="Selecciona un área"
-            error={errors.area_id}
+            options={gradeOptions}
+            placeholder="Selecciona los grados"
+            error={errors.grades}
             className="w-full"
           />
+
+          {updateEvaluatorError?.response?.data?.message && (
+            <span className="text-sm text-center text-red-500">
+              {updateEvaluatorError.response.data.message}
+            </span>
+          )}
 
           <div className="flex justify-end gap-3 mt-5">
             <button

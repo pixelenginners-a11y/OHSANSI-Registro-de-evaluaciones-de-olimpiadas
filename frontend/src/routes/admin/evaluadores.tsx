@@ -48,8 +48,8 @@ function RouteComponent() {
   const { data: gradesData, isLoading: gradeLoading, isError: gradesError } = useGetGrades();
   const { data: searchResults } = useSearchEvaluators(query, filter);
   const { mutateAsync: deleteEvaluator } = useDeleteEvaluator();
-  const { mutateAsync: updateEvaluator } = useUpdateEvaluator();
-  const { mutateAsync: createEvaluator } = useCreateEvaluator();
+  const { mutateAsync: updateEvaluator, error: updateEvaluatorError } = useUpdateEvaluator();
+  const { mutateAsync: createEvaluator, error: createEvaluatorError } = useCreateEvaluator();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -147,17 +147,19 @@ function RouteComponent() {
           onPageChange={(newPage) => setPage(newPage)}
         />
         <EditEvaluatorModal
-          areaOptions={areaOptions}
+          gradeOptions={gradeOptions}
           isOpen={isModalOpen}
-          evaluator={selectedEvaluator}
+          evaluator={selectedEvaluator as EvaluatorBase}
           onClose={() => setIsModalOpen(false)}
           onSave={handleSave}
+          updateEvaluatorError={updateEvaluatorError}
         />
         <CreateEvaluatorModal
           gradeOptions={gradeOptions}
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           onSave={handleSaveCreate}
+          createEvaluatorError={createEvaluatorError}
         />
       </div>
     </div>
