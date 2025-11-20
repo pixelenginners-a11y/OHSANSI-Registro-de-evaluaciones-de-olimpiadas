@@ -50,14 +50,27 @@ export const useUpdateArea = () => {
         }
       };
 
-      // Agregar medalParameter si existe
+      // Agregar medalParameter si existe, filtrando valores null
       if (data.medalParameter) {
-        payload.medalParameter = {
-          gold: data.medalParameter.gold,
-          silver: data.medalParameter.silver,
-          bronze: data.medalParameter.bronze,
-          honor_mentions: data.medalParameter.honor_mentions
-        };
+        const medalParameter: any = {};
+
+        if (data.medalParameter.gold !== null && data.medalParameter.gold !== undefined) {
+          medalParameter.gold = data.medalParameter.gold;
+        }
+        if (data.medalParameter.silver !== null && data.medalParameter.silver !== undefined) {
+          medalParameter.silver = data.medalParameter.silver;
+        }
+        if (data.medalParameter.bronze !== null && data.medalParameter.bronze !== undefined) {
+          medalParameter.bronze = data.medalParameter.bronze;
+        }
+        if (data.medalParameter.honor_mentions !== null && data.medalParameter.honor_mentions !== undefined) {
+          medalParameter.honor_mentions = data.medalParameter.honor_mentions;
+        }
+
+        // Solo agregar medalParameter si hay al menos un campo
+        if (Object.keys(medalParameter).length > 0) {
+          payload.medalParameter = medalParameter;
+        }
       }
 
       const res = await areasEndpoints.update(id, payload as any);
