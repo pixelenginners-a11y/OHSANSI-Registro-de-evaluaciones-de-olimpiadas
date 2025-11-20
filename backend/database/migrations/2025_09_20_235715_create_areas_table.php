@@ -20,7 +20,6 @@ return new class extends Migration
             $table->integer('group_min_size')->nullable();
             $table->integer('group_max_size')->nullable();
             $table->timestamps();
-            $table->softDeletes();
 
             $table->foreignId('responsable_id')->nullable()->references('id')->on('users')->onDelete('set null');
         });
