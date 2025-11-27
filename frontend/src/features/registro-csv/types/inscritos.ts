@@ -8,6 +8,7 @@ export type FilaCSVParseada = {
   academic_tutor?: string;
   area?: string;
   grade?: string;
+  group_name?: string;
 };
 
 // Tipo para los datos validados listos para el backend
@@ -22,6 +23,7 @@ export type FilaCSVValida = {
   area_id: number;
   grade_id: number;
   status?: string;
+  group_name?: string;
 };
 
 export type FilaCSVConError = {
@@ -37,6 +39,7 @@ export const CAMPOS_PLANTILLA = [
   "tutor_academico",
   "area",
   "grado",
+  "nombre_grupo",
 ] as const;
 
 export type CampoPlantilla = (typeof CAMPOS_PLANTILLA)[number];
@@ -50,14 +53,15 @@ export const MAPEO_CAMPOS: Record<string, keyof FilaCSVParseada> = {
   "tutor_academico": "academic_tutor",
   "area": "area",
   "grado": "grade",
+  "nombre_grupo": "group_name",
 };
 
 export const DEPARTAMENTOS_DEFAULT = [
-  "Chuquisaca","La Paz","Cochabamba","Oruro","Potosí","Tarija","Santa Cruz","Beni","Pando",
+  "Chuquisaca", "La Paz", "Cochabamba", "Oruro", "Potosí", "Tarija", "Santa Cruz", "Beni", "Pando",
 ];
 
 export const AREAS_DEFAULT = [
-  "Matemática","Física","Química","Informática","Biología","Astronomía","Robótica","Ciencias de la Tierra",
+  "Matemática", "Física", "Química", "Informática", "Biología", "Astronomía", "Robótica", "Ciencias de la Tierra",
 ];
 
 export const NIVELES_DEFAULT = [
