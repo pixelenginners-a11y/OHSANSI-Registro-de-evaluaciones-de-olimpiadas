@@ -31,7 +31,37 @@ class StoreInscriptionRequest extends FormRequest
             'area_id'   => 'required|exists:areas,id',
             'grade_id'  => 'required|exists:grades,id',
             'status'    => 'nullable|string|in:pending,approved,rejected',
+            'group_id'  => 'nullable|exists:groups,id',
         ];
+    }
+
+        public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $area = Area::find($this->area_id);
+
+            if (!$area) {
+                return;
+            }
+
+            if ($area->is_group) {
+                if (empty($this->group_id)) {
+                    $validator->errors()->add(
+                        'group_id',
+                        "Debes seleccionar un grupo porque el área '{$area->name}' es grupal."
+                    );
+                }
+            }
+
+            else {
+                if (!empty($this->group_id)) {
+                    $validator->errors()->add(
+                        'group_id',
+                        "El área '{$area->name}' no es grupal, por lo que no debes seleccionar un grupo."
+                    );
+                }
+            }
+        });
     }
 
     public function messages(): array
@@ -48,6 +78,7 @@ class StoreInscriptionRequest extends FormRequest
             'grade_id.required'=> 'El grado es obligatorio',
             'grade_id.exists'  => 'El grado seleccionado no existe',
             'status.in'        => 'El estado debe ser pending, approved o rejected',
+            'group_id.exists' => 'El grupo seleccionado no existe',
         ];
     }
 }
