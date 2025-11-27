@@ -87,6 +87,21 @@ class InscriptionController extends Controller
         return response()->noContent();
     }
 
+    public function search(Request $request): JsonResponse
+    {
+        $inscriptions = $this->inscriptionService->searchInscriptions(
+            search: $request->input('query', ''),
+            areaId: $request->input('areaId'),
+            gradeId: $request->input('gradeId'),
+            groupId: $request->input('groupId'),
+            status: $request->input('status'),
+            perPage: $request->input('perPage', 10)
+        );
+
+        return response()->json($inscriptions);
+    }
+    
+
     /**
      * Import multiple inscriptions from an array of data.
      */

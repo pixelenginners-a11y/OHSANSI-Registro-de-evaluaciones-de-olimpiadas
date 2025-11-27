@@ -90,14 +90,15 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('inscriptions')->middleware('role:Administrador,Evaluador,Responsable Academico')->group(function () {
         Route::get('/', [InscriptionController::class, 'index']);
         Route::get('{id}', [InscriptionController::class, 'show']);
+        Route::get('/search', [InscriptionController::class, 'search']);
         Route::post('/import', [InscriptionController::class, 'import']);
         // Solo permitir crear inscripciones en fase de Inscripciones
-        Route::post('/', [InscriptionController::class, 'store'])->middleware('fase:Inscripciones');
+        Route::post('/', [InscriptionController::class, 'store']);
 
         // Solo permitir actualizar y eliminar en fase de Inscripciones
-        Route::put('{id}', [InscriptionController::class, 'update'])->middleware('fase:Inscripciones');
-        Route::patch('{id}', [InscriptionController::class, 'update'])->middleware('fase:Inscripciones');
-        Route::delete('{id}', [InscriptionController::class, 'destroy'])->middleware('fase:Inscripciones');
+        Route::put('{id}', [InscriptionController::class, 'update']);
+        Route::patch('{id}', [InscriptionController::class, 'update']);
+        Route::delete('{id}', [InscriptionController::class, 'destroy']);
     });
 
     Route::prefix('listings')->middleware('role:Administrador,Evaluador, Responsable Academico')->group(function () {

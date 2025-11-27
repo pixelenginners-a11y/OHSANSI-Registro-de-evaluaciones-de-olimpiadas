@@ -13,7 +13,7 @@ class CompetitionPhasesSeeder extends Seeder
     public function run(): void
     {
         $phases = [
-            // ['phase' => 'Inscripcion', 'active' => false],
+            ['phase' => 'Inscripcion', 'active' => false],
             ['phase' => 'Clasificacion', 'active' => false, 'description' => 'Fase de clasificación donde los participantes compiten para avanzar a la siguiente etapa.'],
             ['phase' => 'Final', 'active' => false, 'description' => 'Fase final donde los mejores participantes compiten por el título y los premios.'],
         ];
