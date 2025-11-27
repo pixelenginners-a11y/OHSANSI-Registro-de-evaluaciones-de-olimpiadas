@@ -67,6 +67,7 @@ export function validarCSVInscritos(
       academic_tutor: normalize(raw.tutor_academico ?? ""),
       area: normalize(raw.area ?? ""),
       grade: normalize(raw.grado ?? ""),
+      grupo_name: normalize(raw.nombre_grupo ?? ""),
     };
 
     // Agregar todas las filas parseadas sin validar
@@ -79,6 +80,7 @@ export function validarCSVInscritos(
       academic_tutor: data.academic_tutor || undefined,
       area: data.area,
       grade: data.grade,
+      group_name: data.grupo_name || undefined,
     });
   });
 

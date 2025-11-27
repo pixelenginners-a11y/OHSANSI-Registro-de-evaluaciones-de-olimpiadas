@@ -27,7 +27,7 @@ export function useCSVRegistro() {
     errores: erroresBackend.length
   }), [parseadas, erroresBackend]);
 
-  const onCSVParseado = (rows: Record<string,string>[], nombreArchivo: string) => {
+  const onCSVParseado = (rows: Record<string, string>[], nombreArchivo: string) => {
     const { validas } = validarCSVInscritos(rows);
     setParseadas(validas);
     setErroresBackend([]); // Limpiar errores del backend previo
@@ -70,6 +70,7 @@ export function useCSVRegistro() {
           area_id: area?.id || 0,
           grade_id: grade?.id || 0,
           status: "pending",
+          group_name: fila.group_name || undefined,
         };
       });
 
@@ -164,6 +165,7 @@ export function useCSVRegistro() {
             },
             area_id: 0,
             grade_id: 0,
+            group_name: parseada?.group_name || undefined,
           };
 
           return {

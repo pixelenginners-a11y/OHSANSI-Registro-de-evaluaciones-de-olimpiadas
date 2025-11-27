@@ -9,6 +9,7 @@ export const FIELD_NAMES: Record<string, string> = {
   academic_tutor: 'Tutor académico',
   area: 'Área',
   grade: 'Grado',
+  group_name: 'Grupo',
 };
 
 export type ErrorInfo = {
@@ -46,6 +47,9 @@ export function useErrorMapping(errores: FilaCSVConError[]) {
         }
         if (msgLower.includes('grade') || msgLower.includes('grado')) {
           camposConError.add('grade');
+        }
+        if (msgLower.includes('grop_name') || msgLower.includes('grupo')) {
+          camposConError.add('group_name');
         }
       });
 
