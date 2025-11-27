@@ -6,15 +6,20 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Olympian;
-use Illuminate\Http\Request;
 
 use function PHPSTORM_META\map;
 
 class OlympianService
 {
-    public function create(Request $req)
+    public function create(array $data)
     {
-        return Olympian::create($req);
+        return Olympian::create([
+            'full_name' => $data['full_name'],
+            'identity_document' => $data['identity_document'],
+            'educational_institution' => $data['educational_institution'],
+            'department' => $data['department'],
+            'academic_tutor' => $data['academic_tutor'] ?? null,
+        ]);
     }
 
     public function getAll()
