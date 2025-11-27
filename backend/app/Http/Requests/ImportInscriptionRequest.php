@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Area;
 
 class ImportInscriptionRequest extends FormRequest
 {
@@ -32,6 +33,7 @@ class ImportInscriptionRequest extends FormRequest
             'data.*.area_id'   => 'required|exists:areas,id',
             'data.*.grade_id'  => 'required|exists:grades,id',
             'data.*.status'    => 'nullable|string|in:pending,approved,rejected',
+            'data.*.group_name' => 'nullable|string|max:50',
         ];
     }
 
@@ -52,6 +54,36 @@ class ImportInscriptionRequest extends FormRequest
             'data.*.grade_id.required'=> 'El grado es obligatorio',
             'data.*.grade_id.exists'  => 'El grado seleccionado no existe',
             'data.*.status.in'        => 'El estado debe ser pending, approved o rejected',
+            'data.*.group_name.max'   => 'El nombre del grupo no debe exceder los 50 caracteres',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+
+            foreach ($this->data as $index => $row) {
+
+                $area = Area::find($row['area_id']);
+
+                if ($area?->is_group) {
+                    if (empty($row['group_name'])) {
+                        $validator->errors()->add(
+                            "data.$index.group_name",
+                            "El nombre del grupo es obligatorio porque el área '{$area->name}' es grupal."
+                        );
+                    }
+                } 
+
+                else {
+                    if (!empty($row['group_name'])) {
+                        $validator->errors()->add(
+                            "data.$index.group_name",
+                            "El área '{$area->name}' no es grupal, por lo que no se debe especificar nombre de grupo."
+                        );
+                    }
+                }
+            }
+        });
     }
 }
