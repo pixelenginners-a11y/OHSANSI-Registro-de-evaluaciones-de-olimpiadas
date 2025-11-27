@@ -1,8 +1,9 @@
 import api from "./axios";
 
-export const getOlympians = () => {
+export const getOlympians = (page: number = 1) => {
   const token = localStorage.getItem("token");
-  return api.get("/inscriptions/", {
+
+  return api.get(`/inscriptions?page=${page}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

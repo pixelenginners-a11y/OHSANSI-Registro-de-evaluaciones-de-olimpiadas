@@ -6,3 +6,7 @@ type Error = {
 export type ErrorEvaluator = Error;
 
 export type ErrorResponsable = Error;
+
+export type ErrorOlympian = Error;
+
+export type ErrorInscription = Error;
