@@ -13,7 +13,7 @@ interface TableBodyProps {
 }
 
 export const TableBody = ({ slice, erroresPorFila, page, pageSize, handleErrorClick, handleEdit, handleDelete }: TableBodyProps) => {
-  const fieldKeys: (keyof FilaCSVParseada)[] = ['full_name', 'identity_document', 'educational_institution', 'department', 'academic_tutor', 'area', 'grade'];
+  const fieldKeys: (keyof FilaCSVParseada)[] = ['full_name', 'identity_document', 'educational_institution', 'department', 'academic_tutor', 'area', 'grade', 'group_name'];
   return (
     <tbody>
       {

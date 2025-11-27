@@ -88,6 +88,15 @@ export default function EditModal({ isOpen, row, onClose, onSave, getFieldErrors
               hasError={hasFieldError('academic_tutor')}
               errors={getFieldErrors('academic_tutor')}
             />
+
+            <FormField
+              label="Grupo"
+              value={editedData.group_name || ''}
+              onChange={(val) => setEditedData({ ...editedData, group_name: val })}
+              hasError={hasFieldError('group_name')}
+              errors={getFieldErrors('group_name')}
+            />
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1.5">
@@ -95,10 +104,9 @@ export default function EditModal({ isOpen, row, onClose, onSave, getFieldErrors
                 </label>
                 <select
                   value={editedData.area || ''}
-                  onChange={(e) => setEditedData({...editedData, area: e.target.value})}
-                  className={`w-full px-3 py-2 border rounded-lg text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    hasFieldError('area') ? 'border-red-300 bg-red-50' : 'border-neutral-300'
-                  }`}
+                  onChange={(e) => setEditedData({ ...editedData, area: e.target.value })}
+                  className={`w-full px-3 py-2 border rounded-lg text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${hasFieldError('area') ? 'border-red-300 bg-red-50' : 'border-neutral-300'
+                    }`}
                 >
                   <option value="">Seleccionar área</option>
                   {areas?.map((area) => (
@@ -121,10 +129,9 @@ export default function EditModal({ isOpen, row, onClose, onSave, getFieldErrors
                 </label>
                 <select
                   value={editedData.grade || ''}
-                  onChange={(e) => setEditedData({...editedData, grade: e.target.value})}
-                  className={`w-full px-3 py-2 border rounded-lg text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    hasFieldError('grade') ? 'border-red-300 bg-red-50' : 'border-neutral-300'
-                  }`}
+                  onChange={(e) => setEditedData({ ...editedData, grade: e.target.value })}
+                  className={`w-full px-3 py-2 border rounded-lg text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${hasFieldError('grade') ? 'border-red-300 bg-red-50' : 'border-neutral-300'
+                    }`}
                 >
                   <option value="">Seleccionar grado</option>
                   {grades?.map((grade) => (
