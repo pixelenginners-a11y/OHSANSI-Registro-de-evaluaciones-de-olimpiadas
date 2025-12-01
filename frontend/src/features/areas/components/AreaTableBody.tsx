@@ -1,11 +1,11 @@
-import type { Area } from '../types/area';
+import type { Area, AreaWithGrades } from '../types/area';
 import { AreaTableRow } from './AreaTableRow';
 
 interface AreaTableBodyProps {
-  areas: Area[] | undefined;
+  areas: AreaWithGrades[] | undefined;
   isLoading: boolean;
   isError: boolean;
-  onEdit: (area: Area) => void;
+  onEdit: (area: AreaWithGrades) => void;
   onDelete: (area: Area) => void;
 }
 
