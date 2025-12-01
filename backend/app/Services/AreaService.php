@@ -56,8 +56,6 @@ class AreaService
                 'active'         => $data['active'] ?? true,
                 'responsable_id' => $data['responsable_id'] ?? null,
                 'is_group'       => $data['is_group'],
-                'group_min_size' => $data['is_group'] ? ($data['group_min_size']) : null,
-                'group_max_size' => $data['is_group'] ? ($data['group_max_size']) : null,
             ]);
 
             $this->medalParameterService->create([
