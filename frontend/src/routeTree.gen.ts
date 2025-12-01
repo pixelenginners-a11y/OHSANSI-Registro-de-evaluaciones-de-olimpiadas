@@ -9,10 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResponsibleRouteRouteImport } from './routes/responsible/route'
 import { Route as EvaluatorRouteRouteImport } from './routes/evaluator/route'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SharedConstruccionRouteImport } from './routes/shared/construccion'
+import { Route as ResponsibleListsRouteImport } from './routes/responsible/lists'
+import { Route as ResponsibleCompetitionRouteImport } from './routes/responsible/competition'
 import { Route as PublicLoginRouteImport } from './routes/public/login'
 import { Route as EvaluatorEvaluationsRouteImport } from './routes/evaluator/evaluations'
 import { Route as AdminResponsablesRouteImport } from './routes/admin/responsables'
@@ -25,6 +28,11 @@ import { Route as AdminCompetitionRouteImport } from './routes/admin/competition
 import { Route as AdminAreasRouteImport } from './routes/admin/areas'
 import { Route as PublicListsListIdRouteImport } from './routes/public/lists/$listId'
 
+const ResponsibleRouteRoute = ResponsibleRouteRouteImport.update({
+  id: '/responsible',
+  path: '/responsible',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EvaluatorRouteRoute = EvaluatorRouteRouteImport.update({
   id: '/evaluator',
   path: '/evaluator',
@@ -44,6 +52,16 @@ const SharedConstruccionRoute = SharedConstruccionRouteImport.update({
   id: '/shared/construccion',
   path: '/shared/construccion',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ResponsibleListsRoute = ResponsibleListsRouteImport.update({
+  id: '/lists',
+  path: '/lists',
+  getParentRoute: () => ResponsibleRouteRoute,
+} as any)
+const ResponsibleCompetitionRoute = ResponsibleCompetitionRouteImport.update({
+  id: '/competition',
+  path: '/competition',
+  getParentRoute: () => ResponsibleRouteRoute,
 } as any)
 const PublicLoginRoute = PublicLoginRouteImport.update({
   id: '/public/login',
@@ -105,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/evaluator': typeof EvaluatorRouteRouteWithChildren
+  '/responsible': typeof ResponsibleRouteRouteWithChildren
   '/admin/areas': typeof AdminAreasRoute
   '/admin/competition': typeof AdminCompetitionRoute
   '/admin/csv': typeof AdminCsvRoute
@@ -115,6 +134,8 @@ export interface FileRoutesByFullPath {
   '/admin/responsables': typeof AdminResponsablesRoute
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
   '/public/login': typeof PublicLoginRoute
+  '/responsible/competition': typeof ResponsibleCompetitionRoute
+  '/responsible/lists': typeof ResponsibleListsRoute
   '/shared/construccion': typeof SharedConstruccionRoute
   '/public/lists/$listId': typeof PublicListsListIdRoute
 }
@@ -122,6 +143,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/evaluator': typeof EvaluatorRouteRouteWithChildren
+  '/responsible': typeof ResponsibleRouteRouteWithChildren
   '/admin/areas': typeof AdminAreasRoute
   '/admin/competition': typeof AdminCompetitionRoute
   '/admin/csv': typeof AdminCsvRoute
@@ -132,6 +154,8 @@ export interface FileRoutesByTo {
   '/admin/responsables': typeof AdminResponsablesRoute
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
   '/public/login': typeof PublicLoginRoute
+  '/responsible/competition': typeof ResponsibleCompetitionRoute
+  '/responsible/lists': typeof ResponsibleListsRoute
   '/shared/construccion': typeof SharedConstruccionRoute
   '/public/lists/$listId': typeof PublicListsListIdRoute
 }
@@ -140,6 +164,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/evaluator': typeof EvaluatorRouteRouteWithChildren
+  '/responsible': typeof ResponsibleRouteRouteWithChildren
   '/admin/areas': typeof AdminAreasRoute
   '/admin/competition': typeof AdminCompetitionRoute
   '/admin/csv': typeof AdminCsvRoute
@@ -150,6 +175,8 @@ export interface FileRoutesById {
   '/admin/responsables': typeof AdminResponsablesRoute
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
   '/public/login': typeof PublicLoginRoute
+  '/responsible/competition': typeof ResponsibleCompetitionRoute
+  '/responsible/lists': typeof ResponsibleListsRoute
   '/shared/construccion': typeof SharedConstruccionRoute
   '/public/lists/$listId': typeof PublicListsListIdRoute
 }
@@ -159,6 +186,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/evaluator'
+    | '/responsible'
     | '/admin/areas'
     | '/admin/competition'
     | '/admin/csv'
@@ -169,6 +197,8 @@ export interface FileRouteTypes {
     | '/admin/responsables'
     | '/evaluator/evaluations'
     | '/public/login'
+    | '/responsible/competition'
+    | '/responsible/lists'
     | '/shared/construccion'
     | '/public/lists/$listId'
   fileRoutesByTo: FileRoutesByTo
@@ -176,6 +206,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/evaluator'
+    | '/responsible'
     | '/admin/areas'
     | '/admin/competition'
     | '/admin/csv'
@@ -186,6 +217,8 @@ export interface FileRouteTypes {
     | '/admin/responsables'
     | '/evaluator/evaluations'
     | '/public/login'
+    | '/responsible/competition'
+    | '/responsible/lists'
     | '/shared/construccion'
     | '/public/lists/$listId'
   id:
@@ -193,6 +226,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/evaluator'
+    | '/responsible'
     | '/admin/areas'
     | '/admin/competition'
     | '/admin/csv'
@@ -203,6 +237,8 @@ export interface FileRouteTypes {
     | '/admin/responsables'
     | '/evaluator/evaluations'
     | '/public/login'
+    | '/responsible/competition'
+    | '/responsible/lists'
     | '/shared/construccion'
     | '/public/lists/$listId'
   fileRoutesById: FileRoutesById
@@ -211,6 +247,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   EvaluatorRouteRoute: typeof EvaluatorRouteRouteWithChildren
+  ResponsibleRouteRoute: typeof ResponsibleRouteRouteWithChildren
   PublicLoginRoute: typeof PublicLoginRoute
   SharedConstruccionRoute: typeof SharedConstruccionRoute
   PublicListsListIdRoute: typeof PublicListsListIdRoute
@@ -218,6 +255,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/responsible': {
+      id: '/responsible'
+      path: '/responsible'
+      fullPath: '/responsible'
+      preLoaderRoute: typeof ResponsibleRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/evaluator': {
       id: '/evaluator'
       path: '/evaluator'
@@ -245,6 +289,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/shared/construccion'
       preLoaderRoute: typeof SharedConstruccionRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/responsible/lists': {
+      id: '/responsible/lists'
+      path: '/lists'
+      fullPath: '/responsible/lists'
+      preLoaderRoute: typeof ResponsibleListsRouteImport
+      parentRoute: typeof ResponsibleRouteRoute
+    }
+    '/responsible/competition': {
+      id: '/responsible/competition'
+      path: '/competition'
+      fullPath: '/responsible/competition'
+      preLoaderRoute: typeof ResponsibleCompetitionRouteImport
+      parentRoute: typeof ResponsibleRouteRoute
     }
     '/public/login': {
       id: '/public/login'
@@ -364,10 +422,24 @@ const EvaluatorRouteRouteWithChildren = EvaluatorRouteRoute._addFileChildren(
   EvaluatorRouteRouteChildren,
 )
 
+interface ResponsibleRouteRouteChildren {
+  ResponsibleCompetitionRoute: typeof ResponsibleCompetitionRoute
+  ResponsibleListsRoute: typeof ResponsibleListsRoute
+}
+
+const ResponsibleRouteRouteChildren: ResponsibleRouteRouteChildren = {
+  ResponsibleCompetitionRoute: ResponsibleCompetitionRoute,
+  ResponsibleListsRoute: ResponsibleListsRoute,
+}
+
+const ResponsibleRouteRouteWithChildren =
+  ResponsibleRouteRoute._addFileChildren(ResponsibleRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   EvaluatorRouteRoute: EvaluatorRouteRouteWithChildren,
+  ResponsibleRouteRoute: ResponsibleRouteRouteWithChildren,
   PublicLoginRoute: PublicLoginRoute,
   SharedConstruccionRoute: SharedConstruccionRoute,
   PublicListsListIdRoute: PublicListsListIdRoute,
