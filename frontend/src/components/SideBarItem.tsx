@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
 import Icon from "./Icon";
 import { type MenuItem } from "./Menu";
@@ -14,7 +14,7 @@ type SidebarItemProps = {
   setseleccion: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const SidebarItem = ({ item, open, red, onClick, isChild, seleccion, setseleccion }: SidebarItemProps) => {
+export const SidebarItem = ({ item, open, red, isChild, seleccion, setseleccion }: SidebarItemProps) => {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
   const hasChildren = item.children && item.children.length > 0;
@@ -22,7 +22,7 @@ export const SidebarItem = ({ item, open, red, onClick, isChild, seleccion, sets
     if (hasChildren) {
       setIsExpanded(!isExpanded);
     } else if (item.route) {
-      navigate({ to: item.route});
+      navigate({ to: item.route });
       setseleccion(item.text)
     }
   };
