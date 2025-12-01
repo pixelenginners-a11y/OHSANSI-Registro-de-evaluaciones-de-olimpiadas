@@ -20,7 +20,6 @@ function RouteComponent() {
   const [filterArea, setFilterArea] = useState<string>('');
   const [filterGrade, setFilterGrade] = useState<string>('');
   const [filterPhase, setFilterPhase] = useState<string>('');
-  const [filterStatus, setFilterStatus] = useState<string>('');
   const [page, setPage] = useState(1);
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -34,7 +33,6 @@ function RouteComponent() {
     area: filterArea,
     grade: filterGrade,
     phase: filterPhase,
-    status: filterStatus,
     page,
     per_page: 9,
   });
@@ -55,14 +53,9 @@ function RouteComponent() {
   const areaOptions = areasData?.map((area) => ({ value: area.id, label: area.name })) || [];
   const gradeOptions = gradesData?.map((grade) => ({ value: grade.name, label: grade.name })) || [];
   const phaseOptions = [
+    { value: 'inscripcion', label: 'Inscripción' },
     { value: 'clasificacion', label: 'Clasificación' },
     { value: 'final', label: 'Final' },
-  ];
-  const statusOptions = [
-    { value: 'pendiente', label: 'Pendiente' },
-    { value: 'clasificado', label: 'Clasificado' },
-    { value: 'no_clasificado', label: 'No Clasificado' },
-    { value: 'desclasificado', label: 'Desclasificado' },
   ];
 
   const dataToShow: Evaluation[] = Array.isArray(evaluationsData?.data)
@@ -125,13 +118,6 @@ function RouteComponent() {
           options={phaseOptions}
           className="w-full sm:w-auto min-w-0"
           placeholder="Filtrar por Fase"
-        />
-        <Select
-          value={filterStatus}
-          onChange={(value) => { setFilterStatus(String(value)); setPage(1); }}
-          options={statusOptions}
-          className="w-full sm:w-auto min-w-0"
-          placeholder="Filtrar por Estado"
         />
       </div>
 
