@@ -3,10 +3,10 @@ import AreasTableHeader from '../components/AreasTableHeader';
 import { AreaTableBody } from '../components/AreaTableBody';
 import { DeleteAreaModal } from '../components/DeleteAreaModal';
 import { CreateAreaModal } from '../components/CreateAreaModal';
-import { EditAreaModal } from '../components/EditAreaModal';
+import { UpdateAreaModal } from '../components/EditAreaModal';
 import { Toast } from '../../../components/Toast';
 import { useGetAreas, useDeleteArea } from '../hooks';
-import type { Area } from '../types/area';
+import type { Area, AreaWithGrades } from '../types/area';
 
 const AreasManager = () => {
   const { data: areas, isLoading, isError } = useGetAreas();
@@ -15,14 +15,24 @@ const AreasManager = () => {
   const [areaToDelete, setAreaToDelete] = useState<Area | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [areaToEdit, setAreaToEdit] = useState<Area | null>(null);
+  const [areaToEdit, setAreaToEdit] = useState<AreaWithGrades>({
+    id: 0,
+    name: '',
+    description: '',
+    grades: [],
+    active: false,
+    responsable_id: null,
+    is_group: false,
+    group_min_size: 0,
+    group_max_size: 0,
+    medal_parameter: null,
+  });
   const [showDeleteToast, setShowDeleteToast] = useState(false);
 
-  const handleEditClick = (area: Area) => {
+  const handleEditClick = (area: AreaWithGrades) => {
     setAreaToEdit(area);
     setIsEditModalOpen(true);
   };
-
   const handleDeleteClick = (area: Area) => {
     setAreaToDelete(area);
     setIsModalOpen(true);
@@ -85,12 +95,11 @@ const AreasManager = () => {
         onClose={() => setIsCreateModalOpen(false)}
       />
 
-      <EditAreaModal
+      <UpdateAreaModal
         isOpen={isEditModalOpen}
         area={areaToEdit}
         onClose={() => {
           setIsEditModalOpen(false);
-          setAreaToEdit(null);
         }}
       />
 

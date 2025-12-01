@@ -1,8 +1,8 @@
-import type { Area } from '../types/area';
+import type { Area, AreaWithGrades } from '../types/area';
 
 interface AreaTableRowProps {
-  area: Area;
-  onEdit: (area: Area) => void;
+  area: AreaWithGrades;
+  onEdit: (area: AreaWithGrades) => void;
   onDelete: (area: Area) => void;
 }
 
@@ -27,11 +27,10 @@ export const AreaTableRow = ({ area, onEdit, onDelete }: AreaTableRowProps) => {
       </td>
       <td className="px-6 py-4 text-sm text-center">
         <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
-            area.active
-              ? 'bg-green-100 text-green-800'
-              : 'bg-red-100 text-red-800'
-          }`}
+          className={`px-2 py-1 rounded-full text-xs font-medium ${area.active
+            ? 'bg-green-100 text-green-800'
+            : 'bg-red-100 text-red-800'
+            }`}
         >
           {area.active ? 'Activo' : 'Inactivo'}
         </span>
