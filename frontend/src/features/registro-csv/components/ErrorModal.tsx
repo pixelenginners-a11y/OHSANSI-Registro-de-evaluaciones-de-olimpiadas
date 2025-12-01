@@ -7,7 +7,7 @@ type Props = {
   onClose: () => void;
 };
 
-export default function ErrorModal({ isOpen, campo, mensajes, fila, nombreCampo, onClose }: Props) {
+export default function ErrorModal({ isOpen, mensajes, fila, nombreCampo, onClose }: Props) {
   if (!isOpen) return null;
 
   return (

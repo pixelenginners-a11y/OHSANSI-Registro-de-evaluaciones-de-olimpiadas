@@ -4,5 +4,6 @@ export type {
   InscriptionUpdate,
   InscriptionsResponse,
   InscriptionResponse,
-  Column
+  Column,
+  Olympian,
 } from './inscriptions';
