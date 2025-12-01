@@ -9,7 +9,7 @@ interface ExportPDFButtonProps {
 export function ExportPDFButton({ data }: ExportPDFButtonProps) {
   const handleExportPDF = () => {
     const doc = new jsPDF();
-    
+
     autoTable(doc, {
       startY: 28,
       head: [['ID', 'Nombre Completo', 'Documento', 'Institución', 'Departamento']],
