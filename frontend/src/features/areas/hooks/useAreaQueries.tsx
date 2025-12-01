@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import areasEndpoints, { type Area } from "../../../api/endpointAreas";
+import type { AreaWithGrades } from "../types/area";
 
 export const useGetAreas = () => {
-  return useQuery<Area[]>({
+  return useQuery<AreaWithGrades[]>({
     queryKey: ["areas"],
     queryFn: async () => {
       const res = await areasEndpoints.getAll();
