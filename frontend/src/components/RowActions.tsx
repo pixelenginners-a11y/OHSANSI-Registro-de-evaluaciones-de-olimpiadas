@@ -3,7 +3,7 @@ import { type UseMutateFunction } from "@tanstack/react-query";
 
 import { type Responsable, type EvaluatorBase, type ResponsableEdit, type EvaluatorUpdate } from "../features/AdministratorUsers";
 import Icon from "./Icon";
-import { ConfirmModal } from "./ConfirmModal";
+import { ConfirmModal } from "../features/AdministratorUsers/components/ConfirmModal";
 
 interface RowActionsProps {
   id: number;
