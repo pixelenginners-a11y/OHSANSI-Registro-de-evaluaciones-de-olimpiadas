@@ -20,6 +20,8 @@ export const Form = () => {
         navigate({ to: '/admin' });
       } else if (user.role_id === 2) {
         navigate({ to: '/evaluator/evaluations' });
+      } else if (user.role_id === 3) {
+        navigate({ to: '/responsible/competition' });
       }
     }
   }, [isSuccess, user, navigate]);
