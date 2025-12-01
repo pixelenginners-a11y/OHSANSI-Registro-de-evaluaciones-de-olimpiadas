@@ -1,4 +1,5 @@
 import type { Area } from '../features/areas/types/area';
+import type { UpdateAreaInput } from '../features/areas/schemas/updateAreaSchema';
 import api from './axios';
 
 export type { Area };
@@ -27,7 +28,7 @@ export const areasEndpoints = {
   },
 
   // PUT /api/areas/{id} - Actualizar un área completa
-  update: (id: number, data: Area) => {
+  update: (id: number, data: UpdateAreaInput) => {
     return api.put(`/areas/${id}`, data, { headers: getAuthHeaders() });
   },
 

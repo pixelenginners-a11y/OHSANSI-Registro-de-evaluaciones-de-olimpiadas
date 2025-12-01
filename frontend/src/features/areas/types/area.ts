@@ -1,9 +1,9 @@
 export type MedalParameter = {
   id: number;
   area_id: number;
-  gold: number|null;
-  silver: number|null;
-  bronze: number|null;
+  gold: number | null;
+  silver: number | null;
+  bronze: number | null;
   honor_mentions: number;
 };
 
@@ -17,4 +17,15 @@ export type Area = {
   is_group: boolean;
   group_min_size: number;
   group_max_size: number;
+  grades: number[];
 }
+
+export type AreaWithGrades = Area & {
+  grades: {
+    id: number;
+    name: string;
+  }[];
+};
+
+export type CreateArea = Omit<Area, "id">;
+export type UpdateArea = Partial<CreateArea>;
