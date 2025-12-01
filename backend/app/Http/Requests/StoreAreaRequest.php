@@ -27,8 +27,8 @@ class StoreAreaRequest extends FormRequest
             'active' => 'sometimes|boolean',
             'responsable_id' => 'nullable|exists:users,id',
             'is_group' => 'required|boolean',
-            'group_min_size' => 'required_if:is_group,1|integer|min:1',
-            'group_max_size' => 'required_if:is_group,1|integer|min:1|gte:group_min_size',
+            // 'group_min_size' => 'required_if:is_group,1|integer|min:1',
+            // 'group_max_size' => 'required_if:is_group,1|integer|min:1|gte:group_min_size',
 
             'gold' => 'sometimes|integer|min:0',
             'silver' => 'sometimes|integer|min:0',
@@ -49,13 +49,13 @@ class StoreAreaRequest extends FormRequest
             'name.max' => 'El nombre del área no puede exceder 255 caracteres.',
             'is_group.required' => 'Debe especificar si el área es grupal.',
             'is_group.boolean' => 'El valor de el grupo no es correcto.',
-            'group_min_size.required_if' => 'El tamaño mínimo del grupo es obligatorio cuando el área es grupal.',
-            'group_min_size.integer' => 'El tamaño mínimo del grupo debe ser un número entero.',
-            'group_min_size.min' => 'El tamaño mínimo del grupo debe ser al menos 1.',
-            'group_max_size.required_if' => 'El tamaño máximo del grupo es obligatorio cuando el área es grupal.',
-            'group_max_size.integer' => 'El tamaño máximo del grupo debe ser un número entero.',
-            'group_max_size.min' => 'El tamaño máximo del grupo debe ser al menos 1.',
-            'group_max_size.gte' => 'El tamaño máximo del grupo debe ser mayor o igual al tamaño mínimo del grupo.',
+            // 'group_min_size.required_if' => 'El tamaño mínimo del grupo es obligatorio cuando el área es grupal.',
+            // 'group_min_size.integer' => 'El tamaño mínimo del grupo debe ser un número entero.',
+            // 'group_min_size.min' => 'El tamaño mínimo del grupo debe ser al menos 1.',
+            // 'group_max_size.required_if' => 'El tamaño máximo del grupo es obligatorio cuando el área es grupal.',
+            // 'group_max_size.integer' => 'El tamaño máximo del grupo debe ser un número entero.',
+            // 'group_max_size.min' => 'El tamaño máximo del grupo debe ser al menos 1.',
+            // 'group_max_size.gte' => 'El tamaño máximo del grupo debe ser mayor o igual al tamaño mínimo del grupo.',
 
 
 
