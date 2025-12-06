@@ -6,9 +6,9 @@ export const useGetOlympians = () => {
     queryKey: ["olympians"],
     queryFn: async () => {
       const res = await getOlympians();
-      return res.data;
-    }, 
-  }); 
+      return res.data.data;
+    },
+  });
 };
 
 export const useGetOlympianById = (id: number) => {

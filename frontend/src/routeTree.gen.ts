@@ -22,6 +22,7 @@ import { Route as AdminInscritosRouteImport } from './routes/admin/inscritos'
 import { Route as AdminEvaluadoresRouteImport } from './routes/admin/evaluadores'
 import { Route as AdminCsvRouteImport } from './routes/admin/csv'
 import { Route as AdminCompetitionRouteImport } from './routes/admin/competition'
+import { Route as AdminCertificadoRouteImport } from './routes/admin/certificado'
 import { Route as AdminAreasRouteImport } from './routes/admin/areas'
 import { Route as PublicListsListIdRouteImport } from './routes/public/lists/$listId'
 
@@ -90,6 +91,11 @@ const AdminCompetitionRoute = AdminCompetitionRouteImport.update({
   path: '/competition',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminCertificadoRoute = AdminCertificadoRouteImport.update({
+  id: '/certificado',
+  path: '/certificado',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminAreasRoute = AdminAreasRouteImport.update({
   id: '/areas',
   path: '/areas',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/evaluator': typeof EvaluatorRouteRouteWithChildren
   '/admin/areas': typeof AdminAreasRoute
+  '/admin/certificado': typeof AdminCertificadoRoute
   '/admin/competition': typeof AdminCompetitionRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
   '/evaluator': typeof EvaluatorRouteRouteWithChildren
   '/admin/areas': typeof AdminAreasRoute
+  '/admin/certificado': typeof AdminCertificadoRoute
   '/admin/competition': typeof AdminCompetitionRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/evaluator': typeof EvaluatorRouteRouteWithChildren
   '/admin/areas': typeof AdminAreasRoute
+  '/admin/certificado': typeof AdminCertificadoRoute
   '/admin/competition': typeof AdminCompetitionRoute
   '/admin/csv': typeof AdminCsvRoute
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/evaluator'
     | '/admin/areas'
+    | '/admin/certificado'
     | '/admin/competition'
     | '/admin/csv'
     | '/admin/evaluadores'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/evaluator'
     | '/admin/areas'
+    | '/admin/certificado'
     | '/admin/competition'
     | '/admin/csv'
     | '/admin/evaluadores'
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/evaluator'
     | '/admin/areas'
+    | '/admin/certificado'
     | '/admin/competition'
     | '/admin/csv'
     | '/admin/evaluadores'
@@ -309,6 +321,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCompetitionRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/certificado': {
+      id: '/admin/certificado'
+      path: '/certificado'
+      fullPath: '/admin/certificado'
+      preLoaderRoute: typeof AdminCertificadoRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/areas': {
       id: '/admin/areas'
       path: '/areas'
@@ -328,6 +347,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteRouteChildren {
   AdminAreasRoute: typeof AdminAreasRoute
+  AdminCertificadoRoute: typeof AdminCertificadoRoute
   AdminCompetitionRoute: typeof AdminCompetitionRoute
   AdminCsvRoute: typeof AdminCsvRoute
   AdminEvaluadoresRoute: typeof AdminEvaluadoresRoute
@@ -339,6 +359,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAreasRoute: AdminAreasRoute,
+  AdminCertificadoRoute: AdminCertificadoRoute,
   AdminCompetitionRoute: AdminCompetitionRoute,
   AdminCsvRoute: AdminCsvRoute,
   AdminEvaluadoresRoute: AdminEvaluadoresRoute,

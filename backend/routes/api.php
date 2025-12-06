@@ -13,6 +13,7 @@ use App\Http\Controllers\ListingController;
 use App\Http\Controllers\ListItemController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\CompetitionPhaseController;
+use App\Http\Controllers\RankedController;
 
 
 // Rutas públicas de autenticación
@@ -122,5 +123,13 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('admin/competition/phases')->middleware('auth:api')->group(function () {
         Route::get('/', [CompetitionPhaseController::class, 'index']);
         Route::post('{phase}/{action}', [CompetitionPhaseController::class, 'togglePhase']);
+    });
+
+    // Ranked routes (Administrador)
+    Route::prefix('ranked')->middleware('role:Administrador')->group(function () {
+        Route::get('/ranking', [RankedController::class, 'getRanking']);
+        Route::get('/awarded', [RankedController::class, 'getAwarded']);
+        Route::get('/awarded/{areaId}', [RankedController::class, 'getAwardedByArea']);
+        Route::post('/generate', [RankedController::class, 'generateRanking']);
     });
 });

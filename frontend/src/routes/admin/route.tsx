@@ -30,6 +30,7 @@ function RouteComponent() {
       ]
     },
     { text: "Generar Listas", route: "/admin/lists", icon: "album" },
+    { text: "Generar Certificado", route: "/admin/certificado", icon: "square-check" },
   ];
 
   return (
