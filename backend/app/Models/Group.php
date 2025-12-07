@@ -18,6 +18,16 @@ class Group extends Model
         'grade_id',
     ];
 
+    const STATUS_INSCRIBED = 'inscribed';
+    const STATUS_CLASIFICADOS = 'classified';
+    const STATUS_NOT_CLASSIFIED = 'not_classified';
+    const STATUS_DISQUALIFIED = 'disqualified';
+    const STATUS_FINALIST = 'finalist';
+    const STATUS_GOLD_MEDALIST = 'gold_medalist';
+    const STATUS_SILVER_MEDALIST = 'silver_medalist';
+    const STATUS_BRONZE_MEDALIST = 'bronze_medalist';
+    const STATUS_HONORABLE_MENTION = 'honorable_mention';
+
     public function area()
     {
         return $this->belongsTo(Area::class);

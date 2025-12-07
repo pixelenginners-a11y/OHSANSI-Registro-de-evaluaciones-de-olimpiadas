@@ -11,26 +11,23 @@ class Evaluation extends Model
         'group_id',
         'evaluator_id',
         'score',
+        'competition_phase_id',
         'description',
-        'phase',
         'status',
     ];
 
-    const STATUS_PENDING = 'pendiente';
-    const STATUS_CLASIFICADOS = 'clasificado';
-    const STATUS_NO_CLASIFICADOS = 'no_clasificado';
-    const STATUS_DESCLASIFICADOS = 'desclasificado';
-
-    const PHASE_CLASIFICACION = 'clasificacion';
-    const PHASE_FINAL = 'final';
+    const STATUS_PENDING = 'pending';
+    const STATUS_IN_REVIEW = 'in_review';
+    const STATUS_APPROVED = 'approved';
+    const STATUS_REJECTED = 'rejected';
 
     public static function statuses(): array
     {
         return [
             self::STATUS_PENDING,
-            self::STATUS_CLASIFICADOS,
-            self::STATUS_NO_CLASIFICADOS,
-            self::STATUS_DESCLASIFICADOS,
+            self::STATUS_IN_REVIEW,
+            self::STATUS_APPROVED,
+            self::STATUS_REJECTED,
         ];
     }
 
@@ -52,5 +49,10 @@ class Evaluation extends Model
     public function group()
     {
         return $this->belongsTo(Group::class);
+    }
+
+    public function competitionPhase()
+    {
+        return $this->belongsTo(CompetitionPhase::class);
     }
 }
