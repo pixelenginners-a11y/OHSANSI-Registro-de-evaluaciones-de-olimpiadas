@@ -16,4 +16,14 @@ class CompetitionPhase extends Model
         'started_at' => 'datetime',
         'active' => 'boolean',
     ];
+
+    const PHASE_INSCRIPTION = 'inscripcion';
+    const PHASE_CLASSIFICATION = 'clasificacion';
+    const PHASE_FINAL = 'final';
+    const PHASE_AWARDING = 'premiacion';
+
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class);
+    }
 }
