@@ -6,6 +6,7 @@ export const useGetCompetitionPhases = () => {
     queryKey: ["getCompetitionPhases"],
     queryFn: async () => {
       const res = await api.get("/admin/competition/phases");
+      console.log(res);
       return res.data;
     },
   });
