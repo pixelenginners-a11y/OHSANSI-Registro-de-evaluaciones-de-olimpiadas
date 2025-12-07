@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\CompetitionService;
+use App\Models\CompetitionPhase;
 
 class CompetitionController extends Controller
 {
@@ -81,10 +82,12 @@ class CompetitionController extends Controller
             'phase' => 'required|string',
         ])['phase'];
 
-        if ($phase === 'clasificacion') {
+        if ($phase === CompetitionPhase::PHASE_CLASSIFICATION) {
             $result = $this->competitionService->activateInitialPhase();
-        } elseif ($phase === 'final') {
+        } elseif ($phase === CompetitionPhase::PHASE_FINAL) {
             $result = $this->competitionService->activateFinalPhase();
+        } else if ($phase === CompetitionPhase::PHASE_AWARDING) {
+            $result = $this->competitionService->activateAwardingPhase();
         } else {
             return response()->json([
                 'success' => false,
