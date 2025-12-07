@@ -1,9 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { Lists } from '../../features/lists/pages/Lists'
 
 export const Route = createFileRoute('/responsible/lists')({
-  component: RouteComponent,
+  component: Lists,
 })
-
-function RouteComponent() {
-  return <div>Hello "/responsible/lists"!</div>
-}

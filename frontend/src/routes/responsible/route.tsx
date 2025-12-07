@@ -17,8 +17,9 @@ export type MenuItem = {
 
 function RouteComponent() {
   const items: MenuItem[] = [
-    { text: "Competencia", route: "/admin/competition", icon: "trophy" },
-    { text: "Generar Listas", route: "/admin/lists", icon: "album" },
+    { text: "Competencia", route: "/responsible/competition", icon: "trophy" },
+    { text: "Verificar Evaluaciones", route: "/responsible/evaluations", icon: "album" },
+    { text: "Generar Listas", route: "/responsible/lists", icon: "album" },
   ];
 
   return (

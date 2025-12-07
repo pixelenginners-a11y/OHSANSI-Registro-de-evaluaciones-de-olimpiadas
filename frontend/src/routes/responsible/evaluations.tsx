@@ -3,39 +3,34 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Select } from '../../components/Select';
 import { SearchBar } from '../../components/SearchBar';
 import { Pagination } from '../../components/Pagination';
-import { useGetEvaluations } from '../../features/evaluations/hooks';
-import { useGetAreas } from '../../features/areas/hooks';
+import { useGetEvaluationsForResponsible } from '../../features/evaluations/hooks/useEvaluationQueries';
 import { useGetGrades } from '../../features/administrar-niveles/hooks/useGradeQueries';
-import { EditEvaluationModal } from '../../features/evaluations/components/EditEvaluationModal';
-import type { EditEvaluationForm, Evaluation } from '../../features/evaluations/components/EditEvaluationModal';
-import { useUpdateEvaluation } from '../../features/evaluations/hooks/useEvaluationMutation';
+import type { Evaluation } from '../../features/evaluations/components/EditEvaluationModal';
+import { useUpdateEvaluation, useApproveAllEvaluations } from '../../features/evaluations/hooks/useEvaluationMutation';
+import { ConfirmModal } from '../../features/AdministratorUsers/components/ConfirmModal';
 
-export const Route = createFileRoute('/evaluator/evaluations')({
+export const Route = createFileRoute('/responsible/evaluations')({
   component: RouteComponent,
-});
+})
 
 function RouteComponent() {
   const [inputValue, setInputValue] = useState('');
   const [query, setQuery] = useState('');
-  const [filterArea, setFilterArea] = useState<string>('');
   const [filterGrade, setFilterGrade] = useState<string>('');
   const [page, setPage] = useState(1);
-
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedEvaluation, setSelectedEvaluation] = useState<Evaluation | null>(null);
 
-  const { data: areasData, isLoading: areasLoading, isError: areasError } = useGetAreas();
   const { data: gradesData } = useGetGrades();
 
-  const { data: evaluationsData, isLoading, isError } = useGetEvaluations({
+  const { data: evaluationsData, isLoading, isError } = useGetEvaluationsForResponsible({
     search: query,
-    area: filterArea,
     grade: filterGrade,
     page,
     per_page: 9,
   });
 
   const updateEvaluationMutation = useUpdateEvaluation();
+  const approveAllMutation = useApproveAllEvaluations();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -45,44 +40,36 @@ function RouteComponent() {
     return () => clearTimeout(handler);
   }, [inputValue]);
 
-  if (isLoading || areasLoading) return <div className="p-6">Cargando evaluaciones...</div>;
-  if (isError || areasError) return <div className="p-6">Error al cargar los datos.</div>;
+  if (isLoading) return <div className="p-6">Cargando evaluaciones...</div>;
+  if (isError) return <div className="p-6">Error al cargar los datos.</div>;
 
-  const areaOptions = areasData?.map((area) => ({ value: area.id, label: area.name })) || [];
   const gradeOptions = gradesData?.map((grade) => ({ value: grade.name, label: grade.name })) || [];
 
   const dataToShow: Evaluation[] = Array.isArray(evaluationsData?.data)
     ? evaluationsData.data
     : [];
 
-  const openModal = (evaluation: Evaluation) => {
-    setSelectedEvaluation(evaluation);
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelectedEvaluation(null);
-    setModalOpen(false);
-  };
-
-  const handleSaveEvaluation = async (form: EditEvaluationForm) => {
-    if (!selectedEvaluation) return;
+  const handleEditStatus = async (evaluacion: Evaluation) => {
+    if (!evaluacion) return;
     updateEvaluationMutation.mutate({
-      id: selectedEvaluation.id,
+      id: evaluacion.id,
       data: {
-        score: form.score,
-        disqualified: form.status === 'disqualified' ? true : false,
-        description: form.description,
-        status: selectedEvaluation.status === 'rejected' ? 'approved' : null,
-      }
+        status: 'rejected',
+      },
     });
+  };
 
-    closeModal();
+  const handleApproveAll = () => {
+    approveAllMutation.mutate(undefined, {
+      onSuccess: () => {
+        setModalOpen(false);
+      },
+    });
   };
 
   return (
     <div className="h-screen overflow-hidden p-6 flex flex-col">
-      <h1 className="text-2xl font-bold mb-4">Evaluaciones</h1>
+      <h1 className="text-2xl font-bold mb-4">Verificar Evaluaciones</h1>
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-4 w-full">
         <div className="flex-1 min-w-0">
@@ -95,21 +82,23 @@ function RouteComponent() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-4 w-full">
-        <Select
-          value={filterArea}
-          onChange={(value) => { setFilterArea(String(value)); setPage(1); }}
-          options={areaOptions}
-          className="w-full sm:w-auto min-w-0"
-          placeholder="Filtrar por Área"
-        />
-        <Select
-          value={filterGrade}
-          onChange={(value) => { setFilterGrade(String(value)); setPage(1); }}
-          options={gradeOptions}
-          className="w-full sm:w-auto min-w-0"
-          placeholder="Filtrar por Grado"
-        />
+      <div className="flex flex-col sm:flex-row gap-2 mb-4 w-full items-stretch">
+        <div className="flex flex-col sm:flex-row flex-1 gap-2">
+          <Select
+            value={filterGrade}
+            onChange={(value) => { setFilterGrade(String(value)); setPage(1); }}
+            options={gradeOptions}
+            className="w-full sm:w-auto min-w-0"
+            placeholder="Filtrar por Grado"
+          />
+        </div>
+
+        <button
+          className="w-full sm:w-auto min-w-0 bg-primary-dark text-white rounded px-4 py-2 hover:cursor-pointer"
+          onClick={() => setModalOpen(true)}
+        >
+          Aprobar todas
+        </button>
       </div>
 
       <div className="flex-1 min-h-0 overflow-auto">
@@ -163,11 +152,15 @@ function RouteComponent() {
 
                 <div className="mt-4">
                   <button
-                    className={`w-full px-3 py-2 bg-primary-dark text-white rounded text-sm ${evalItem.status === 'approved' || evalItem.status === 'in_review' || evalItem.status === 'disqualified' ? 'opacity-50 cursor-not-allowed' : 'hover:cursor-pointer'}`}
-                    onClick={() => openModal(evalItem)}
-                    disabled={evalItem.status === 'approved' || evalItem.status === 'in_review' || evalItem.status === 'disqualified'}
+                    className={`w-full px-3 py-2 ${evalItem.status === 'in_review'
+                      ? "bg-primary-dark cursor-pointer"
+                      : "bg-gray-500 cursor-not-allowed"} text-white rounded text-sm`}
+                    onClick={() => { handleEditStatus(evalItem) }}
+                    disabled={evalItem.status === 'approved' || evalItem.status === 'rejected' || evalItem.status === 'pending'}
                   >
-                    Editar Evaluación
+                    {evalItem.status === 'pending' ? 'En Evaluacion' :
+                      evalItem.status === 'approved' ? 'Aprobado' :
+                        evalItem.status === 'rejected' ? 'Rechazado' : 'Permitir reeditar evaluacion'}
                   </button>
                 </div>
               </article>
@@ -176,29 +169,33 @@ function RouteComponent() {
         </div>
       </div>
 
-      {
-        evaluationsData?.links && (
-          <div className="mt-4">
-            <Pagination
-              links={evaluationsData.links}
-              currentPage={evaluationsData.current_page}
-              lastPage={evaluationsData.last_page}
-              total={evaluationsData.total}
-              onPageChange={(newPage) => setPage(newPage)}
-            />
-          </div>
-        )
-      }
-
-      {
-        modalOpen && selectedEvaluation && (
-          <EditEvaluationModal
-            evaluation={selectedEvaluation}
-            onClose={closeModal}
-            onSave={handleSaveEvaluation}
+      {evaluationsData?.links && (
+        <div className="mt-4">
+          <Pagination
+            links={evaluationsData.links}
+            currentPage={evaluationsData.current_page}
+            lastPage={evaluationsData.last_page}
+            total={evaluationsData.total}
+            onPageChange={(newPage) => setPage(newPage)}
           />
-        )
-      }
-    </div >
+        </div>
+      )}
+
+      {modalOpen && (
+        <ConfirmModal
+          isOpen={modalOpen}
+          title="Aprobar todas las evaluaciones"
+          description={`¿Estás seguro de que deseas aprobar todas las evaluaciones que están en revisión para la fase activa?
+                        Aquellas que continúan en evaluación no serán aprobadas aún. Esta acción no se puede deshacer.`}
+          confirmText="Aprobar"
+          confirmClassnames='px-4 py-2 bg-primary-dark text-white rounded'
+          onConfirm={() => {
+            handleApproveAll();
+            setModalOpen(false);
+          }}
+          onCancel={() => setModalOpen(false)}
+        />
+      )}
+    </div>
   );
 }
