@@ -28,7 +28,6 @@ export function RowActions({
   const open = openRowId === id;
 
   const handleDelete = () => {
-    console.log(id);
     onDelete(id);
     setIsConfirmOpen(false);
   };

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputField } from "../../../components/InputField";
 import { MultiSelectForm } from "../../../components/MultiSelectForm";
@@ -15,11 +15,7 @@ interface UpdateAreaModalProps {
   area: AreaWithGrades;
 }
 
-export const UpdateAreaModal = ({
-  isOpen,
-  onClose,
-  area,
-}: UpdateAreaModalProps) => {
+export const UpdateAreaModal = ({ isOpen, onClose, area }: UpdateAreaModalProps) => {
   const {
     register,
     handleSubmit,
@@ -28,28 +24,15 @@ export const UpdateAreaModal = ({
     formState: { errors, isSubmitting },
   } = useForm<UpdateAreaInput>({
     resolver: zodResolver(updateAreaSchema),
-    defaultValues:
-    {
+    defaultValues: {
       name: area.name,
-      description: area.description
-        ? area.description
-        : "",
-      is_group: area.is_group
-        ? area.is_group
-        : false,
-      gold: area.medal_parameter?.gold
-        ? area.medal_parameter.gold
-        : 0,
-      silver: area.medal_parameter?.silver
-        ? area.medal_parameter.silver
-        : 0,
-      bronze: area.medal_parameter?.bronze
-        ? area.medal_parameter.bronze
-        : 0,
-      honor_mentions: area.medal_parameter?.honor_mentions
-        ? area.medal_parameter.honor_mentions
-        : 0,
-      grades: area.grades ? area.grades : [],
+      description: area.description ?? "",
+      is_group: area.is_group ?? false,
+      gold: area.medal_parameter?.gold ?? 0,
+      silver: area.medal_parameter?.silver ?? 0,
+      bronze: area.medal_parameter?.bronze ?? 0,
+      honor_mentions: area.medal_parameter?.honor_mentions ?? 0,
+      grades: area.grades ?? [],
     },
   });
 
@@ -73,13 +56,12 @@ export const UpdateAreaModal = ({
         silver: area.medal_parameter?.silver ?? 0,
         bronze: area.medal_parameter?.bronze ?? 0,
         honor_mentions: area.medal_parameter?.honor_mentions ?? 0,
-        grades: (area.grades as Grade[])?.map(g => g.id) ?? []
+        grades: (area.grades as Grade[])?.map((g) => g.id) ?? [],
       });
     }
   }, [area, reset]);
 
   const onSubmit = async (data: UpdateAreaInput) => {
-    console.log(data);
     await updateArea({
       id: area.id,
       data: {
@@ -103,6 +85,13 @@ export const UpdateAreaModal = ({
   };
 
   if (!isOpen) return null;
+
+  const medalLabels: Record<string, string> = {
+    gold: "Oro",
+    silver: "Plata",
+    bronze: "Bronce",
+    honor_mentions: "Menciones de Honor",
+  };
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
@@ -145,41 +134,27 @@ export const UpdateAreaModal = ({
             </h3>
 
             <div className="grid grid-cols-2 gap-3">
-              <InputField
-                label="Oro"
-                type="text"
-                onlyNumbers={true}
-                {...register("gold", { valueAsNumber: true })}
-                error={errors.gold?.message}
-                disabled={isSubmitting}
-              />
-
-              <InputField
-                label="Plata"
-                type="text"
-                onlyNumbers={true}
-                {...register("silver", { valueAsNumber: true })}
-                error={errors.silver?.message}
-                disabled={isSubmitting}
-              />
-
-              <InputField
-                label="Bronce"
-                type="text"
-                onlyNumbers={true}
-                {...register("bronze", { valueAsNumber: true })}
-                error={errors.bronze?.message}
-                disabled={isSubmitting}
-              />
-
-              <InputField
-                label="Menciones de Honor"
-                type="text"
-                onlyNumbers={true}
-                {...register("honor_mentions", { valueAsNumber: true })}
-                error={errors.honor_mentions?.message}
-                disabled={isSubmitting}
-              />
+              {["gold", "silver", "bronze", "honor_mentions"].map((field) => (
+                <Controller
+                  key={field}
+                  name={field as keyof UpdateAreaInput}
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <InputField
+                      label={medalLabels[field]}
+                      type="text"
+                      onlyNumbers
+                      value={value?.toString() ?? "0"}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^\d*$/.test(val)) onChange(val === "" ? 0 : Number(val));
+                      }}
+                      disabled={isSubmitting}
+                      error={errors[field as keyof UpdateAreaInput]?.message}
+                    />
+                  )}
+                />
+              ))}
             </div>
           </div>
 

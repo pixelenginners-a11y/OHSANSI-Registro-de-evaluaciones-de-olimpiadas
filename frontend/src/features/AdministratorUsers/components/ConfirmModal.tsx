@@ -1,6 +1,8 @@
 interface ConfirmModalProps {
   isOpen: boolean;
   title: string;
+  confirmText?: string;
+  confirmClassnames?: string;
   description?: string;
   onConfirm: () => void;
   onCancel: () => void;
@@ -9,8 +11,10 @@ interface ConfirmModalProps {
 export function ConfirmModal({
   isOpen,
   title,
+  confirmText,
   description,
   onConfirm,
+  confirmClassnames,
   onCancel,
 }: ConfirmModalProps) {
   if (!isOpen) return null;
@@ -37,9 +41,9 @@ export function ConfirmModal({
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 bg-red-500 text-white rounded"
+            className={`${confirmClassnames ? confirmClassnames : "px-4 py-2 bg-red-500 text-white rounded"} `}
           >
-            Eliminar
+            {confirmText || 'Eliminar'}
           </button>
         </div>
       </div>
