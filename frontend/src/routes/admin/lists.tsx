@@ -6,10 +6,7 @@ import { useGetGrades } from '../../features/administrar-niveles/hooks/useGradeQ
 import { type Listing, type CreateListingData } from '../../features/lists/types/listing';
 import { Pagination } from '../../components/Pagination';
 import { CreateListingModal } from '../../components/CreateListingModal';
-
-export const Route = createFileRoute('/admin/lists')({
-  component: RouteComponent,
-});
+import { withPhaseGuard } from '../../components/withPhaseGuard';
 
 interface AreaOptionType {
   id: number;
@@ -109,3 +106,9 @@ function RouteComponent() {
     </div>
   );
 }
+
+const GuardedRouteComponent = withPhaseGuard('generar_lista_inscritos')(RouteComponent);
+
+export const Route = createFileRoute('/admin/lists')({
+  component: GuardedRouteComponent,
+});

@@ -12,7 +12,8 @@ use Illuminate\Http\Request;
 class InscriptionController extends Controller
 {
     public function __construct(
-        protected InscriptionService $inscriptionService
+      protected InscriptionService $inscriptionService,
+      protected \App\Services\PhaseEnforcerService $phaseEnforcer
     ){}
 
     /**
@@ -34,8 +35,13 @@ class InscriptionController extends Controller
      */
     public function store(StoreInscriptionRequest $request)
     {
-        $validated = $request->validated();
-        $inscription = $this->inscriptionService->create($validated);
+      $check = $this->phaseEnforcer->checkFunctionalityAllowed('registrar_inscrito');
+      if (!$check['allowed']) {
+        return response()->json(['message' => $check['message']], 403);
+      }
+
+      $validated = $request->validated();
+      $inscription = $this->inscriptionService->create($validated);
         if(!$inscription){
           return response()->json([
             'message' => 'El inscrito no se pudo crear'
@@ -63,8 +69,13 @@ class InscriptionController extends Controller
      */
     public function update(UpdateInscriptionRequest $request, int $id)
     {
-        $validated = $request->validated();
-        $updatedInscription = $this->inscriptionService->update($id, $validated);
+      $check = $this->phaseEnforcer->checkFunctionalityAllowed('registrar_inscrito');
+      if (!$check['allowed']) {
+        return response()->json(['message' => $check['message']], 403);
+      }
+
+      $validated = $request->validated();
+      $updatedInscription = $this->inscriptionService->update($id, $validated);
         if(!$updatedInscription){
           return response()->json([
             'message' => 'El inscrito no se pudo actualizar'
@@ -78,7 +89,12 @@ class InscriptionController extends Controller
      */
     public function destroy(int $id)
     {
-        $deleted = $this->inscriptionService->delete($id);
+      $check = $this->phaseEnforcer->checkFunctionalityAllowed('registrar_inscrito');
+      if (!$check['allowed']) {
+        return response()->json(['message' => $check['message']], 403);
+      }
+
+      $deleted = $this->inscriptionService->delete($id);
         if(!$deleted){
           return response()->json([
             'message' => 'El inscrito no se pudo eliminar'
@@ -107,8 +123,13 @@ class InscriptionController extends Controller
      */
     public function import(ImportInscriptionRequest $request)
     {
-        $validated = $request->validated();
-        $inscriptions = $this->inscriptionService->import($validated['data']);
+      $check = $this->phaseEnforcer->checkFunctionalityAllowed('cargar_csv');
+      if (!$check['allowed']) {
+        return response()->json(['message' => $check['message']], 403);
+      }
+
+      $validated = $request->validated();
+      $inscriptions = $this->inscriptionService->import($validated['data']);
 
         if($inscriptions->isEmpty()){
           return response()->json([

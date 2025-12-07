@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { InputField } from "./InputField";
+import { InputField } from "../features/lists/components/InputField";
 import { SelectForm } from "./SelectForm";
 import { type CreateListingData } from "../features/lists/types/listing";
 

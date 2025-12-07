@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
             'fase' => \App\Http\Middleware\CheckFase::class,
+            'phase.guard' => \App\Http\Middleware\PhaseGuard::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

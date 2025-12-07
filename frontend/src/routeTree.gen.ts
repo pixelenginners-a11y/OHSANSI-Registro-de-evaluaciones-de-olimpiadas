@@ -14,6 +14,7 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SharedConstruccionRouteImport } from './routes/shared/construccion'
 import { Route as PublicLoginRouteImport } from './routes/public/login'
+import { Route as PublicFaseNoPermitidaRouteImport } from './routes/public/fase-no-permitida'
 import { Route as EvaluatorEvaluationsRouteImport } from './routes/evaluator/evaluations'
 import { Route as AdminResponsablesRouteImport } from './routes/admin/responsables'
 import { Route as AdminNivelesRouteImport } from './routes/admin/niveles'
@@ -48,6 +49,11 @@ const SharedConstruccionRoute = SharedConstruccionRouteImport.update({
 const PublicLoginRoute = PublicLoginRouteImport.update({
   id: '/public/login',
   path: '/public/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicFaseNoPermitidaRoute = PublicFaseNoPermitidaRouteImport.update({
+  id: '/public/fase-no-permitida',
+  path: '/public/fase-no-permitida',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EvaluatorEvaluationsRoute = EvaluatorEvaluationsRouteImport.update({
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
+  '/public/fase-no-permitida': typeof PublicFaseNoPermitidaRoute
   '/public/login': typeof PublicLoginRoute
   '/shared/construccion': typeof SharedConstruccionRoute
   '/public/lists/$listId': typeof PublicListsListIdRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
+  '/public/fase-no-permitida': typeof PublicFaseNoPermitidaRoute
   '/public/login': typeof PublicLoginRoute
   '/shared/construccion': typeof SharedConstruccionRoute
   '/public/lists/$listId': typeof PublicListsListIdRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
+  '/public/fase-no-permitida': typeof PublicFaseNoPermitidaRoute
   '/public/login': typeof PublicLoginRoute
   '/shared/construccion': typeof SharedConstruccionRoute
   '/public/lists/$listId': typeof PublicListsListIdRoute
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
     | '/admin/niveles'
     | '/admin/responsables'
     | '/evaluator/evaluations'
+    | '/public/fase-no-permitida'
     | '/public/login'
     | '/shared/construccion'
     | '/public/lists/$listId'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/admin/niveles'
     | '/admin/responsables'
     | '/evaluator/evaluations'
+    | '/public/fase-no-permitida'
     | '/public/login'
     | '/shared/construccion'
     | '/public/lists/$listId'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/admin/niveles'
     | '/admin/responsables'
     | '/evaluator/evaluations'
+    | '/public/fase-no-permitida'
     | '/public/login'
     | '/shared/construccion'
     | '/public/lists/$listId'
@@ -211,6 +223,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   EvaluatorRouteRoute: typeof EvaluatorRouteRouteWithChildren
+  PublicFaseNoPermitidaRoute: typeof PublicFaseNoPermitidaRoute
   PublicLoginRoute: typeof PublicLoginRoute
   SharedConstruccionRoute: typeof SharedConstruccionRoute
   PublicListsListIdRoute: typeof PublicListsListIdRoute
@@ -251,6 +264,13 @@ declare module '@tanstack/react-router' {
       path: '/public/login'
       fullPath: '/public/login'
       preLoaderRoute: typeof PublicLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/public/fase-no-permitida': {
+      id: '/public/fase-no-permitida'
+      path: '/public/fase-no-permitida'
+      fullPath: '/public/fase-no-permitida'
+      preLoaderRoute: typeof PublicFaseNoPermitidaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/evaluator/evaluations': {
@@ -368,6 +388,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   EvaluatorRouteRoute: EvaluatorRouteRouteWithChildren,
+  PublicFaseNoPermitidaRoute: PublicFaseNoPermitidaRoute,
   PublicLoginRoute: PublicLoginRoute,
   SharedConstruccionRoute: SharedConstruccionRoute,
   PublicListsListIdRoute: PublicListsListIdRoute,

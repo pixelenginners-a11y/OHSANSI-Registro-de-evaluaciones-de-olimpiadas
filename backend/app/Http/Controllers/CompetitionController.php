@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\CompetitionService;
+use App\Services\CompetitionPhaseService;
 
 class CompetitionController extends Controller
 {
-    protected CompetitionService $competitionService;
+    protected CompetitionPhaseService $competitionPhaseService;
 
     public function __construct(
-        CompetitionService $competitionService
+        CompetitionPhaseService $competitionPhaseService
     )
-    {}
+    {
+        $this->competitionPhaseService = $competitionPhaseService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -71,7 +74,7 @@ class CompetitionController extends Controller
 
     public function getPhases()
     {
-        $phases = $this->competitionService->getPhases();
+        $phases = $this->competitionPhaseService->getPhases();
         return response()->json($phases);
     }
 
@@ -80,19 +83,12 @@ class CompetitionController extends Controller
         $phase = $request->validate([
             'phase' => 'required|string',
         ])['phase'];
+        // Delegar la activación al servicio de fases (que a su vez puede disparar
+        // las acciones necesarias en CompetitionService en la primera activación).
+        $result = $this->competitionPhaseService->activatePhase($phase);
 
-        if ($phase === 'clasificacion') {
-            $result = $this->competitionService->activateInitialPhase();
-        } elseif ($phase === 'final') {
-            $result = $this->competitionService->activateFinalPhase();
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => "Fase '$phase' no reconocida.",
-            ], 400);
-        }
-
-        return response()->json($result);
+        $status = $result['success'] ? 200 : 400;
+        return response()->json($result, $status);
     }
 
     public function deactivatePhase(Request $request)
@@ -100,9 +96,9 @@ class CompetitionController extends Controller
         $phase = $request->validate([
             'phase' => 'required|string',
         ])['phase'];
+        $result = $this->competitionPhaseService->deactivatePhase($phase);
 
-        $result = $this->competitionService->deactivatePhase($phase);
-
-        return response()->json($result);
+        $status = $result['success'] ? 200 : 400;
+        return response()->json($result, $status);
     }
 }

@@ -9,10 +9,7 @@ import { useGetGrades } from '../../features/administrar-niveles/hooks/useGradeQ
 import { EditEvaluationModal } from '../../features/evaluations/components/EditEvaluationModal';
 import type { EditEvaluationForm, Evaluation } from '../../features/evaluations/components/EditEvaluationModal';
 import { useUpdateEvaluation } from '../../features/evaluations/hooks/useEvaluationMutation';
-
-export const Route = createFileRoute('/evaluator/evaluations')({
-  component: RouteComponent,
-});
+import { withPhaseGuard } from '../../components/withPhaseGuard';
 
 function RouteComponent() {
   const [inputValue, setInputValue] = useState('');
@@ -220,3 +217,9 @@ function RouteComponent() {
     </div>
   );
 }
+
+const GuardedRouteComponent = withPhaseGuard('registrar_notas')(RouteComponent);
+
+export const Route = createFileRoute('/evaluator/evaluations')({
+  component: GuardedRouteComponent,
+});

@@ -8,10 +8,7 @@ import { Pagination } from '../../components/Pagination';
 import { EditResponsableModal } from '../../components/EditResponsableModal';
 import { CreateResponsableModal } from '../../components/CreateResponsableModal';
 import { useGetAcademics, useGetAreas, useSearchAcademics, useDeleteAcademic, useUpdateAcademic, useCreateAcademic } from "../../features/AdministratorUsers/hooks/index";
-
-export const Route = createFileRoute('/admin/responsables')({
-  component: RouteComponent,
-})
+import { withPhaseGuard } from '../../components/withPhaseGuard';
 
 function RouteComponent() {
   const columns: Column[] = [
@@ -157,3 +154,9 @@ function RouteComponent() {
     </div>
   );
 }
+
+const GuardedRouteComponent = withPhaseGuard('registrar_responsables')(RouteComponent);
+
+export const Route = createFileRoute('/admin/responsables')({
+  component: GuardedRouteComponent,
+})

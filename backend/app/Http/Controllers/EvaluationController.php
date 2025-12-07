@@ -12,7 +12,7 @@ use Exception;
 
 class EvaluationController extends Controller
 {
-    public function __construct(private EvaluationService $evaluationService) {}
+    public function __construct(private EvaluationService $evaluationService, private \App\Services\PhaseEnforcerService $phaseEnforcer) {}
 
     /**
      * Listar evaluaciones con filtros opcionales
@@ -92,6 +92,19 @@ class EvaluationController extends Controller
     {
         try {
             $evaluatorId = auth()->id(); // Tomamos el evaluador desde la sesión
+
+            $evaluationModel = \App\Models\Evaluation::find($id);
+            if (!$evaluationModel) {
+                return response()->json(['message' => 'Evaluación no encontrada'], 404);
+            }
+
+            // Determinar la funcionalidad según la fase de la evaluación
+            $func = $evaluationModel->phase === \App\Models\Evaluation::PHASE_FINAL ? 'registrar_notas_finales' : 'registrar_notas';
+            $check = $this->phaseEnforcer->checkFunctionalityAllowed($func);
+            if (!$check['allowed']) {
+                return response()->json(['message' => $check['message']], 403);
+            }
+
             $evaluation = $this->evaluationService->updateEvaluationByEvaluationId(
                 $id,
                 $request->validated(),

@@ -21,10 +21,7 @@ import { useGetAreas } from '../../features/AdministratorUsers/hooks';
 import { useGetGrades } from '../../features/administrar-niveles/hooks';
 import { type Nivel } from '../../features/administrar-niveles/types';
 import { type Inscription, type InscriptionUpdate, type InscriptionCreate } from '../../features/administrar-inscritos/types/inscriptions';
-
-export const Route = createFileRoute('/admin/inscritos')({
-  component: RouteComponent,
-})
+import { withPhaseGuard } from '../../components/withPhaseGuard';
 
 function RouteComponent() {
   const columns: Column[] = [
@@ -242,3 +239,9 @@ function RouteComponent() {
     </div>
   );
 }
+
+const GuardedRouteComponent = withPhaseGuard('registrar_inscrito')(RouteComponent);
+
+export const Route = createFileRoute('/admin/inscritos')({
+  component: GuardedRouteComponent,
+})

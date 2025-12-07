@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { InputField } from "../../../components/InputField";
 import { type OlympianCreate } from "../types";
+import { usePhaseGuard } from '../../../hooks/usePhaseGuard';
+import { useNavigate } from '@tanstack/react-router';
 
 interface CreateOlympianModalProps {
   isOpen: boolean;
@@ -22,6 +24,15 @@ export const CreateOlympianModal = ({
     school_grade: "",
     academic_tutor: "",
   });
+
+  const { allowed, loading } = usePhaseGuard('registrar_inscrito');
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (!loading && !allowed) {
+      navigate({ to: '/public/fase-no-permitida' });
+    }
+  }, [allowed, loading, navigate]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -66,6 +77,7 @@ export const CreateOlympianModal = ({
   };
 
   if (!isOpen) return null;
+  if (loading) return null;
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">

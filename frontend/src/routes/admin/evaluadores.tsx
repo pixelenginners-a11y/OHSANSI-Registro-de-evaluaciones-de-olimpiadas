@@ -19,10 +19,7 @@ import { CreateEvaluatorModal } from '../../components/CreateEvaluatorModal';
 import { useGetEvaluators, useGetAreas, useSearchEvaluators, useDeleteEvaluator, useUpdateEvaluator, useCreateEvaluator } from "../../features/AdministratorUsers/hooks/index";
 import { useGetGrades } from '../../features/administrar-niveles/hooks';
 import { type Nivel } from '../../features/administrar-niveles/types';
-
-export const Route = createFileRoute('/admin/evaluadores')({
-  component: RouteComponent,
-})
+import { withPhaseGuard } from '../../components/withPhaseGuard';
 
 function RouteComponent() {
   const columns: Column[] = [
@@ -165,3 +162,9 @@ function RouteComponent() {
     </div>
   );
 }
+
+const GuardedRouteComponent = withPhaseGuard('registrar_evaluadores')(RouteComponent);
+
+export const Route = createFileRoute('/admin/evaluadores')({
+  component: GuardedRouteComponent,
+})
