@@ -8,7 +8,6 @@ type SidebarItemProps = {
   item: MenuItem;
   open?: boolean;
   red?: boolean;
-  onClick?: () => void;
   isChild?: boolean;
   seleccion?: string;
   setseleccion: React.Dispatch<React.SetStateAction<string>>;

@@ -21,6 +21,8 @@ import {
   Search,
   Album,
   Settings,
+  Activity,
+  ClipboardList,
 } from "lucide-react";
 
 export const icons = {
@@ -46,6 +48,8 @@ export const icons = {
   'search': Search,
   'album': Album,
   'settings': Settings,
+  'activity': Activity,
+  'clipboard-list': ClipboardList,
 } as const;
 
 export type IconName = keyof typeof icons;

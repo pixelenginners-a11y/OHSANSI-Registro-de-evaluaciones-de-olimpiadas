@@ -7,12 +7,14 @@ use App\Models\Inscription;
 use App\Models\CompetitionPhase;
 use App\Services\CompetitionService;
 use Illuminate\Support\Facades\DB;
+use App\Services\LogService;
 
 class CompetitionPhaseService
 {
 
     public function __construct(
       protected CompetitionService $competitionService,
+      protected LogService $logService,
     ) {}
 
     public function activatePhase(string $phase): array
@@ -24,6 +26,14 @@ class CompetitionPhaseService
                 return [
                     'success' => false,
                     'message' => "La fase '$phase' no existe en la base de datos."
+                ];
+            }
+
+            // Regla de negocio: una fase cerrada no puede reabrirse
+            if (!$competitionPhase->active && $competitionPhase->started_at && $competitionPhase->active === false) {
+                return [
+                    'success' => false,
+                    'message' => "La fase '$phase' ya fue cerrada y no puede reactivarse.",
                 ];
             }
 
@@ -59,6 +69,18 @@ class CompetitionPhaseService
                 }
             }
 
+            $this->logService->record(
+                'phase.activated',
+                'CompetitionPhase',
+                $competitionPhase->id,
+                [
+                    'phase' => $competitionPhase->phase,
+                    'metadata' => [
+                        'first_activation' => $firstActivation,
+                    ],
+                ]
+            );
+
             return [
                 'success' => true,
                 'message' => "Fase '$phase' activada correctamente."
@@ -83,10 +105,22 @@ class CompetitionPhaseService
 
             // $this->competitionService->deactivatePhase($phase);
 
-            return [
+            $response = [
                 'success' => true,
                 'message' => "Fase '$phase' desactivada correctamente."
             ];
+            $this->logService->record(
+                'phase.deactivated',
+                'CompetitionPhase',
+                $competitionPhase->id,
+                [
+                    'phase' => $competitionPhase->phase,
+                    'metadata' => [
+                        'active' => false,
+                    ],
+                ]
+            );
+            return $response;
         });
     }
 

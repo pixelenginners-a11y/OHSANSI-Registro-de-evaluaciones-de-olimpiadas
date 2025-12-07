@@ -13,6 +13,7 @@ use App\Http\Controllers\ListingController;
 use App\Http\Controllers\ListItemController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\CompetitionPhaseController;
+use App\Http\Controllers\LogController;
 
 
 // Rutas públicas de autenticación
@@ -25,16 +26,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('me', [AuthController::class, 'me']);
     
-    Route::prefix('academics')->group(function () {
-        Route::get('/', [AcademicResponsibleController::class, 'index']);
-        Route::post('/', [AcademicResponsibleController::class, 'store']);
-        Route::get('/search', [AcademicResponsibleController::class, 'search']);
-        Route::get('{id}', [AcademicResponsibleController::class, 'show']);
-        Route::put('{id}', [AcademicResponsibleController::class, 'update']);
-        Route::patch('{id}', [AcademicResponsibleController::class, 'update']);
-        Route::delete('{id}', [AcademicResponsibleController::class, 'destroy']);
-    });
-
     // Evaluators routes (Solo Administradores)
     Route::prefix('evaluators')->middleware('role:Administrador')->group(function () {
         Route::get('/', [EvaluatorController::class, 'index']);
@@ -101,7 +92,7 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('{id}', [InscriptionController::class, 'destroy']);
     });
 
-    Route::prefix('listings')->middleware('role:Administrador,Evaluador, Responsable Academico')->group(function () {
+    Route::prefix('listings')->middleware('role:Administrador,Evaluador,Responsable Academico')->group(function () {
         Route::get('/', [ListingController::class, 'index']);
         Route::post('/', [ListingController::class, 'store']);
         Route::get('{id}', [ListingController::class, 'show']);
@@ -110,7 +101,7 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('{id}', [ListingController::class, 'destroy']);
     });
 
-    Route::prefix('list-items')->middleware('role:Administrador,Evaluador, Responsable Academico')->group(function () {
+    Route::prefix('list-items')->middleware('role:Administrador,Evaluador,Responsable Academico')->group(function () {
         Route::get('{id}', [ListItemController::class, 'index']);
     });
 
@@ -120,8 +111,10 @@ Route::middleware('auth:api')->group(function () {
         Route::patch('{id}', [EvaluationController::class, 'update']);
     });
 
-    Route::prefix('admin/competition/phases')->middleware('auth:api')->group(function () {
+    Route::prefix('admin/competition/phases')->middleware(['auth:api','role:Administrador'])->group(function () {
         Route::get('/', [CompetitionPhaseController::class, 'index']);
         Route::post('{phase}/{action}', [CompetitionPhaseController::class, 'togglePhase']);
     });
+
+    Route::get('logs', [LogController::class, 'index']);
 });

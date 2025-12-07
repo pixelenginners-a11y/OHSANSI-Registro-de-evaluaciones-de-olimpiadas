@@ -6,9 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class EvaluationChangeLog extends Model
 {
-    public function evaluator()
+    protected $fillable = [
+        'evaluation_id',
+        'user_id',
+        'previous_score',
+        'new_score',
+        'description',
+    ];
+
+    public function evaluation()
     {
         return $this->belongsTo(Evaluation::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function inscription()
