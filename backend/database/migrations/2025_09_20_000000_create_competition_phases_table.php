@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('phase', 50)->unique();
             $table->text('description')->nullable();
             $table->boolean('active')->default(false);
+            $table->integer('classification_limit')->nullable();
             $table->timestamp('started_at')->nullable();
+            $table->dateTime('ended_at')->nullable();
             $table->timestamps();
         });
     }
