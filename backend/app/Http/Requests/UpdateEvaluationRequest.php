@@ -24,8 +24,9 @@ class UpdateEvaluationRequest extends FormRequest
     {
         return [
             'score'          => 'sometimes|numeric|min:0|max:100',
-            'description'    => 'nullable|string|max:1000',
-            'status'         => 'sometimes|in:' . implode(',', Evaluation::statuses()),
+            'description'    => 'sometimes|nullable|string|max:1000',
+            'status'         => 'sometimes|nullable|string',
+            'disqualified'   => 'sometimes|boolean',
         ];
     }
 
@@ -45,8 +46,6 @@ class UpdateEvaluationRequest extends FormRequest
 
             'phase.string' => 'La fase debe ser texto.',
             'phase.max'    => 'La fase no puede superar los 20 caracteres.',
-
-            'status.in' => 'El estado debe ser uno de los siguientes: pendiente, clasificado, no_clasificado o desclasificado.',
         ];
     }
 }
