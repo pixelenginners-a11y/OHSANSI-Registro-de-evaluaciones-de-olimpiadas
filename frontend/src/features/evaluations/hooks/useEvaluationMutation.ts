@@ -3,9 +3,10 @@ import { AxiosError } from 'axios';
 import api from '../../../api/axios';
 
 export type EditEvaluationForm = {
-  score: number;
-  status: 'pendiente' | 'clasificado' | 'no_clasificado' | 'desclasificado';
+  score?: number;
+  status?: "pending" | "in_review" | "approved" | "rejected" | "disqualified" | null;
   description?: string;
+  disqualified?: boolean;
 };
 
 export interface UpdateEvaluationResponse {
@@ -15,6 +16,11 @@ export interface UpdateEvaluationResponse {
 
 export interface ErrorResponse {
   message: string;
+}
+
+export interface ApproveAllResponse {
+  message: string;
+  data: { updated_count: number };
 }
 
 interface MutationVariables {
@@ -31,17 +37,19 @@ export const useUpdateEvaluation = () => {
     MutationVariables
   >({
     mutationFn: async ({ id, data }) => {
-      const payload = {
-        score: data.score,
-        status: data.status,
-        description: data.description,
-      };
+      const payload: any = {};
+      if (data.score !== undefined) payload.score = data.score;
+      if (data.description !== undefined) payload.description = data.description;
+      if (data.disqualified !== undefined) payload.disqualified = data.disqualified;
+      if (data.status !== undefined) payload.status = data.status;
+      console.log('Payload enviado:', JSON.stringify(payload, null, 2));
 
       const response = await api.patch<UpdateEvaluationResponse>(
         `/evaluations/${id}`,
         payload
       );
 
+      console.log('Respuesta de la actualización:', response.data);
       return response.data;
     },
     onSuccess: (_data, variables) => {
@@ -54,3 +62,23 @@ export const useUpdateEvaluation = () => {
     },
   });
 };
+
+export const useApproveAllEvaluations = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<ApproveAllResponse, AxiosError<ErrorResponse>>({
+    mutationFn: async () => {
+      const response = await api.patch<ApproveAllResponse>('/evaluations/approve-all');
+      return response.data;
+    },
+    onSuccess: (data) => {
+      console.log(`Se aprobaron ${data.data.updated_count} evaluaciones.`);
+      queryClient.invalidateQueries({ queryKey: ['getEvaluations'] });
+    },
+    onError: (err: AxiosError<ErrorResponse>) => {
+      const errorMessage = err.response?.data?.message || err.message;
+      console.error('Error aprobando evaluaciones:', errorMessage);
+    },
+  });
+};
+
