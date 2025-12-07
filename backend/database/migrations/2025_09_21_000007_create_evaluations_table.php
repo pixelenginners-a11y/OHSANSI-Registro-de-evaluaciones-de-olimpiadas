@@ -16,10 +16,11 @@ return new class extends Migration
             $table->foreignId('inscription_id')->nullable()->references('id')->on('inscriptions')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('group_id')->nullable()->references('id')->on('groups')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('evaluator_id')->nullable()->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('competition_phase_id')->nullable()->references('id')->on('competition_phases')->onUpdate('cascade')->onDelete('cascade');
             $table->decimal('score', 5, 2);
             $table->text('description')->nullable();
-            $table->string('phase',20);
             $table->string('status',20)->default('pending');
+            $table->boolean('disqualified')->default(false);
             $table->timestamps();
         });
     }
