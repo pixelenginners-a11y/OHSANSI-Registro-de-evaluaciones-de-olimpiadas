@@ -26,19 +26,18 @@ export const useUpdateArea = () => {
   return useMutation<any, AxiosError<ErrorArea>, { id: number; data: UpdateAreaInput }, void>({
     mutationFn: async ({ id, data }) => {
       const dataToSend = {
-        name: data.name,
-        description: data.description,
-        is_group: data.is_group,
-        grades: data.grades,
-        medalParameter: {
-          gold: data.gold,
-          silver: data.silver,
-          bronze: data.bronze,
-          honor_mentions: data.honor_mentions,
+        name: data.name ?? "",
+        description: data.description ?? "",
+        is_group: data.is_group ?? false,
+        grades: data.grades ?? [],
+        medal_parameter: {
+          gold: data.gold ?? 0,
+          silver: data.silver ?? 0,
+          bronze: data.bronze ?? 0,
+          honor_mentions: data.honor_mentions ?? 0,
         },
       };
       const res = await areasEndpoints.update(id, dataToSend);
-      console.log(res);
       return res.data;
     },
     onSuccess: (_, variables) => {
