@@ -6,7 +6,7 @@ import { z } from "zod";
 export type EditEvaluationForm = {
   score: number;
   description?: string;
-  status: "pendiente" | "clasificado" | "no_clasificado" | "desclasificado";
+  status?: "pending" | "in_review" | "approved" | "rejected" | "disqualified" | "";
 };
 
 export type Evaluation = {
@@ -29,7 +29,8 @@ const editEvaluationSchema = z.object({
     .min(0, { message: "El puntaje mínimo es 0" })
     .max(100, { message: "El puntaje máximo es 100" }),
   description: z.string().max(255).optional(),
-  status: z.enum(["pendiente", "clasificado", "no_clasificado", "desclasificado"]),
+  status: z.enum(["pending", "in_review", "approved", "rejected", "disqualified"]).optional()
+    .or(z.literal(""))
 });
 
 export interface EditEvaluationModalProps {
@@ -43,13 +44,7 @@ export const EditEvaluationModal: React.FC<EditEvaluationModalProps> = ({
   onClose,
   onSave,
 }) => {
-  const defaultStatus: EditEvaluationForm["status"] =
-    ["pendiente", "clasificado", "no_clasificado", "desclasificado"].includes(
-      evaluation.status ?? ""
-    )
-      ? (evaluation.status as EditEvaluationForm["status"])
-      : "pendiente";
-
+  const defaultStatus: EditEvaluationForm["status"] = undefined
   const {
     register,
     handleSubmit,
@@ -111,10 +106,8 @@ export const EditEvaluationModal: React.FC<EditEvaluationModalProps> = ({
           <div>
             <label className="text-sm font-medium block mb-1">Estado</label>
             <select {...register("status")} className="w-full border rounded px-2 py-1">
-              <option value="pendiente">Pendiente</option>
-              <option value="clasificado">Clasificado</option>
-              <option value="no_clasificado">No Clasificado</option>
-              <option value="desclasificado">Desclasificado</option>
+              <option value="">Ninguno</option>
+              <option value="disqualified">Descalificado</option>
             </select>
             {errors.status && (
               <p className="text-xs text-red-500 mt-1">{errors.status.message}</p>

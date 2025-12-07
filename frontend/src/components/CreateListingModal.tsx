@@ -86,7 +86,6 @@ export const CreateListingModal = ({
       visibility: data.visibility,
     };
 
-    console.log("Creando lista:", dataToSend);
     await onSave(dataToSend);
     reset();
     onClose();
