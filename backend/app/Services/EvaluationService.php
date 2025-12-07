@@ -8,11 +8,8 @@ use App\Services\EvaluatorGradeService;
 use App\Models\CompetitionPhase;
 use App\Models\Group;
 use App\Models\Area;
-<<<<<<< Updated upstream
 use App\Models\EvaluationChangeLog;
-=======
 use App\Models\Inscription;
->>>>>>> Stashed changes
 use App\Http\Requests\StoreEvaluationRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +28,6 @@ class EvaluationService
     /**
      * Editar una evaluación existente
      */
-<<<<<<< Updated upstream
     public function updateEvaluationByEvaluationId(int $evaluationId, array $data, int $evaluatorId): ?Evaluation
     {
         $evaluation = Evaluation::with(['inscription', 'group'])->find($evaluationId);
@@ -45,41 +41,44 @@ class EvaluationService
             'status' => $evaluation->status,
         ];
 
-        if (isset($data['score'])) {
-=======
-      public function updateEvaluationByEvaluationId(int $evaluationId, array $data, int $evaluatorId): ?Evaluation
-      {
-          $evaluation = Evaluation::find($evaluationId);
-          if (!$evaluation) {
-              return null;
-          }
+        $fase = CompetitionPhase::where('active', true)->first();
+        if (!$fase) {
+            throw new Exception("No hay una fase de competencia activa.");
+        }
 
-          $fase = CompetitionPhase::where('active', true)->first();
-          if (!$fase) {
-              throw new Exception("No hay una fase de competencia activa.");
-          }
-
-          if (array_key_exists('score', $data) && $data['score'] !== null) {
->>>>>>> Stashed changes
+        if (array_key_exists('score', $data) && $data['score'] !== null) {
             $evaluation->score = $data['score'];
-          }
+        }
 
-          if (array_key_exists('description', $data) && $data['description'] !== null) {
-              $evaluation->description = $data['description'];
-          }
+        if (array_key_exists('description', $data) && $data['description'] !== null) {
+            $evaluation->description = $data['description'];
+        }
 
-          
-          if (array_key_exists('disqualified', $data) && $data['disqualified'] !== null) {
-              $evaluation->disqualified = $data['disqualified'];
-          }
+        if (array_key_exists('disqualified', $data) && $data['disqualified'] !== null) {
+            $evaluation->disqualified = $data['disqualified'];
+        }
 
-          $evaluation->competition_phase_id = $fase->id;
+        if (array_key_exists('status', $data) && $data['status'] !== null) {
+            switch ($data['status']) {
+                case Evaluation::STATUS_REJECTED:
+                    $evaluation->status = Evaluation::STATUS_REJECTED;
+                    $evaluation->disqualified = false;
+                    break;
+                case Evaluation::STATUS_APPROVED:
+                    $evaluation->status = Evaluation::STATUS_APPROVED;
+                    break;
+            }
+        } else {
+            if ($evaluation->status === Evaluation::STATUS_PENDING) {
+                $evaluation->status = Evaluation::STATUS_IN_REVIEW;
+            }
+        }
 
-          if ($evaluation->status === Evaluation::STATUS_PENDING) {
-              $evaluation->status = Evaluation::STATUS_IN_REVIEW;
-          }
+        $evaluation->competition_phase_id = $fase->id;
+        $evaluation->evaluator_id = $evaluatorId;
 
-<<<<<<< Updated upstream
+        $evaluation->save();
+
         $after = [
             'score' => $evaluation->score,
             'description' => $evaluation->description,
@@ -111,27 +110,6 @@ class EvaluationService
 
         return $evaluation;
     }
-=======
-          if (array_key_exists('status', $data) && $data['status'] !== null) {
-              switch ($data['status']) {
-                  case Evaluation::STATUS_REJECTED:
-                      $evaluation->status = Evaluation::STATUS_REJECTED;
-                      $evaluation->disqualified = false;
-                      break;
-                  case Evaluation::STATUS_APPROVED:
-                      $evaluation->status = Evaluation::STATUS_APPROVED;
-                      break;
-              }
-          }
->>>>>>> Stashed changes
-
-          $evaluation->evaluator_id = $evaluatorId;
-
-          $evaluation->save();
-
-          return $evaluation;
-      }
-
 
     public function getEvaluationsForEvaluator(int $evaluatorId, array $params)
     {
@@ -348,9 +326,6 @@ class EvaluationService
             ]
         ];
     }
-<<<<<<< Updated upstream
-}
-=======
 
     public function updateAllStatusToApproved(string $phaseId): int
     {
@@ -372,4 +347,3 @@ class EvaluationService
         return $updatedCount;
     }
 }
->>>>>>> Stashed changes
