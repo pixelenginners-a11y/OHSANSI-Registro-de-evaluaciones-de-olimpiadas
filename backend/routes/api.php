@@ -113,12 +113,8 @@ Route::middleware('auth:api')->group(function () {
         Route::patch('{id}', [EvaluationController::class, 'update']);
     });
 
-<<<<<<< Updated upstream
-    Route::prefix('admin/competition/phases')->middleware(['auth:api','role:Administrador'])->group(function () {
-=======
 
     Route::prefix('admin/competition/phases')->middleware('auth:api')->group(function () {
->>>>>>> Stashed changes
         Route::get('/', [CompetitionPhaseController::class, 'index']);
         Route::post('/set-classification-limit', [CompetitionPhaseController::class, 'setClassificationLimit']);
         Route::post('{phase}/{action}', [CompetitionPhaseController::class, 'togglePhase']);
