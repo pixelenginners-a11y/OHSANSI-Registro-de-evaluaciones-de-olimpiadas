@@ -107,12 +107,20 @@ Route::middleware('auth:api')->group(function () {
 
     Route::prefix('evaluations')->middleware(['auth:api', 'role:Administrador,Evaluador,Responsable Academico'])->group(function () {
         Route::get('/', [EvaluationController::class, 'index']);
+        Route::get('/responsible', [EvaluationController::class, 'indexResponsible']);
         Route::get('/stats', [EvaluationController::class, 'stats']);
+        Route::patch('approve-all', [EvaluationController::class, 'approveAllInReviewByPhase']);
         Route::patch('{id}', [EvaluationController::class, 'update']);
     });
 
+<<<<<<< Updated upstream
     Route::prefix('admin/competition/phases')->middleware(['auth:api','role:Administrador'])->group(function () {
+=======
+
+    Route::prefix('admin/competition/phases')->middleware('auth:api')->group(function () {
+>>>>>>> Stashed changes
         Route::get('/', [CompetitionPhaseController::class, 'index']);
+        Route::post('/set-classification-limit', [CompetitionPhaseController::class, 'setClassificationLimit']);
         Route::post('{phase}/{action}', [CompetitionPhaseController::class, 'togglePhase']);
     });
 
