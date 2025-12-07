@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Inscription;
 use App\Models\GroupMember;
 use App\Services\OlympianService;
-use App\Services\GroupService;
+use App\Services\LogService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
 use \Illuminate\Pagination\LengthAwarePaginator;
@@ -14,7 +14,7 @@ class InscriptionService
 {
     public function __construct(
         protected OlympianService $olympianService,
-        protected GroupService $groupService
+        protected LogService $logService
     )
     {}
     /**
@@ -89,12 +89,16 @@ class InscriptionService
                     'group_id'    => $group ? $group->id : null,
                 ]);
 
-                if($group){
-                    GroupMember::create([
-                        'group_id' => $group->id,
-                        'olympian_id' => $olympian->id,
-                    ]);
-                }
+                $this->logService->record(
+                    'inscription.created',
+                    'Inscription',
+                    $inscription->id,
+                    [
+                        'area_id' => $inscription->area_id,
+                        'grade_id' => $inscription->grade_id,
+                        'metadata' => ['import' => true],
+                    ]
+                );
 
                 return $inscription->load([
                     'olympian:id,full_name,identity_document,educational_institution,department',
@@ -128,7 +132,15 @@ class InscriptionService
                 'status'      => $data['status'] ?? 'pending',
                 'group_id'    => $data['group_id'] ?? null,
             ]);
-
+            $this->logService->record(
+                'inscription.created',
+                'Inscription',
+                $inscription->id,
+                [
+                    'area_id' => $inscription->area_id,
+                    'grade_id' => $inscription->grade_id,
+                ]
+            );
             return $inscription->load([
                 'olympian:id,full_name,identity_document,educational_institution,department',
                 'area:id,name',
@@ -149,34 +161,34 @@ class InscriptionService
             if (!$inscription) {
                 return null;
             }
+            $before = $inscription->only(['area_id', 'grade_id', 'status']);
             if(isset($data['olympian'])) {
                 $olympian = $this->olympianService->update($inscription->olympian_id, $data['olympian']);
                 if (!$olympian) {
                     return null;
                 }
             }
-            
-            $areaId = $data['area_id'] ?? $inscription->area_id;
-            $area = Area::find($areaId);
-
-            $groupId = $data['group_id'] ?? $inscription->group_id;
-
-            if ($area && !$area->is_group) {
-                $groupId = null; // ← SE AGREGA AQUÍ
-            }
-
-            $inscription->update([
-                'area_id'  => $areaId,
-                'grade_id' => $data['grade_id'] ?? $inscription->grade_id,
-                'status'   => $data['status'] ?? $inscription->status,
-                'group_id' => $groupId,
-            ]);
-            return $inscription->load([
-                'olympian:id,full_name,identity_document,educational_institution,department',
-                'area:id,name',
-                'grade:id,name',
-                'group:id,name'
-            ]);
+            $inscription->update(
+                [
+                    'area_id'  => $data['area_id'] ?? $inscription->area_id,
+                    'grade_id' => $data['grade_id'] ?? $inscription->grade_id,
+                    'status'   => $data['status'] ?? $inscription->status,
+                ]
+            );
+            $this->logService->record(
+                'inscription.updated',
+                'Inscription',
+                $inscription->id,
+                [
+                    'area_id' => $inscription->area_id,
+                    'grade_id' => $inscription->grade_id,
+                    'metadata' => [
+                        'before' => $before,
+                        'after' => $inscription->only(['area_id', 'grade_id', 'status']),
+                    ],
+                ]
+            );
+            return $inscription->load('olympian', 'area', 'grade');
         });
     }
 
@@ -192,7 +204,19 @@ class InscriptionService
                 return false;
             }
 
-            return (bool) $inscription->delete();
+            $deleted = (bool) $inscription->delete();
+
+            $this->logService->record(
+                'inscription.deleted',
+                'Inscription',
+                $inscription->id,
+                [
+                    'area_id' => $inscription->area_id,
+                    'grade_id' => $inscription->grade_id,
+                ]
+            );
+
+            return $deleted;
         });
     }
 

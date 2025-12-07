@@ -20,6 +20,7 @@ import { Route as PublicLoginRouteImport } from './routes/public/login'
 import { Route as EvaluatorEvaluationsRouteImport } from './routes/evaluator/evaluations'
 import { Route as AdminResponsablesRouteImport } from './routes/admin/responsables'
 import { Route as AdminNivelesRouteImport } from './routes/admin/niveles'
+import { Route as AdminLogsRouteImport } from './routes/admin/logs'
 import { Route as AdminListsRouteImport } from './routes/admin/lists'
 import { Route as AdminInscritosRouteImport } from './routes/admin/inscritos'
 import { Route as AdminEvaluadoresRouteImport } from './routes/admin/evaluadores'
@@ -83,6 +84,11 @@ const AdminNivelesRoute = AdminNivelesRouteImport.update({
   path: '/niveles',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminLogsRoute = AdminLogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminListsRoute = AdminListsRouteImport.update({
   id: '/lists',
   path: '/lists',
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
   '/admin/lists': typeof AdminListsRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
   '/admin/lists': typeof AdminListsRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/admin/evaluadores': typeof AdminEvaluadoresRoute
   '/admin/inscritos': typeof AdminInscritosRoute
   '/admin/lists': typeof AdminListsRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/niveles': typeof AdminNivelesRoute
   '/admin/responsables': typeof AdminResponsablesRoute
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/admin/evaluadores'
     | '/admin/inscritos'
     | '/admin/lists'
+    | '/admin/logs'
     | '/admin/niveles'
     | '/admin/responsables'
     | '/evaluator/evaluations'
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
     | '/admin/evaluadores'
     | '/admin/inscritos'
     | '/admin/lists'
+    | '/admin/logs'
     | '/admin/niveles'
     | '/admin/responsables'
     | '/evaluator/evaluations'
@@ -233,6 +244,7 @@ export interface FileRouteTypes {
     | '/admin/evaluadores'
     | '/admin/inscritos'
     | '/admin/lists'
+    | '/admin/logs'
     | '/admin/niveles'
     | '/admin/responsables'
     | '/evaluator/evaluations'
@@ -332,6 +344,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNivelesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/logs': {
+      id: '/admin/logs'
+      path: '/logs'
+      fullPath: '/admin/logs'
+      preLoaderRoute: typeof AdminLogsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/lists': {
       id: '/admin/lists'
       path: '/lists'
@@ -391,6 +410,7 @@ interface AdminRouteRouteChildren {
   AdminEvaluadoresRoute: typeof AdminEvaluadoresRoute
   AdminInscritosRoute: typeof AdminInscritosRoute
   AdminListsRoute: typeof AdminListsRoute
+  AdminLogsRoute: typeof AdminLogsRoute
   AdminNivelesRoute: typeof AdminNivelesRoute
   AdminResponsablesRoute: typeof AdminResponsablesRoute
 }
@@ -402,6 +422,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminEvaluadoresRoute: AdminEvaluadoresRoute,
   AdminInscritosRoute: AdminInscritosRoute,
   AdminListsRoute: AdminListsRoute,
+  AdminLogsRoute: AdminLogsRoute,
   AdminNivelesRoute: AdminNivelesRoute,
   AdminResponsablesRoute: AdminResponsablesRoute,
 }

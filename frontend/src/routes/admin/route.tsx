@@ -30,6 +30,13 @@ function RouteComponent() {
       ]
     },
     { text: "Generar Listas", route: "/admin/lists", icon: "album" },
+    {
+      text: "Reportes",
+      icon: "activity",
+      children: [
+        { text: "Logs", route: "/admin/logs", icon: "clipboard-list" },
+      ]
+    },
   ];
 
   return (

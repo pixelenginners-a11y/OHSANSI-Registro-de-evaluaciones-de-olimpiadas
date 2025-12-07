@@ -1,6 +1,5 @@
 type Props = {
   isOpen: boolean;
-  campo: string;
   mensajes: string[];
   fila: number;
   nombreCampo: string;

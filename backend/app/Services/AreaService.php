@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Services\MedallParameterService;
 use App\Services\AreaGradeService;
+use App\Services\LogService;
 use App\Models\Area;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,7 +13,8 @@ class AreaService
 {
     public function __construct(
         protected MedalParameterService $medalParameterService,
-        protected AreaGradeService $areaGradeService
+        protected AreaGradeService $areaGradeService,
+        protected LogService $logService
     )
     {}
     /**
@@ -69,6 +71,18 @@ class AreaService
             if (!empty($data['grades']) && is_array($data['grades'])) {
                 $area->grades()->sync($data['grades']);
             }
+            $this->logService->record(
+                'area.created',
+                'Area',
+                $area->id,
+                [
+                    'area_id' => $area->id,
+                    'metadata' => [
+                        'is_group' => $area->is_group,
+                        'responsable_id' => $area->responsable_id,
+                    ],
+                ]
+            );
             return $area->load(['medalParameter', 'grades']);
         });
     }
@@ -101,6 +115,16 @@ class AreaService
                 $area->grades()->sync($data['grades']);
             }
 
+            $this->logService->record(
+                'area.updated',
+                'Area',
+                $area->id,
+                [
+                    'area_id' => $area->id,
+                    'metadata' => $data,
+                ]
+            );
+
             return $area->load(['medalParameter', 'grades']);
         });
     }
@@ -120,7 +144,18 @@ class AreaService
             $this->medalParameterService->delete($area->id);
             $this->areaGradeService->delete($area->id);
 
-            return (bool) $area->delete();
+            $deleted = (bool) $area->delete();
+
+            $this->logService->record(
+                'area.deleted',
+                'Area',
+                $area->id,
+                [
+                    'area_id' => $area->id,
+                ]
+            );
+
+            return $deleted;
         });
     }
 
@@ -141,6 +176,15 @@ class AreaService
         // }
         $area->responsable_id = $userId;
         $area->save();
+        $this->logService->record(
+            'area.responsable_assigned',
+            'Area',
+            $area->id,
+            [
+                'area_id' => $area->id,
+                'metadata' => ['responsable_id' => $userId],
+            ]
+        );
         return $area;
     }
 
@@ -152,6 +196,15 @@ class AreaService
         }
         $area->responsable_id = null;
         $area->save();
+        $this->logService->record(
+            'area.responsable_unassigned',
+            'Area',
+            $area->id,
+            [
+                'area_id' => $area->id,
+                'metadata' => ['responsable_id' => $userId],
+            ]
+        );
         return $area;
     }
 }

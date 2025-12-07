@@ -20,6 +20,7 @@ class CheckRole
         }
 
         $userRole = $request->user()->role->name;
+        $roles = array_map('trim', $roles);
 
         // Administradores tienen acceso a todo
         if ($userRole === 'Administrador') {

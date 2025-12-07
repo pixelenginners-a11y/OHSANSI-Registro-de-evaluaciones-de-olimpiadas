@@ -6,17 +6,20 @@ use App\Models\Evaluation;
 use App\Services\EvaluatorService;
 use App\Services\EvaluatorGradeService;
 use App\Models\Area;
+use App\Models\EvaluationChangeLog;
 use App\Http\Requests\StoreEvaluationRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use App\Services\LogService;
 
 class EvaluationService
 {
 
     public function __construct(
         protected EvaluatorService $evaluatorService,
-        protected EvaluatorGradeService $evaluatorGradeService
+        protected EvaluatorGradeService $evaluatorGradeService,
+        protected LogService $logService
     ) {}
     
     /**
@@ -24,10 +27,16 @@ class EvaluationService
      */
     public function updateEvaluationByEvaluationId(int $evaluationId, array $data, int $evaluatorId): ?Evaluation
     {
-        $evaluation = Evaluation::find($evaluationId);
+        $evaluation = Evaluation::with(['inscription', 'group'])->find($evaluationId);
         if (!$evaluation) {
             return null;
         }
+
+        $before = [
+            'score' => $evaluation->score,
+            'description' => $evaluation->description,
+            'status' => $evaluation->status,
+        ];
 
         if (isset($data['score'])) {
             $evaluation->score = $data['score'];
@@ -44,6 +53,35 @@ class EvaluationService
         $evaluation->evaluator_id = $evaluatorId;
 
         $evaluation->save();
+
+        $after = [
+            'score' => $evaluation->score,
+            'description' => $evaluation->description,
+            'status' => $evaluation->status,
+        ];
+
+        EvaluationChangeLog::create([
+            'evaluation_id'  => $evaluation->id,
+            'user_id'        => $evaluatorId,
+            'previous_score' => $before['score'] ?? 0,
+            'new_score'      => $after['score'] ?? 0,
+            'description'    => $data['description'] ?? null,
+        ]);
+
+        $this->logService->record(
+            'evaluation.updated',
+            'Evaluation',
+            $evaluation->id,
+            [
+                'area_id' => $evaluation->inscription?->area_id ?? $evaluation->group?->area_id,
+                'grade_id' => $evaluation->inscription?->grade_id ?? $evaluation->group?->grade_id,
+                'phase' => $evaluation->phase,
+                'metadata' => [
+                    'before' => $before,
+                    'after'  => $after,
+                ],
+            ]
+        );
 
         return $evaluation;
     }

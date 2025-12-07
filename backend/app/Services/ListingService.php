@@ -6,11 +6,13 @@ use App\Models\Listing;
 use App\Services\ListItemService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Services\LogService;
 
 class ListingService
 {
     public function __construct(
-      protected ListItemService $listItemService
+      protected ListItemService $listItemService,
+      protected LogService $logService
     ){}
 
     /**
@@ -34,6 +36,20 @@ class ListingService
 
             $this->listItemService->generateItems($listing->id, $data['area_id'], $data['grade_id']);
 
+            $this->logService->record(
+                'listing.created',
+                'Listing',
+                $listing->id,
+                [
+                    'area_id' => $listing->area_id,
+                    'grade_id' => $listing->grade_id,
+                    'metadata' => [
+                        'type' => $listing->type,
+                        'is_published' => $listing->is_published,
+                    ],
+                ]
+            );
+
             return $listing->fresh();
         });
     }
@@ -44,6 +60,8 @@ class ListingService
     public function updateListing(Listing $listing, array $data): Listing
     {
         return DB::transaction(function () use ($listing, $data) {
+            $originalAreaId = $listing->area_id;
+            $originalGradeId = $listing->grade_id;
 
             if (isset($data['is_published']) && $data['is_published'] === true) {
                 if (!isset($data['published_at']) && !$listing->is_published) {
@@ -52,6 +70,27 @@ class ListingService
             }
 
             $listing->update($data);
+
+            $areaChanged = isset($data['area_id']) && $data['area_id'] !== $originalAreaId;
+            $gradeChanged = isset($data['grade_id']) && $data['grade_id'] !== $originalGradeId;
+
+            if ($areaChanged || $gradeChanged) {
+                $this->listItemService->deleteListItem($listing->id);
+                $this->listItemService->generateItems($listing->id, $listing->area_id, $listing->grade_id);
+            }
+
+            $this->logService->record(
+                'listing.updated',
+                'Listing',
+                $listing->id,
+                [
+                    'area_id' => $listing->area_id,
+                    'grade_id' => $listing->grade_id,
+                    'metadata' => [
+                        'changes' => $data,
+                    ],
+                ]
+            );
 
             return $listing->fresh();
         });
@@ -69,7 +108,18 @@ class ListingService
                 'visibility' => $listing->visibility ?? 'publico'
             ]);
 
-            return $listing->fresh();
+            $listing = $listing->fresh();
+            $this->logService->record(
+                'listing.published',
+                'Listing',
+                $listing->id,
+                [
+                    'area_id' => $listing->area_id,
+                    'grade_id' => $listing->grade_id,
+                ]
+            );
+
+            return $listing;
         });
     }
 
@@ -83,7 +133,18 @@ class ListingService
                 'is_published' => false
             ]);
 
-            return $listing->fresh();
+            $listing = $listing->fresh();
+            $this->logService->record(
+                'listing.unpublished',
+                'Listing',
+                $listing->id,
+                [
+                    'area_id' => $listing->area_id,
+                    'grade_id' => $listing->grade_id,
+                ]
+            );
+
+            return $listing;
         });
     }
 
@@ -103,7 +164,17 @@ class ListingService
         return DB::transaction(function () use ($listing) {
 
             $this->listItemService->deleteListItem($listing->id);
-            return $listing->delete();
+            $deleted = $listing->delete();
+            $this->logService->record(
+                'listing.deleted',
+                'Listing',
+                $listing->id,
+                [
+                    'area_id' => $listing->area_id,
+                    'grade_id' => $listing->grade_id,
+                ]
+            );
+            return $deleted;
         });
     }
 

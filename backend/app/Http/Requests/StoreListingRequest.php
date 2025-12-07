@@ -85,7 +85,7 @@ class StoreListingRequest extends FormRequest
             'type.required' => 'El tipo de lista es obligatorio.',
             'type.string' => 'El tipo debe ser texto.',
             'type.max' => 'El tipo no puede superar los 50 caracteres.',
-            'type.in' => 'El tipo debe ser: selection, ranking, waiting, qualified o reserve.',
+            'type.in' => 'El tipo debe ser: concursantes, clasificados, no_clasificados, desclasificados, premiados, certificados, ceremonia o publicacion.',
             
             'description.string' => 'La descripción debe ser texto.',
             'description.max' => 'La descripción no puede superar los 1000 caracteres.',

@@ -76,13 +76,6 @@ export const CreateListingModal = ({
   });
 
   const onSubmit = async (data: FormData) => {
-    const validTypes = ['', 'concursantes', 'clasificados', 'no_clasificados', 'desclasificados', 'premiados', 'certificados', 'ceremonia', 'publicacion'] as const;
-
-    if (!validTypes.includes(data.type as any)) {
-      console.error("Tipo de lista inválido");
-      return;
-    }
-
     const dataToSend: CreateListingData = {
       name: data.name,
       area_id: Number(data.area_id),

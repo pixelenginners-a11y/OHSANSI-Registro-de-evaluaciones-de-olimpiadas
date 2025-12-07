@@ -9,6 +9,7 @@ use App\Models\Inscription;
 use App\Services\AreaService;
 use App\Services\GradeService;
 use App\Services\InscriptionService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\LengthAwarePaginator;
