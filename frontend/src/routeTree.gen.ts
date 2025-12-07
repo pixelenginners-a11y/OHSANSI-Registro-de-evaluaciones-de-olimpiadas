@@ -15,6 +15,7 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SharedConstruccionRouteImport } from './routes/shared/construccion'
 import { Route as ResponsibleListsRouteImport } from './routes/responsible/lists'
+import { Route as ResponsibleEvaluationsRouteImport } from './routes/responsible/evaluations'
 import { Route as ResponsibleCompetitionRouteImport } from './routes/responsible/competition'
 import { Route as PublicLoginRouteImport } from './routes/public/login'
 import { Route as EvaluatorEvaluationsRouteImport } from './routes/evaluator/evaluations'
@@ -57,6 +58,11 @@ const SharedConstruccionRoute = SharedConstruccionRouteImport.update({
 const ResponsibleListsRoute = ResponsibleListsRouteImport.update({
   id: '/lists',
   path: '/lists',
+  getParentRoute: () => ResponsibleRouteRoute,
+} as any)
+const ResponsibleEvaluationsRoute = ResponsibleEvaluationsRouteImport.update({
+  id: '/evaluations',
+  path: '/evaluations',
   getParentRoute: () => ResponsibleRouteRoute,
 } as any)
 const ResponsibleCompetitionRoute = ResponsibleCompetitionRouteImport.update({
@@ -142,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
   '/public/login': typeof PublicLoginRoute
   '/responsible/competition': typeof ResponsibleCompetitionRoute
+  '/responsible/evaluations': typeof ResponsibleEvaluationsRoute
   '/responsible/lists': typeof ResponsibleListsRoute
   '/shared/construccion': typeof SharedConstruccionRoute
   '/public/lists/$listId': typeof PublicListsListIdRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByTo {
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
   '/public/login': typeof PublicLoginRoute
   '/responsible/competition': typeof ResponsibleCompetitionRoute
+  '/responsible/evaluations': typeof ResponsibleEvaluationsRoute
   '/responsible/lists': typeof ResponsibleListsRoute
   '/shared/construccion': typeof SharedConstruccionRoute
   '/public/lists/$listId': typeof PublicListsListIdRoute
@@ -185,6 +193,7 @@ export interface FileRoutesById {
   '/evaluator/evaluations': typeof EvaluatorEvaluationsRoute
   '/public/login': typeof PublicLoginRoute
   '/responsible/competition': typeof ResponsibleCompetitionRoute
+  '/responsible/evaluations': typeof ResponsibleEvaluationsRoute
   '/responsible/lists': typeof ResponsibleListsRoute
   '/shared/construccion': typeof SharedConstruccionRoute
   '/public/lists/$listId': typeof PublicListsListIdRoute
@@ -208,6 +217,7 @@ export interface FileRouteTypes {
     | '/evaluator/evaluations'
     | '/public/login'
     | '/responsible/competition'
+    | '/responsible/evaluations'
     | '/responsible/lists'
     | '/shared/construccion'
     | '/public/lists/$listId'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/evaluator/evaluations'
     | '/public/login'
     | '/responsible/competition'
+    | '/responsible/evaluations'
     | '/responsible/lists'
     | '/shared/construccion'
     | '/public/lists/$listId'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/evaluator/evaluations'
     | '/public/login'
     | '/responsible/competition'
+    | '/responsible/evaluations'
     | '/responsible/lists'
     | '/shared/construccion'
     | '/public/lists/$listId'
@@ -307,6 +319,13 @@ declare module '@tanstack/react-router' {
       path: '/lists'
       fullPath: '/responsible/lists'
       preLoaderRoute: typeof ResponsibleListsRouteImport
+      parentRoute: typeof ResponsibleRouteRoute
+    }
+    '/responsible/evaluations': {
+      id: '/responsible/evaluations'
+      path: '/evaluations'
+      fullPath: '/responsible/evaluations'
+      preLoaderRoute: typeof ResponsibleEvaluationsRouteImport
       parentRoute: typeof ResponsibleRouteRoute
     }
     '/responsible/competition': {
@@ -445,11 +464,13 @@ const EvaluatorRouteRouteWithChildren = EvaluatorRouteRoute._addFileChildren(
 
 interface ResponsibleRouteRouteChildren {
   ResponsibleCompetitionRoute: typeof ResponsibleCompetitionRoute
+  ResponsibleEvaluationsRoute: typeof ResponsibleEvaluationsRoute
   ResponsibleListsRoute: typeof ResponsibleListsRoute
 }
 
 const ResponsibleRouteRouteChildren: ResponsibleRouteRouteChildren = {
   ResponsibleCompetitionRoute: ResponsibleCompetitionRoute,
+  ResponsibleEvaluationsRoute: ResponsibleEvaluationsRoute,
   ResponsibleListsRoute: ResponsibleListsRoute,
 }
 
