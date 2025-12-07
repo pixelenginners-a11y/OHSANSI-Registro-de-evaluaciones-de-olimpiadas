@@ -14,7 +14,12 @@ class Inscription extends Model
         'is_group',
         'status',
     ];
-    
+
+    const STATUS_INSCRIBED = 'inscribed';
+    const STATUS_NOT_CLASSIFIED = 'not_classified';
+    const STATUS_DISQUALIFIED = 'disqualified';
+    const STATUS_FINALIST = 'finalist';
+
     public function olympian()
     {
         return $this->belongsTo(Olympian::class);
