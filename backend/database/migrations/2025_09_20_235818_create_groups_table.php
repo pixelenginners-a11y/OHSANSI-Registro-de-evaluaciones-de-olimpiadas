@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name', 50);
             $table->foreignId('area_id')->references('id')->on('areas')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('grade_id')->references('id')->on('grades')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('status',20)->default('inscribed');
             $table->timestamps();
             $table->softDeletes();
 
