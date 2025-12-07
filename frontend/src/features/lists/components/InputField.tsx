@@ -14,7 +14,7 @@ export const InputField = ({ label, error, ...rest }: InputFieldProps) => {
       </label>
 
       <input
-        {...rest}  // <-- aquí entran onChange, onBlur, ref, name, value, type, etc.
+        {...rest}
         className={`border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-dark ${error ? "border-red-500" : "border-gray-300"
           }`}
       />
