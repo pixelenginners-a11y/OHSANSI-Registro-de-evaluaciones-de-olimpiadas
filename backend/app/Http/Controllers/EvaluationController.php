@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEvaluationRequest;
 use App\Http\Requests\UpdateEvaluationRequest;
+use App\Models\CompetitionPhase;
 use App\Services\EvaluationService;
 use App\Models\Evaluation;
 use Illuminate\Http\JsonResponse;
@@ -57,6 +58,37 @@ class EvaluationController extends Controller
         }
     }
 
+    public function indexResponsible(Request $request): JsonResponse
+    {
+        $responsibleId = $request->user()->id;
+        try {
+            $filters = $request->only([
+                'phase',
+                'status',
+                'grade',
+                'search',
+                'page',
+                'per_page',
+            ]);
+
+            $evaluations = $this->evaluationService->getEvaluationsForResponsible(
+                $responsibleId,
+                $filters
+            );
+
+            return response()->json([
+                'message' => 'Evaluaciones obtenidas correctamente',
+                'data' => $evaluations
+            ]);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Error al obtener las evaluaciones',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * Mostrar una evaluación específica
      */
@@ -91,7 +123,7 @@ class EvaluationController extends Controller
     public function update(UpdateEvaluationRequest $request, int $id): JsonResponse
     {
         try {
-            $evaluatorId = auth()->id(); // Tomamos el evaluador desde la sesión
+            $evaluatorId = auth()->id();
             $evaluation = $this->evaluationService->updateEvaluationByEvaluationId(
                 $id,
                 $request->validated(),
@@ -138,6 +170,24 @@ class EvaluationController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Error al obtener estadísticas',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function approveAllInReviewByPhase(): JsonResponse
+    {
+        try {
+            $phaseId = CompetitionPhase::where('active', true)->value('id');
+            $updatedCount = $this->evaluationService->updateAllStatusToApproved($phaseId);
+
+            return response()->json([
+                'message' => 'Evaluaciones actualizadas correctamente',
+                'data' => ['updated_count' => $updatedCount]
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Error al actualizar las evaluaciones',
                 'error' => $e->getMessage()
             ], 500);
         }
