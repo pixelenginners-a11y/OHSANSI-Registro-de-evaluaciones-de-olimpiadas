@@ -15,9 +15,44 @@ export const useTogglePhase = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getCompetitionPhases"] });
       queryClient.invalidateQueries({ queryKey: ["getEvaluations"] });
+      queryClient.invalidateQueries({ queryKey: ["getEvaluationsForResponsible"] });
     },
     onError: (err) => {
       console.error("useTogglePhase error:", err);
     },
   });
 };
+
+export type SetClassificationLimitInput = {
+  phase: number;
+  classification_limit: number;
+};
+
+export type SetClassificationLimitResponse = {
+  success: boolean;
+  message?: string;
+};
+
+export const useSetClassificationLimit = () => {
+  return useMutation<
+    SetClassificationLimitResponse,
+    AxiosError,
+    SetClassificationLimitInput
+  >({
+    mutationFn: async ({ phase, classification_limit }) => {
+      const res = await api.post(
+        `/admin/competition/phases/set-classification-limit`,
+        { phase, classification_limit }
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getCompetitionPhases"] });
+      queryClient.invalidateQueries({ queryKey: ["getEvaluations"] });
+    },
+    onError: (err) => {
+      console.error("useSetClassificationLimit error:", err);
+    },
+  });
+};
+
