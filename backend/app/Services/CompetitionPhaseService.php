@@ -60,11 +60,11 @@ class CompetitionPhaseService
             $phaseLower = strtolower($phase);
 
             if ($firstActivation) {
-                if ($phaseLower === Evaluation::PHASE_CLASIFICACION) {
+                if ($phaseLower === strtolower(CompetitionPhase::PHASE_CLASSIFICATION)) {  
                     $this->competitionService->activateInitialPhase();
                 }
 
-                if ($phaseLower === Evaluation::PHASE_FINAL) {
+                if ($phaseLower === CompetitionPhase::PHASE_FINAL) {
                     $this->competitionService->activateFinalPhase();
                 }
             }
@@ -122,6 +122,26 @@ class CompetitionPhaseService
             );
             return $response;
         });
+    }
+
+    function setClassificationLimit(int $limit, int $phase_id): array
+    {
+        $phase = CompetitionPhase::find($phase_id);
+
+        if (!$phase) {
+            return [
+                'success' => false,
+                'message' => "Fase con ID '$phase_id' no encontrada."
+            ];
+        }
+
+        $phase->classification_limit = $limit;
+        $phase->save();
+
+        return [
+            'success' => true,
+            'message' => "Límite de clasificación establecido a $limit para la fase '{$phase->phase}'."
+        ];
     }
 
 }
