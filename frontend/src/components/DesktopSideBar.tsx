@@ -12,7 +12,7 @@ type DesktopSideBarProps = {
 
 export const DesktopSideBar = ({ open, setOpen, sideBarItems, seleccion, setseleccion }: DesktopSideBarProps) => {
   const handleLogout = () => {
-    localStorage.removeItem('token'); //borrar token
+    localStorage.removeItem('token');
   };
 
   return (

@@ -1,0 +1,1 @@
+import{C as o}from"./Competition-CFoe7Q9_.js";import"./index-X1YA0lv4.js";import"./useMutation-CpHJIr-Q.js";import"./useQuery-CLt-_kTG.js";import"./InputField-BF3RP7OX.js";const n=o;export{n as component};

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 export const api = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: 'http://pixelenginners.tis.cs.umss.edu.bo/api',
   headers: { Accept: "application/json" },
 });
 

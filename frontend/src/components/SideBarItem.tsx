@@ -11,18 +11,33 @@ type SidebarItemProps = {
   isChild?: boolean;
   seleccion?: string;
   setseleccion: React.Dispatch<React.SetStateAction<string>>;
+  onClick?: () => void; // <-- agregado
 };
 
-export const SidebarItem = ({ item, open, red, isChild, seleccion, setseleccion }: SidebarItemProps) => {
+export const SidebarItem = ({
+  item,
+  open,
+  red,
+  isChild,
+  seleccion,
+  setseleccion,
+  onClick
+}: SidebarItemProps) => {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
   const hasChildren = item.children && item.children.length > 0;
+
   const handleClick = () => {
+    if (onClick) {
+      onClick();
+      return;
+    }
+
     if (hasChildren) {
       setIsExpanded(!isExpanded);
     } else if (item.route) {
       navigate({ to: item.route });
-      setseleccion(item.text)
+      setseleccion && setseleccion(item.text);
     }
   };
 
@@ -63,12 +78,6 @@ export const SidebarItem = ({ item, open, red, isChild, seleccion, setseleccion 
           </div>
         )}
       </div>
-    );
-  }
-
-  if (item.route) {
-    return (
-      <ButtonContent />
     );
   }
 
